@@ -10,7 +10,7 @@ grant_type = client_credentials
 
 post at TOKEN_URL to get TOKEN for Authorization
 
-TOKEN_URL = https://id.twitch.tv/oauth2/token?client_id=abcdefg12345&client_secret=hijklmn67890&grant_type=client_credentials
+TOKEN_URL = https://id.twitch.tv/oauth2/token?client_id=n1rw74f6gu7z0vp1mwnnjcnjxhydem&client_secret=sfag42ajo6ay3tc5bptl5y9omwkiuq&grant_type=client_credentials
 
 responseExample = {
   "access_token": "access12345token",
