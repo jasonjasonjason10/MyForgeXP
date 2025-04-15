@@ -2,13 +2,16 @@ import { Link } from "react-router-dom";
 
 export default function NavBar() {
   return (
-    <nav className="bg-gray-900 text-white px-6 py-4 shadow-md flex justify-betweeen items-center">
-      <Link
-        to="/"
-        className="text-3xl font-extrabold text-orange-400 hover:text-orange-300 transition"
-      >
-        ForgeXP
-      </Link>
+    <nav className="bg-gray-700 text-white px-6 py-4 shadow-md flex justify-between items-center">
+      <div>
+        <Link
+          to="/"
+          className="text-3xl font-extrabold text-orange-400 hover:text-orange-300 transition"
+        >
+          ForgeXP
+        </Link>
+      </div>
+
       <ul className="flex gap-6 text-lg">
         <li>
           <Link to="/community" className="hover:text-orange-400">
@@ -16,8 +19,8 @@ export default function NavBar() {
           </Link>
         </li>
         <li>
-          <Link to="/reviews" className="hover:text-orange-400">
-            Reviews
+          <Link to="/all-games" className="hover:text-orange-400">
+            All Games
           </Link>
         </li>
         <li>
