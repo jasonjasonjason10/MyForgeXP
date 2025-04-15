@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Homepage from './components/Homepage';
+import AllGames from './components/All-Games/AllGames';
+
 
 function App() {
   return (
@@ -8,6 +10,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/all-games" element={<AllGames />} />
         {/* Add other routes later, set "/" to Homepage so that when user goes to forgexp.com it routes to HomePage */}
       </Routes>
     </div>

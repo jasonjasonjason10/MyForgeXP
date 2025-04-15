@@ -369,4 +369,4 @@ const mockData = [
     }
 ]
 
-export modules mockData
+export default mockData;
