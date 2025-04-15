@@ -1,8 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import Homepage from './components/Homepage';
-import AllGames from './components/All-Games/AllGames';
-
+import { Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Homepage from "./components/Homepage";
+import AllGames from "./components/Games/AllGames";
+import SingleGame from "./components/Games/SingleGame";
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/all-games" element={<AllGames />} />
+        <Route path="/games/:id" element={<SingleGame />} />
         {/* Add other routes later, set "/" to Homepage so that when user goes to forgexp.com it routes to HomePage */}
       </Routes>
     </div>
