@@ -1,5 +1,18 @@
 const prisma = require("../prisma");
 const seed = async () => {
+    async function createUser() {
+        
+    }
+    async function createGames() {
+        
+    }
+    async function createReviews() {
+        
+    }
+
+    createUser();
+    createGames();
+    createReviews();
 
 };
 seed()
