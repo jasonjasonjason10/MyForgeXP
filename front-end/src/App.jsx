@@ -1,19 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import Homepage from './components/Homepage';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-     
-      <h1>ForgeXP</h1>
-     
-  
-    </>
-  )
+    <div className="min-h-screen bg-gray-950 text-white">
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        {/* Add other routes later, set "/" to Homepage so that when user goes to forgexp.com it routes to HomePage */}
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
