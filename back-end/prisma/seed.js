@@ -1,6 +1,6 @@
 const prisma = require("../prisma");
 const seed = async () => {
-//================seeded data=====================
+
 };
 seed()
     .then(async () => await prisma.$disconnect())
