@@ -17,7 +17,7 @@ export default function NavBar() {
         </li>
         <li>
           <Link to="/reviews" className="hover:text-orange-400">
-            Reviews
+            All Games
           </Link>
         </li>
         <li>
