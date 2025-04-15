@@ -27,6 +27,7 @@ model User {
 
 model Game {
   id Int @id @default(autoincrement())
+  extertalId Int
   name String
   cover String
   summary String
