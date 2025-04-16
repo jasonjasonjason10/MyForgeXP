@@ -29,8 +29,7 @@ router.post('/login', async (req, res) => {
         })
     }
     
-    const token = jwt.sign({ id: user.id}, process.env.JWT)
-    console.log("post prima user =>", user)
+    const token = jwt.sign({ id: user.id, isAdmin: user.isAdmin }, process.env.JWT)
     res.status(200).json({
         successMessage: "you gots a user :)",
         token: token
