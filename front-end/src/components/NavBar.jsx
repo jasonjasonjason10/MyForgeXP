@@ -10,7 +10,7 @@ export default function NavBar() {
             alt="ForgeXP Logo"
             className="h-8 w-auto drop-shadow-xl"
           />
-          <span className="text-2xl font-extrabold text-orange-400 hover:text-orange-300 transition">
+          <span className="text-2xl font-extrabold text-orange-400 hover:text-orange-300 transition text-shadow-lg">
             ForgeXP
           </span>
         </Link>
