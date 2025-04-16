@@ -7,6 +7,11 @@ const app = express()
 app.use(cors());
 app.use(express.json())
 
+//=============game routers==================
+
+const gameRouter = require('./src/routes/game')
+app.use("/game", userRouter)
+
 //=============user routes===================
 
 const userRouter = require('./src/routes/user')
