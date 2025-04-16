@@ -50,9 +50,9 @@ export default function Homepage() {
           >
             ◀
           </button>
-          <button 
-          onClick={() => slider.current?.next()}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/60 p-2 rounded-full hover:bg-black"
+          <button
+            onClick={() => slider.current?.next()}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/60 p-2 rounded-full hover:bg-black"
           >
             ▶
           </button>
