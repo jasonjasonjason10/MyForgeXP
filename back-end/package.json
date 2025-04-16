@@ -4,7 +4,7 @@
     "prisma": "^6.6.0"
   },
   "scripts": {
-    "start:dev": "nodemon server"
+    "start:dev": "nodemon server.js"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",

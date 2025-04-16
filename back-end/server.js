@@ -1,14 +1,30 @@
-const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const igdbRoutes = require("./routes/igdb");
+const express = require('express')
+const app = express()
+const prisma = require("prisma")
 
-const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json())
 
+//=============user routes===================
+
+const userRouter = require('.src/routes/user')
+app.use("/user", userRouter)
+
+//=============review routes=================
+
+const reviewRouter = require(".src/routes/review")
+app.use("/review", reviewRouter)
+
+//=============igdb routes===================
+
+const igdbRoutes = require("./routes/igdb");
 app.use("/api/igdb", igdbRoutes);
+
+
+
 
 app.listen(3000, () => {
   console.log("server running on port 3000");
