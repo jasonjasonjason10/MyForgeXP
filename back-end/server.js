@@ -10,7 +10,7 @@ app.use(express.json())
 //=============game routers==================
 
 const gameRouter = require('./src/routes/game')
-app.use("/game", userRouter)
+app.use("/game", gameRouter)
 
 //=============user routes===================
 
