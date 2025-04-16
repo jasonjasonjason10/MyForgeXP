@@ -1,9 +1,8 @@
 const cors = require("cors");
-require("dotenv").config();
 
 const express = require('express')
 const app = express()
-const prisma = require("prisma")
+// const prisma = require("prisma")
 
 app.use(cors());
 app.use(express.json())
