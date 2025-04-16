@@ -3,12 +3,16 @@ import { Link } from "react-router-dom";
 export default function NavBar() {
   return (
     <nav className="bg-gray-700 text-white px-6 py-4 shadow-md flex justify-between items-center">
-      <div>
-        <Link
-          to="/"
-          className="text-3xl font-extrabold text-orange-400 hover:text-orange-300 transition"
-        >
-          ForgeXP
+      <div className="flex items-center">
+        <Link to="/" className="flex items-center space-x-2">
+          <img
+            src="/images/minilogo.png"
+            alt="ForgeXP Logo"
+            className="h-8 w-auto drop-shadow-xl"
+          />
+          <span className="text-2xl font-extrabold text-orange-400 hover:text-orange-300 transition">
+            ForgeXP
+          </span>
         </Link>
       </div>
 
