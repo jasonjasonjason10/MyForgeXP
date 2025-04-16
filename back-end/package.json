@@ -6,8 +6,12 @@
   "scripts": {
     "start:dev": "nodemon server.js"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "@prisma/client": "^6.6.0",
+    "bcrypt": "^5.1.1",
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "postgres": "^3.4.5"
