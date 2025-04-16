@@ -150,7 +150,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/run/media/nathan/user/Documents/Coursework/ForgeXP/ForgeXP/back-end/generated/prisma",
+      "value": "C:\\Bootcamp\\Capstone\\ForgeXP\\back-end\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -159,12 +159,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/run/media/nathan/user/Documents/Coursework/ForgeXP/ForgeXP/back-end/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Bootcamp\\Capstone\\ForgeXP\\back-end\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -182,7 +182,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://nathan:B!gboy69@localhost/ForgeXP_db"
+        "value": "postgresql://jason:kevinkevin@localhost/ForgeXP_db"
       }
     }
   },

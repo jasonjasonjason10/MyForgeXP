@@ -53,28 +53,6 @@ export default function Homepage() {
           ultimate gaming experience hub.
         </p>
       </section>
-
-      {/* CAROUSEL THAT IS NOT WORKING COME BACK AND FIX!*/}
-      <section className="w-full max-w-6xl mx-auto">
-        <h3 className="text-2xl font-bold mb-4">Featured Games</h3>
-        <div ref={sliderRef} className="keen-slider">
-          {games.map((game) => (
-            <div key={game.id} className="keen-slider__slide p-2">
-              <Link to={`/games/${game.id}`}>
-                <img
-                  src={
-                    game.cover?.url
-                      ? `https:${game.cover.url}`
-                      : "https://via.placeholder.com/264x374?text=No+Image"
-                  }
-                  alt={game.name}
-                  className="rounded shadow-lg hover:scale-105 transition duration-300 w-full h-64 object-cover"
-                />
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
