@@ -9,17 +9,17 @@ app.use(express.json())
 
 //=============user routes===================
 
-const userRouter = require('.src/routes/user')
+const userRouter = require('./src/routes/user')
 app.use("/user", userRouter)
 
 //=============review routes=================
 
-const reviewRouter = require(".src/routes/review")
+const reviewRouter = require("./src/routes/review")
 app.use("/review", reviewRouter)
 
 //=============igdb routes===================
 
-const igdbRoutes = require("./routes/igdb");
+const igdbRoutes = require("./src/routes/igdb");
 app.use("/api/igdb", igdbRoutes);
 
 
