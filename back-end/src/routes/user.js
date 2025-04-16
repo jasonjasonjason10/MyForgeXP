@@ -84,7 +84,6 @@ router.post('/register', async (req, res) => {
 
 router.get("/info", tokenAuth, async (req, res, next) => {
     const id = req.userId
-    const isAdmin = req.isAdmin
 
     const allInfo = await prisma.user.findUnique({ where: { id }})
     const refinedInfo = {
@@ -104,14 +103,11 @@ router.get("/info", tokenAuth, async (req, res, next) => {
 
 // get all users
 
-// get user by id
-
-// create a user
-
 // delete a user
 
-// update a user by id
+// update a user by id (by that user)
 
+// admin update 
 
 
 
