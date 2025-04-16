@@ -1,6 +1,7 @@
 const prisma = require("../prisma"); 
 const bcrypt = require("bcrypt");
 
+
 const seed = async () => {
   async function createUser() {
     const hashedPassword = await bcrypt.hash("password123", 10);
