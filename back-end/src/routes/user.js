@@ -3,7 +3,7 @@ const router = express.Router()
 const prisma = require('../../prisma')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+const tokenAuth = require('../middleware/TokenAuth')
 
 //============Routers to create=====================
 
@@ -82,12 +82,25 @@ router.post('/register', async (req, res) => {
 
 // get user info by id ==================================
 
-// router.get("/info"), async (req, res) => {
+router.get("/info", tokenAuth, async (req, res, next) => {
+    const id = req.userId
+    const isAdmin = req.isAdmin
 
-// }
+    const allInfo = await prisma.user.findUnique({ where: { id }})
+    const refinedInfo = {
+        id: allInfo.id,
+        email: allInfo.email,
+        username: allInfo.username,
+        isAdmin: allInfo.isAdmin,
+        fName: allInfo.fName,
+        lName: allInfo.lName
+    }
 
-
-
+    res.status(200).json({
+        successMessage: "here ya go silly",
+        user: refinedInfo
+    })
+})
 
 // get all users
 
