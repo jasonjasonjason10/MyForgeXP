@@ -49,6 +49,7 @@ const seed = async () => {
           summary: "I played in Xbox and pc, this say something about How much I love this game",
           AvgRating: 95,
           popularity: 9.8,
+          cover: "https://i.ebayimg.com/images/g/9owAAOSww4RiKBzU/s-l400.jpg"
         },
         {
           extertalId: 102,
@@ -56,6 +57,7 @@ const seed = async () => {
           summary: "Is it the best game of all time? No. Is it among the best games of all time? Absolutely.",
           AvgRating: 92,
           popularity: 9.5,
+          cover: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/7f3af383a3afa12f0835db4496c7630f62ab6369/capsule_616x353.jpg?t=1744744220"
         },
         {
           extertalId: 103,
@@ -63,6 +65,7 @@ const seed = async () => {
           summary: "Astro Bot can proudly stand beside the PlayStation icons it so fondly celebrates.",
           AvgRating: 90,
           popularity: 8.7,
+          cover: "https://cdn.mobygames.com/f1e25e84-6c90-11ef-8a5e-02420a000112.webp"
         },
       ],
     });
