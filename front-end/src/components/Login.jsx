@@ -12,7 +12,7 @@ const Login = ({ setToken }) => {
     e.preventDefault();
 
     if (!email && !password) {
-      setError("This field is required.");
+      setError("Both fields are required.");
       console.error(error);
       return;
     }
