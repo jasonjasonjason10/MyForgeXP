@@ -35,6 +35,7 @@ model GameCommunity {
   gameName String @unique
   isActive Boolean @default(false)
   description String?
+  coverImage String?
   posts Post[]
   users User[]
 }
