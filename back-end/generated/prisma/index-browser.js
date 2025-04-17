@@ -122,28 +122,45 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   username: 'username',
   password: 'password',
+  avatar: 'avatar',
   isAdmin: 'isAdmin',
   fName: 'fName',
-  lName: 'lName'
+  lName: 'lName',
+  createdAt: 'createdAt'
 };
 
-exports.Prisma.GameScalarFieldEnum = {
+exports.Prisma.GameCommunityScalarFieldEnum = {
   id: 'id',
-  extertalId: 'extertalId',
-  name: 'name',
-  cover: 'cover',
-  summary: 'summary',
-  AvgRating: 'AvgRating',
-  popularity: 'popularity'
+  gameName: 'gameName',
+  isActive: 'isActive',
+  description: 'description',
+  coverImage: 'coverImage'
 };
 
-exports.Prisma.ReviewScalarFieldEnum = {
+exports.Prisma.PostScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  body: 'body',
-  AvgRating: 'AvgRating',
+  content: 'content',
+  description: 'description',
+  postType: 'postType',
+  createdAt: 'createdAt',
   userId: 'userId',
-  gameId: 'gameId'
+  communityId: 'communityId',
+  likes: 'likes'
+};
+
+exports.Prisma.FavoritesScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  body: 'body',
+  likes: 'likes',
+  postId: 'postId',
+  userId: 'userId'
 };
 
 exports.Prisma.SortOrder = {
@@ -160,12 +177,18 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.PostType = exports.$Enums.PostType = {
+  video: 'video',
+  image: 'image',
+  text: 'text'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Game: 'Game',
-  Review: 'Review'
+  GameCommunity: 'GameCommunity',
+  Post: 'Post',
+  Favorites: 'Favorites',
+  Comment: 'Comment'
 };
 
 /**
