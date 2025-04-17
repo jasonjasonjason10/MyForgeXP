@@ -1,35 +1,30 @@
-const prisma = require("../prisma"); 
+const prisma = require("../prisma");
 const bcrypt = require("bcrypt");
 
-
 const seed = async () => {
+  // Users
   async function createUser() {
     const hashedPassword = await bcrypt.hash("password123", 10);
-
-    // 1. Admin user
+  
     await prisma.user.create({
       data: {
         email: "admin@example.com",
         username: "admin",
         password: hashedPassword,
         isAdmin: true,
-        fName: null,
-        lName: null,
       },
     });
 
-    // 2. Regular user with full name
     await prisma.user.create({
       data: {
-        email: "alice@example.com",
-        username: "alicew",
+        email: "alex@example.com",
+        username: "alex",
         password: hashedPassword,
-        fName: "Alice",
+        fName: "Alex",
         lName: "Wong",
       },
     });
 
-    // 3. User with no name
     await prisma.user.create({
       data: {
         email: "ghost@example.com",
@@ -41,78 +36,168 @@ const seed = async () => {
     console.log("Users seeded");
   }
 
+  // Game 
   async function createGames() {
-    await prisma.game.createMany({
+    await prisma.gameCommunity.createMany({
       data: [
         {
-          extertalId: 101,
-          name: "Elden Ring",
-          summary: "I played in Xbox and pc, this say something about How much I love this game",
-          AvgRating: 95,
-          popularity: 9.8,
-          cover: "https://i.ebayimg.com/images/g/9owAAOSww4RiKBzU/s-l400.jpg"
+          gameName: "Elden Ring",
+          isActive: true,
+          description: "I played in Xbox and PC. This says how much I love this game.",
+          coverImage: "https://i.ebayimg.com/images/g/9owAAOSww4RiKBzU/s-l400.jpg"
         },
         {
-          extertalId: 102,
-          name: "Baldur's Gate 3",
-          summary: "Is it the best game of all time? No. Is it among the best games of all time? Absolutely.",
-          AvgRating: 92,
-          popularity: 9.5,
-          cover: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/7f3af383a3afa12f0835db4496c7630f62ab6369/capsule_616x353.jpg?t=1744744220"
+          gameName: "Baldur's Gate 3",
+          isActive: true,
+          description: "Among the best games of all time? Absolutely.",
+          coverImage: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/7f3af383a3afa12f0835db4496c7630f62ab6369/capsule_616x353.jpg?t=1744744220"
         },
         {
-          extertalId: 103,
-          name: "Astro Bot",
-          summary: "Astro Bot can proudly stand beside the PlayStation icons it so fondly celebrates.",
-          AvgRating: 90,
-          popularity: 8.7,
-          cover: "https://cdn.mobygames.com/f1e25e84-6c90-11ef-8a5e-02420a000112.webp"
-        },
-      ],
+          gameName: "Astro Bot",
+          isActive: false,
+          description: "Astro Bot can proudly stand beside the PlayStation icons it celebrates.",
+          coverImage: "https://cdn.mobygames.com/f1e25e84-6c90-11ef-8a5e-02420a000112.webp"
+        }
+      ]
     });
 
-    console.log("Games seeded");
+    console.log("Game Communities seeded");
   }
 
+  // Reviews
   async function createReviews() {
     const users = await prisma.user.findMany();
-    const games = await prisma.game.findMany();
+    const communities = await prisma.gameCommunity.findMany();
 
-    const alice = users.find((u) => u.username === "alicew");
+    const alex = users.find((u) => u.username === "alex");
     const ghost = users.find((u) => u.username === "ghost");
 
-    await prisma.review.createMany({
+    await prisma.post.createMany({
       data: [
         {
           title: "Loved it!",
-          body: "Amazing open-world and challenging bosses.",
-          AvgRating: 10,
-          userId: alice.id,
-          gameId: games[0].id, 
+          description: "Amazing open-world and challenging bosses.",
+          postType: "text",
+          userId: alex.id,
+          communityId: communities[0].id,
+          likes: 10
         },
         {
           title: "Very cinematic",
-          body: "Amazing open-world and challenging bosses.",
-          AvgRating: 9,
+          description: "Incredible acting and writing.",
+          postType: "text",
           userId: ghost.id,
-          gameId: games[1].id,
+          communityId: communities[1].id,
+          likes: 9
         },
         {
           title: "Addictive gameplay",
-          body: "Amazing and challenging bosses.",
-          AvgRating: 9,
-          userId: alice.id,
-          gameId: games[2].id,
-        },
-      ],
+          description: "Super charming and fun.",
+          postType: "text",
+          userId: alex.id,
+          communityId: communities[2].id,
+          likes: 9
+        }
+      ]
     });
 
-    console.log("Reviews seeded");
+    console.log("Posts (Reviews) seeded");
   }
 
+  // Comments
+  async function createComments() {
+    const users = await prisma.user.findMany();
+    const posts = await prisma.post.findMany();
+
+    const alex = users.find((u) => u.username === "alex");
+    const ghost = users.find((u) => u.username === "ghost");
+
+    await prisma.comment.createMany({
+      data: [
+        {
+          body: "Agree! This game was awesome.",
+          postId: posts[0].id,
+          userId: ghost.id,
+          likes: 3
+        },
+        {
+          body: "I was impressed by the graphics.",
+          postId: posts[1].id,
+          userId: alex.id,
+          likes: 2
+        },
+        {
+          body: "One of the best I have played.",
+          postId: posts[2].id,
+          userId: ghost.id,
+          likes: 5
+        }
+      ]
+    });
+
+    console.log("Comments seeded");
+  }
+
+  // Favorites
+  async function createFavorites() {
+    const users = await prisma.user.findMany();
+    const posts = await prisma.post.findMany();
+
+    const alex = users.find((u) => u.username === "alex");
+    const ghost = users.find((u) => u.username === "ghost");
+
+    await prisma.favorites.createMany({
+      data: [
+        {
+          userId: alex.id,
+          postId: posts[0].id
+        },
+        {
+          userId: ghost.id,
+          postId: posts[1].id
+        },
+        {
+          userId: alex.id,
+          postId: posts[2].id
+        }
+      ]
+    });
+
+    console.log("Favorites seeded");
+  }
+
+  // Post 
+  async function createPosts() {
+    const users = await prisma.user.findMany();
+    const communities = await prisma.gameCommunity.findMany();
+
+    const alex = users.find((u) => u.username === "alex");
+    const ghost = users.find((u) => u.username === "ghost");
+
+    await prisma.post.createMany({
+      data: [
+        {
+          title: "Insane boss fight",
+          content: "https://www.youtube.com/watch?v=D_iqjI2p7F4",
+          description: "Malenia: 'I have never known defeat'.",
+          postType: Video,
+          userId: alex.id,
+          communityId: communities[0].id,
+          likes: 12
+        }
+      ]
+    });
+  
+    console.log("Posts seeded");
+  }
+
+  // Run all
   await createUser();
   await createGames();
   await createReviews();
+  await createComments();
+  await createFavorites();
+  await createPosts ();
 };
 
 seed()
