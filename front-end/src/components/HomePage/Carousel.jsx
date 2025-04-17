@@ -50,13 +50,9 @@ export default function Carousel() {
       {/* Carousel */}
       <div ref={sliderRef} className="keen-slider">
         {mockData.map((game) => (
-          <div
-            key={game.id}
-            className="keen-slider__slide p-2"
-          >
+          <div key={game.id} className="keen-slider__slide p-2">
             <Link to={`/games/${game.id}`}>
-              <div className="block bg-gray-800 rounded-lg overflow-hidden shadow hover:scale-105 hover:ring-2 hover:ring-orange-400 transition duration-200"
-              >
+              <div className="block bg-gray-800 rounded-lg overflow-hidden shadow hover:scale-105 hover:ring-2 hover:ring-blue-400 transition duration-200">
                 <img
                   src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover}.jpg`}
                   alt={game.name}

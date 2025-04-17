@@ -1,2 +1,35 @@
 @import "tailwindcss";
 @import "keen-slider/keen-slider.min.css";
+
+
+/* Custom Scrollbar Styling, applying this "Globaly" as to be able to use in various components */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #586ca5; 
+    border-radius: 8px;
+    animation: pulse-scroll 2s infinite;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background-color: #1e3a8a; 
+    border-radius: 8px;
+  }
+
+  /* Scroll bar animation! */
+  @keyframes pulse-scroll {
+    0%, 100% {
+      background-color: #586ca5;
+    }
+    50% {
+      background-color: #7f9cf5;
+    }
+  }
+
+
+  
+  
