@@ -6,34 +6,37 @@ const seed = async () => {
   async function createUser() {
     const hashedPassword = await bcrypt.hash("password123", 10);
 
-    // 1. Admin user
+    const imgPath = '../src/images/'
+    // Admin user
     await prisma.user.create({
       data: {
-        email: "admin@example.com",
+        email: "admin@admin.com",
         username: "admin",
         password: hashedPassword,
+        avatar: `${imgPath}defaultavatar1` ,
         isAdmin: true,
         fName: null,
         lName: null,
       },
     });
 
-    // 2. Regular user with full name
+    // Full Name Test w/ Avatar
     await prisma.user.create({
       data: {
-        email: "alice@example.com",
-        username: "alicew",
+        email: "full@name.com",
+        username: "fullNameTest",
         password: hashedPassword,
-        fName: "Alice",
-        lName: "Wong",
+        avatar: `${imgPath}defaultavatar2`,
+        fName: "FirstName",
+        lName: "LastName",
       },
     });
 
-    // 3. User with no name
+    // no name and no avatar
     await prisma.user.create({
       data: {
-        email: "ghost@example.com",
-        username: "ghost",
+        email: "no@name.com",
+        username: "noNameTest",
         password: hashedPassword,
       },
     });
@@ -111,8 +114,8 @@ const seed = async () => {
   }
 
   await createUser();
-  await createGames();
-  await createReviews();
+  // await createGames();
+  // await createReviews();
 };
 
 seed()
