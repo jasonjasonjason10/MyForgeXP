@@ -4,17 +4,40 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function Register({ setToken }) {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registering:", email, password);
+    setError(null);
 
-    // CHANGE THIS TO A SIMPLE YET STYLED SUCCESS MESSAGE ONCE WE HAVE HOOKED UP TO BACK END
-    alert("Registered! (You can hook this up to the backend later)");
-    navigate("/login");
+    try {
+      const response = await fetch("http://localhost:3000/user/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, username, fName, lName, password }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setToken(result.token);
+        localStorage.setItem("token", result.token);
+        setSuccessMessage(result.successMessage);
+        setTimeout(() => navigate("/"), 1500);
+      } else {
+        setError(result.error || "Registration failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong.");
+    }
   };
 
   return (
@@ -41,7 +64,65 @@ export default function Register({ setToken }) {
               className="h-20 w-auto drop-shadow-xl"
             />
           </div>
+          {error && (
+            <p className="text-orange-400 text-sm mb-2 text-center">{error}</p>
+          )}
+          {successMessage && (
+            <p className="text-blue-400 text-sm mb-2 text-center">
+              {successMessage}
+            </p>
+          )}
 
+          {/* Field for first name input*/}
+          <label
+            className="block mb-2 font-semibold text-white"
+            htmlFor="fName"
+          >
+            First Name
+          </label>
+          <input
+            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            id="fName"
+            placeholder="First Name (optional)"
+            value={fName}
+            onChange={(e) => setFName(e.target.value)}
+          />
+
+          {/* field for Last name input */}
+          <label
+            className="block mb-2 font-semibold text-white"
+            htmlFor="lName"
+          >
+            Last Name
+          </label>
+          <input
+            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            id="lName"
+            placeholder="Last Name (optional)"
+            value={lName}
+            onChange={(e) => setLName(e.target.value)}
+          />
+
+          {/* Field for username input */}
+          <label
+            className="block mb-2 font-semibold text-white"
+            htmlFor="username"
+          >
+            Username
+          </label>
+          <input
+            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+            type="text"
+            id="username"
+            placeholder="Choose a username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+
+          {/* field for Email input */}
           <label className="block mb-2 font-semibold" htmlFor="email">
             Email
           </label>

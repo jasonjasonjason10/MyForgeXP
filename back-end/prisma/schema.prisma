@@ -7,6 +7,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
+  binaryTargets = ["native", "windows"] //=============!!Jason added this per the linux vs windows Prisma Client generation. May cause conflict when merging========//
 }
 
 datasource db {

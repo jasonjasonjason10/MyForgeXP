@@ -174,7 +174,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/run/media/nathan/user/Documents/Coursework/ForgeXP/ForgeXP/back-end/generated/prisma",
+      "value": "C:\\Bootcamp\\Capstone\\ForgeXP\\back-end\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -183,12 +183,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/run/media/nathan/user/Documents/Coursework/ForgeXP/ForgeXP/back-end/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Bootcamp\\Capstone\\ForgeXP\\back-end\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -206,12 +210,12 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://nathan:B!gboy69@localhost/ForgeXP_db"
+        "value": "postgresql://jason:kevinkevin@localhost/ForgeXP_db"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int             @id @default(autoincrement())\n  email     String          @unique\n  username  String          @unique\n  password  String\n  avatar    String?\n  isAdmin   Boolean         @default(false)\n  fName     String?\n  lName     String?\n  createdAt DateTime        @default(now())\n  posts     Post[]\n  favorites Favorites[]\n  community GameCommunity[]\n  comments  Comment[]\n}\n\nmodel GameCommunity {\n  id          Int     @id @default(autoincrement())\n  gameName    String  @unique\n  isActive    Boolean @default(false)\n  description String?\n  coverImage  String?\n  posts       Post[]\n  users       User[]\n}\n\nmodel Post {\n  id          Int           @id @default(autoincrement())\n  title       String\n  content     String? // where you store the video|photo\n  description String? // for text post, or a desc for video|photo\n  postType    PostType\n  createdAt   DateTime      @default(now())\n  userId      Int\n  user        User          @relation(fields: [userId], references: [id])\n  communityId Int\n  community   GameCommunity @relation(fields: [communityId], references: [id])\n  likes       Int?\n  favorites   Favorites[]\n  comments    Comment[]\n}\n\nenum PostType {\n  video\n  image\n  text\n}\n\nmodel Favorites {\n  id     Int  @id @default(autoincrement())\n  userId Int\n  user   User @relation(fields: [userId], references: [id])\n  postId Int\n  post   Post @relation(fields: [postId], references: [id])\n}\n\nmodel Comment {\n  id     Int    @id @default(autoincrement())\n  body   String\n  likes  Int?\n  postId Int\n  post   Post   @relation(fields: [postId], references: [id])\n  userId Int\n  user   User   @relation(fields: [userId], references: [id])\n}\n",
-  "inlineSchemaHash": "7ee3d3350dc4238f825b414cb5d4890db8054845fe47c309375e11f578536ba1",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"windows\"] //=============!!Jason added this per the linux vs windows Prisma Client generation. May cause conflict when merging========//\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int             @id @default(autoincrement())\n  email     String          @unique\n  username  String          @unique\n  password  String\n  avatar    String?\n  isAdmin   Boolean         @default(false)\n  fName     String?\n  lName     String?\n  createdAt DateTime        @default(now())\n  posts     Post[]\n  favorites Favorites[]\n  community GameCommunity[]\n  comments  Comment[]\n}\n\nmodel GameCommunity {\n  id          Int     @id @default(autoincrement())\n  gameName    String  @unique\n  isActive    Boolean @default(false)\n  description String?\n  coverImage  String?\n  posts       Post[]\n  users       User[]\n}\n\nmodel Post {\n  id          Int           @id @default(autoincrement())\n  title       String\n  content     String? // where you store the video|photo\n  description String? // for text post, or a desc for video|photo\n  postType    PostType\n  createdAt   DateTime      @default(now())\n  userId      Int\n  user        User          @relation(fields: [userId], references: [id])\n  communityId Int\n  community   GameCommunity @relation(fields: [communityId], references: [id])\n  likes       Int?\n  favorites   Favorites[]\n  comments    Comment[]\n}\n\nenum PostType {\n  video\n  image\n  text\n}\n\nmodel Favorites {\n  id     Int  @id @default(autoincrement())\n  userId Int\n  user   User @relation(fields: [userId], references: [id])\n  postId Int\n  post   Post @relation(fields: [postId], references: [id])\n}\n\nmodel Comment {\n  id     Int    @id @default(autoincrement())\n  body   String\n  likes  Int?\n  postId Int\n  post   Post   @relation(fields: [postId], references: [id])\n  userId Int\n  user   User   @relation(fields: [userId], references: [id])\n}\n",
+  "inlineSchemaHash": "a1c73311d6fe56b1889cd3d4c21b26b3e9518e37a6a82652e0d5eab1c5c2b106",
   "copyEngine": true
 }
 
@@ -250,8 +254,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "generated/prisma/query_engine-windows.dll.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")
