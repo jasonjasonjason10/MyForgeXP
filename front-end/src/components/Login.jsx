@@ -25,14 +25,25 @@ const Login = ({ setToken }) => {
       });
 
       const result = await response.json();
-      setToken(result);
-      localStorage.setItem("token", result);
+      if (!response.ok) {
+        setError(result.message || "Login failed.");
+        return;
+      }
+      setToken(result.token);
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("isAdmin", result.isAdmin);
       setSuccessMessage(`${result.message} Welcome ${result.email}`);
       setEmail("");
       setPassword("");
-      navigate("/");
+      if (result.isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
     } catch (error) {
-      setError(error.message);
+      setError("Something went wrong. Please try again.");
+      console.error("Login error:", error);
     }
   }
 
