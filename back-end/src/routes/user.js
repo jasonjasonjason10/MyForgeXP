@@ -90,9 +90,14 @@ router.get("/info", tokenAuth, async (req, res, next) => {
         id: allInfo.id,
         email: allInfo.email,
         username: allInfo.username,
+        avatar: allInfo.avatar,
         isAdmin: allInfo.isAdmin,
         fName: allInfo.fName,
-        lName: allInfo.lName
+        lName: allInfo.lName,
+        createdAt: allInfo.createdAt
+        //posts?
+        //communities?
+        //comments?
     }
 
     res.status(200).json({
@@ -101,13 +106,133 @@ router.get("/info", tokenAuth, async (req, res, next) => {
     })
 })
 
-// get all users
+// get all users==========ADMIN ONLY=====================
 
-// delete a user
+router.get("/all", tokenAuth, async (req, res) => {
+    const isAdmin = req.isAdmin
 
-// update a user by id (by that user)
+    if(!isAdmin){
+        return res.status(401).json({
+            error: "No Admin Privilege"
+        })
+    }
 
-// admin update 
+    const allUsers = await prisma.user.findMany()
+
+    res.status(200).json({
+        successMessage: "all active users",
+        users: allUsers
+    })
+})
+
+// delete a user=========ADMIN OR EXISTIING USER========
+
+router.delete("/delete/:id", tokenAuth, async (req, res) => {
+    const isAdmin = req.isAdmin
+    const userId = req.userId
+    const id = +req.params.id
+
+    const userExists = await prisma.user.findUnique({ where: { id }})
+    if(!userExists){
+        return res.status(404).json({
+            error: "No Existing User To Delete"
+        })
+    }
+    if( isAdmin || userId === id ){
+        const user = await prisma.user.delete({ where: { id }})
+        return res.status(200).json({
+            successMessage: "userDeleted",
+            user: user
+        })
+    } else {
+        return res.status(401).json({
+            error: "Not Auth"
+        })
+    }
+})
+
+// update a user=====================================
+
+router.put("/update/:id", tokenAuth, async (req, res) => {
+    const isAdmin = req.isAdmin
+    const userId = req.userId
+    const id = +req.params.id
+
+    const userExists = await prisma.user.findUnique({ where: { id }})
+    if(!userExists){
+        return res.status(404).json({
+            error: "No Existing User to Update"
+        })
+    }
+    const { email, username, password, avatar, fName, lName } = req.body
+    let hashedPassword = undefined
+    if(password){
+        hashedPassword = await bcrypt.hash(password, 10)
+    }
+
+    if( isAdmin || userId === id){
+        const updatedUser = await prisma.user.update({
+            where: {id},
+            data: {
+                email,
+                username,
+                password: hashedPassword || userExists.password,
+                avatar,
+                fName,
+                lName
+            }
+        })
+        
+        res.status(200).json({
+            successMessage: "User Update",
+            oldData: userExists,
+            updatedData: updatedUser
+        })
+    } else {
+        return res.status(403).json({
+            error: "Not Auth"
+        })
+    }
+})
+
+// admin update ========================================
+
+router.patch("/upgrade/:id", tokenAuth,  async (req, res) => {
+    const id = +req.params.id;
+    const isAdmin = req.isAdmin
+
+    const userExists = await prisma.user.findUnique({ where: { id }})
+    if(!userExists){
+        return res.status(404).json({
+            error: "No User To Upgrade"
+        })
+    }
+    if(id === 1) {
+        return res.status(403).json({
+            error: "Cannot downgrade Owner"
+        })
+    }
+    if(!isAdmin){
+        return res.status(403).json({
+            error: "Missing Admin Privilege"
+        })
+    }
+    const upgradedUser = await prisma.user.update({
+        where: {id},
+        data: {isAdmin: !userExists.isAdmin}
+    })
+
+    if(upgradedUser.isAdmin){
+        res.status(200).json({
+            successMessage: "User Successfully Upgraded To Admin"
+        })
+    } else {
+        return res.status(200).json({
+            successMessage: "User Successfuly Downgraded",
+            user: upgradedUser
+        })
+    }
+})
 
 
 
