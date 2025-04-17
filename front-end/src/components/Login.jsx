@@ -32,14 +32,16 @@ const Login = ({ setToken }) => {
       setToken(result.token);
       localStorage.setItem("token", result.token);
       localStorage.setItem("isAdmin", result.isAdmin);
-      setSuccessMessage(`${result.message} Welcome ${result.email}`);
+      setSuccessMessage(`Success!`);
       setEmail("");
       setPassword("");
-      if (result.isAdmin) {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
+      setTimeout(() => {
+        if (result.isAdmin) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+      }, 1500);
 
     } catch (error) {
       setError("Something went wrong. Please try again.");
@@ -48,34 +50,44 @@ const Login = ({ setToken }) => {
   }
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      {error && <p>{error}</p>}
-      {successMessage && <p>{successMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            placeholder="Enter your email"
-            onChange={(e) => setEmail(e.target.value)}
-            required/>
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            minLength="8"
-            required/>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-[#0a1a2f] p-4">
+      <div className="w-full max-w-md bg-[#13294b] text-white rounded-2xl shadow-lg p-8">
+        <h2 className="text-3xl font-semibold text-center mb-6 text-white">Sign In</h2>
+  
+        {error && <p className="text-red-400 text-sm mb-4 text-center">{error}</p>}
+        {successMessage && <p className="text-green-400 text-sm mb-4 text-center">{successMessage}</p>}
+  
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="email" className="block mb-1 text-sm text-blue-300">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              placeholder="Enter your email"
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-[#0f1e36] text-white border border-blue-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required/>
+          </div>
+          <div>
+            <label htmlFor="password" className="block mb-1 text-sm text-blue-300">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength="8"
+              className="w-full px-4 py-2 rounded-lg bg-[#0f1e36] text-white border border-blue-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required/>
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 rounded-lg bg-orange-500 hover:bg-orange-600 transition-all text-white font-semibold">
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
