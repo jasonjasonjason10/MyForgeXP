@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import Homepage from "./components/Homepage";
+import Homepage from "./components/HomePage/Homepage";
 import AllGames from "./components/Games/AllGames";
 import SingleGame from "./components/Games/SingleGame";
 import Login from "./components/Login";
