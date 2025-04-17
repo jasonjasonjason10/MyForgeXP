@@ -1,7 +1,5 @@
 import HomeIntro from "./HomeIntro";
 import Carousel from "./Carousel";
-import TopRanked from "./TopRanked";
-import TopRated from "./TopRated";
 
 export default function Homepage() {
   return (
@@ -20,19 +18,11 @@ export default function Homepage() {
         <HomeIntro />
 
         <div className="w-full flex flex-row justify-between items-start gap-4 overflow-hidden px-2">
-          {/* scroll list on LEFT */}
-          <TopRanked />
-
           <div className="flex-1 min-w-[0]">
             <Carousel />
           </div>
-
-          {/* scroll list on RIGHT*/}
-          <TopRated />
         </div>
       </section>
     </div>
   );
 }
-
-
