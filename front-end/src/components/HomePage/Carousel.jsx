@@ -10,18 +10,30 @@ export default function Carousel() {
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
     slides: {
-      perView: 3,
-      spacing: 15,
+      perView: 3, // default (desktop)
+      spacing: 16,
     },
-    slideChanged(slider) {
-      setCurrentSlide(slider.track.details.rel);
+    breakpoints: {
+      '(max-width: 768px)': {
+        slides: {
+          perView: 1, // mobile: only show 1
+          spacing: 12,
+        },
+      },
+      '(max-width: 1024px)': {
+        slides: {
+          perView: 2, // tablet: show 2
+          spacing: 14,
+        },
+      },
     },
   });
+  
 
   return (
     <div className="relative bg-gray-900 rounded-lg p-4 shadow-lg">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-bold flex items-center gap-2">
+        <h3 className="text-xl font-bold flex items-center gap-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
           Featured Games
         </h3>
         <Link
@@ -48,17 +60,17 @@ export default function Carousel() {
       </button>
 
       {/* Carousel */}
-      <div ref={sliderRef} className="keen-slider">
+      <div ref={sliderRef} className="keen-slider ">
         {mockData.map((game) => (
-          <div key={game.id} className="keen-slider__slide p-2">
+          <div key={game.id} className="keen-slider__slide p-4 sm:p-5 lg:p-6">
             <Link to={`/games/${game.id}`}>
-              <div className="block bg-gray-800 rounded-lg overflow-hidden shadow hover:scale-105 hover:ring-2 hover:ring-blue-400 transition duration-200">
+              <div className="bg-gray-800 rounded-lg border border-transparent hover:border-blue-400 hover:scale-105 transition duration-200 shadow p-2">
                 <img
-                  src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover}.jpg`}
+                  src={game.cover}
                   alt={game.name}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48 object-cover object-center rounded-md"
                 />
-                <div className="p-3">
+                <div className="pt-3">
                   <h4 className="text-white text-md font-bold truncate">
                     {game.name}
                   </h4>
