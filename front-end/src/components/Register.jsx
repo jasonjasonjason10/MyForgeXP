@@ -50,13 +50,6 @@ export default function Register({ setToken, token }) {
   };
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background image and overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center blur-md scale-105"
-        style={{ backgroundImage: "url('/images/forgexp-bg.png')" }}
-      />
-      <div className="absolute inset-0 bg-black opacity-60" />
-
       <div className="relative z-10 flex justify-center items-center min-h-screen px-4 my-10">
         {loading ? (
           // Loading state that wil display mini logo and message so user doesnt spam
@@ -227,11 +220,6 @@ export default function Register({ setToken, token }) {
           </form>
         )}
       </div>
-      <footer className="relative z-10 w-full bg-gray-900 text-white py-3 px-6 border-t border-gray-700 mt-10">
-        <div className="w-full text-left text-sm">
-          © {new Date().getFullYear()} ForgeXP. All rights reserved.
-        </div>
-      </footer>
     </div>
   );
 }
