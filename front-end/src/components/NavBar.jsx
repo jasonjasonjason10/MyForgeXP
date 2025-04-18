@@ -4,6 +4,11 @@ import { useState } from "react";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const clickHandle = () => {
+    localStorage.removeItem("token");
+    console.log(localStorage.getItem("token"));
+    window.location.reload();
+  };
 
   return (
     <nav className="bg-gray-700 text-white px-6 py-4 shadow-md border-b">
@@ -30,25 +35,58 @@ export default function NavBar() {
         {/* Nav links (desktop not mobile) */}
         <ul className="hidden lg:flex gap-6 text-lg">
           <li>
-            <Link to="/community" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            <Link
+              to="/community"
+              className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            >
               Community
             </Link>
           </li>
           <li>
-            <Link to="/all-games" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            <Link
+              to="/all-games"
+              className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            >
               All Games
             </Link>
           </li>
-          <li>
-            <Link to="/login" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link to="/register" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-              Register
-            </Link>
-          </li>
+          {!localStorage.getItem("token") ? (
+            <>
+              <li>
+                <Link
+                  to="/login"
+                  className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                >
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/register"
+                  className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                >
+                  Register
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li
+                onClick={clickHandle}
+                className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-pointer"
+              >
+                Logout
+              </li>
+              <li>
+                <Link
+                  to="/account"
+                  className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                >
+                  My Account
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
 
@@ -73,24 +111,49 @@ export default function NavBar() {
               All Games
             </Link>
           </li>
-          <li>
-            <Link
-              to="/login"
-              className="hover:text-orange-400"
-              onClick={() => setIsOpen(false)}
+
+          {!localStorage.getItem("token") ? (
+            <>
+              <li>
+                <Link
+                  to="/login"
+                  className="hover:text-orange-400"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/register"
+                  className="hover:text-orange-400"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Register
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+            <li
+              onClick={() => {
+                clickHandle();
+                setIsOpen(false);
+              }}
+              className="hover:text-orange-400 cursor-pointer"
             >
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/register"
-              className="hover:text-orange-400"
-              onClick={() => setIsOpen(false)}
-            >
-              Register
-            </Link>
-          </li>
+              Logout
+            </li>
+             <li>
+             <Link
+               to="/account"
+               className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+             >
+               My Account
+             </Link>
+           </li>
+           </>
+          )}
         </ul>
       )}
     </nav>

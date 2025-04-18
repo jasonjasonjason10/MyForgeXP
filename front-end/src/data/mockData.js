@@ -390,6 +390,12 @@ const mockData = [
       description: "Astro Bot can proudly stand beside the PlayStation icons it celebrates.",
       cover: "https://cdn.mobygames.com/f1e25e84-6c90-11ef-8a5e-02420a000112.webp",
     },
+    {
+      id: 4,
+      name: "PUBG",
+      description: "Greatest game ever made, can i get a headshot!?",
+      cover: "https://m.media-amazon.com/images/I/814bhRMHjUL.jpg",
+    },
   ];
   
   export default mockData;
