@@ -6,7 +6,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-700 text-white px-6 py-4 shadow-md">
+    <nav className="bg-gray-700 text-white px-6 py-4 shadow-md border-b">
       <div className="flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <img
@@ -14,7 +14,7 @@ export default function NavBar() {
             alt="ForgeXP Logo"
             className="h-8 w-auto drop-shadow-xl"
           />
-          <span className="text-2xl font-extrabold text-orange-400 hover:text-orange-300 transition text-shadow-lg">
+          <span className="font-forge text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]">
             ForgeXP
           </span>
         </Link>
@@ -30,22 +30,22 @@ export default function NavBar() {
         {/* Nav links (desktop not mobile) */}
         <ul className="hidden lg:flex gap-6 text-lg">
           <li>
-            <Link to="/community" className="hover:text-orange-400">
+            <Link to="/community" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               Community
             </Link>
           </li>
           <li>
-            <Link to="/all-games" className="hover:text-orange-400">
+            <Link to="/all-games" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               All Games
             </Link>
           </li>
           <li>
-            <Link to="/login" className="hover:text-orange-400">
+            <Link to="/login" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               Login
             </Link>
           </li>
           <li>
-            <Link to="/register" className="hover:text-orange-400">
+            <Link to="/register" className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               Register
             </Link>
           </li>

@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { FaHammer } from "react-icons/fa";
 
 export default function Register({ setToken }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:3000/user/register", {
@@ -30,16 +34,20 @@ export default function Register({ setToken }) {
         setToken(result.token);
         localStorage.setItem("token", result.token);
         setSuccessMessage(result.successMessage);
+
+        setLoading(false);
         setTimeout(() => navigate("/"), 1500);
       } else {
+        setLoading(false);
         setError(result.error || "Registration failed.");
       }
     } catch (err) {
       console.error(err);
+      setLoading(false);
+
       setError("Something went wrong.");
     }
   };
-
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Background image and overlay */}
@@ -49,123 +57,181 @@ export default function Register({ setToken }) {
       />
       <div className="absolute inset-0 bg-black opacity-60" />
 
-      {/* Form container */}
-      <div className="relative z-10 flex justify-center items-center min-h-screen px-4">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-cover bg-center border border-blue-500 p-8 rounded-lg shadow-xl w-full max-w-md"
-          style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
-        >
-          <h2 className="text-3xl font-bold text-center mb-6">Register</h2>
-          <div className="flex justify-center my-4">
+      <div className="relative z-10 flex justify-center items-center min-h-screen px-4 my-10">
+        {loading ? (
+          // Loading state that wil display mini logo and message so user doesnt spam
+          <div className="text-center flex flex-col items-center">
             <img
               src="/images/minilogo.png"
-              alt="ForgeXP Logo"
-              className="h-20 w-auto drop-shadow-xl"
+              alt="Loading Logo"
+              className="h-24 w-auto animate-pulse drop-shadow-xl"
             />
-          </div>
-          {error && (
-            <p className="text-orange-400 text-sm mb-2 text-center">{error}</p>
-          )}
-          {successMessage && (
-            <p className="text-blue-400 text-sm mb-2 text-center">
-              {successMessage}
+            <p className="text-orange-400 font-semibold mt-4 text-xl">
+              <FaHammer className="animate-bounce" />
+              Forging New User...
             </p>
-          )}
-
-          {/* Field for first name input*/}
-          <label
-            className="block mb-2 font-semibold text-white"
-            htmlFor="fName"
-          >
-            First Name
-          </label>
-          <input
-            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text"
-            id="fName"
-            placeholder="First Name (optional)"
-            value={fName}
-            onChange={(e) => setFName(e.target.value)}
-          />
-
-          {/* field for Last name input */}
-          <label
-            className="block mb-2 font-semibold text-white"
-            htmlFor="lName"
-          >
-            Last Name
-          </label>
-          <input
-            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text"
-            id="lName"
-            placeholder="Last Name (optional)"
-            value={lName}
-            onChange={(e) => setLName(e.target.value)}
-          />
-
-          {/* Field for username input */}
-          <label
-            className="block mb-2 font-semibold text-white"
-            htmlFor="username"
-          >
-            Username
-          </label>
-          <input
-            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-            type="text"
-            id="username"
-            placeholder="Choose a username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-
-          {/* field for Email input */}
-          <label className="block mb-2 font-semibold" htmlFor="email">
-            Email
-          </label>
-          <input
-            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <label className="block mb-2 font-semibold" htmlFor="password">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-              type={showPassword ? "text" : "password"}
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength="8"
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-3 right-4 text-xl cursor-pointer text-gray-300 hover:text-white"
-            >
-              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-            </span>
           </div>
-
-          <button
-            type="submit"
-            className="w-full py-2 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded mt-2 transition"
+        ) : (
+          //REGISTER FORM
+          <form
+            onSubmit={handleSubmit}
+            className="bg-cover bg-center border border-blue-500 p-8 rounded-lg shadow-xl w-full max-w-md"
+            style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
           >
-            Register
-          </button>
-        </form>
+            <h2 className="text-3xl font-bold text-center mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+              Register
+            </h2>
+            <div className="flex justify-center my-4">
+              <img
+                src="/images/minilogo.png"
+                alt="ForgeXP Logo"
+                className="h-20 w-auto drop-shadow-xl"
+              />
+            </div>
+
+            {error && (
+              <p className="text-orange-400 text-sm mb-2 text-center">
+                {error}
+              </p>
+            )}
+            {successMessage && (
+              <p className="text-blue-400 text-sm mb-2 text-center">
+                {successMessage}
+              </p>
+            )}
+
+            {/* Field for first name */}
+            <label
+              className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              htmlFor="fName"
+            >
+              First Name
+            </label>
+            <input
+              id="fName"
+              type="text"
+              placeholder="First Name (optional)"
+              value={fName}
+              onChange={(e) => setFName(e.target.value)}
+              className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            {/* Field for last name */}
+            <label
+              className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              htmlFor="lName"
+            >
+              Last Name
+            </label>
+            <input
+              id="lName"
+              type="text"
+              placeholder="Last Name (optional)"
+              value={lName}
+              onChange={(e) => setLName(e.target.value)}
+              className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            {/* Field for username */}
+            <label
+              className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              htmlFor="username"
+            >
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Choose a username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+
+            {/* Field for Email */}
+            <label
+              className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+
+            {/* Field for Password */}
+            <label
+              className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                minLength="8"
+                required
+                className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-3 right-4 text-xl cursor-pointer text-gray-300 hover:text-white"
+              >
+                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </span>
+            </div>
+
+            <label
+              className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              htmlFor="confirmPassword"
+            >
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                placeholder="Please Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                minLength="8"
+                required
+                className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-3 right-4 text-xl cursor-pointer text-gray-300 hover:text-white"
+              >
+                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded mt-2 transition disabled:opacity-50"
+            >
+              Register
+            </button>
+          </form>
+        )}
       </div>
+      <footer className="relative z-10 w-full bg-gray-900 text-white py-3 px-6 border-t border-gray-700 mt-10">
+        <div className="w-full text-left text-sm">
+          © {new Date().getFullYear()} ForgeXP. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }

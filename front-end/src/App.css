@@ -1,6 +1,13 @@
 @import "tailwindcss";
 @import "keen-slider/keen-slider.min.css";
 
+@font-face {
+  font-family: 'ForgeXP';
+  src: url('./assets/ForgeXP.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 /* Custom Scrollbar Styling, applying this "Globaly" as to be able to use in various components */
 .scrollbar-thin::-webkit-scrollbar {

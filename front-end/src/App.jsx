@@ -12,13 +12,13 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* <div className="max-w-[2900px] mx-auto px-4"> */} 
+      {/* <div className="max-w-[2900px] mx-auto px-4"> */}
       <NavBar />
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/register" element={<Register setToken={setToken} />} />
-        
+
         <Route path="/all-games" element={<AllGames />} />
         <Route path="/games/:id" element={<SingleGame />} />
 
