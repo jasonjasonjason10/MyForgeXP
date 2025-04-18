@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaHammer } from "react-icons/fa";
 
-export default function Register({ setToken }) {
+export default function Register({ setToken, token }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [fName, setFName] = useState("");
@@ -29,14 +29,14 @@ export default function Register({ setToken }) {
       });
 
       const result = await response.json();
+      console.log("fetch result", result); //REMOVE LATER
 
       if (response.ok) {
-        setToken(result.token);
         localStorage.setItem("token", result.token);
         setSuccessMessage(result.successMessage);
 
         setLoading(false);
-        setTimeout(() => navigate("/"), 1500);
+        setTimeout(() => navigate("/login"), 1500);
       } else {
         setLoading(false);
         setError(result.error || "Registration failed.");
