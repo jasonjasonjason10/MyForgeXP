@@ -6,7 +6,7 @@ export default function HomeIntro() {
       <img
         src="/images/forgexp-logo.png"
         alt="ForgeXP Logo"
-        className="w-32 h-auto mb-6 drop-shadow-xl"
+        className="w-32 h-auto mb-6 drop-shadow-xl forge-tilt"
       />
       <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-shadow-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
         Welcome to ForgeXP
