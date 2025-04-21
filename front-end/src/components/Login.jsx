@@ -10,7 +10,6 @@ const Login = ({ setToken }) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     if (!email && !password) {
       setError("Both fields are required.");
       console.error(error);
@@ -31,6 +30,7 @@ const Login = ({ setToken }) => {
       }
       setToken(result.token);
       localStorage.setItem("token", result.token);
+      localStorage.setItem("email", result.email);
       localStorage.setItem("isAdmin", result.isAdmin);
       setSuccessMessage(`Success!`);
       setEmail("");
