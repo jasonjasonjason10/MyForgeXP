@@ -297,5 +297,4 @@ router.put('/:id/avatar', /* tokenauth whatever */ upload.single('avatar'), asyn
 //     }
 // })
 
-
 module.exports = router

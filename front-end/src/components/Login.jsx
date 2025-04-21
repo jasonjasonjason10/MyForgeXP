@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ setToken }) => {
@@ -10,7 +10,6 @@ const Login = ({ setToken }) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     if (!email && !password) {
       setError("Both fields are required.");
       console.error(error);
@@ -31,6 +30,7 @@ const Login = ({ setToken }) => {
       }
       setToken(result.token);
       localStorage.setItem("token", result.token);
+      localStorage.setItem("email", result.email);
       localStorage.setItem("isAdmin", result.isAdmin);
       setSuccessMessage(`Success!`);
       setEmail("");
@@ -42,7 +42,6 @@ const Login = ({ setToken }) => {
           navigate("/");
         }
       }, 1500);
-
     } catch (error) {
       setError("Something went wrong. Please try again.");
       console.error("Login error:", error);
@@ -50,16 +49,26 @@ const Login = ({ setToken }) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a1a2f] p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-[#13294b] text-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-semibold text-center mb-6 text-white">Sign In</h2>
-  
-        {error && <p className="text-red-400 text-sm mb-4 text-center">{error}</p>}
-        {successMessage && <p className="text-green-400 text-sm mb-4 text-center">{successMessage}</p>}
-  
+        <h2 className="text-3xl font-semibold text-center mb-6 text-white">
+          Sign In
+        </h2>
+
+        {error && (
+          <p className="text-red-400 text-sm mb-4 text-center">{error}</p>
+        )}
+        {successMessage && (
+          <p className="text-green-400 text-sm mb-4 text-center">
+            {successMessage}
+          </p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block mb-1 text-sm text-blue-300">Email</label>
+            <label htmlFor="email" className="block mb-1 text-sm text-blue-300">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -67,10 +76,16 @@ const Login = ({ setToken }) => {
               placeholder="Enter your email"
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 rounded-lg bg-[#0f1e36] text-white border border-blue-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required/>
+              required
+            />
           </div>
           <div>
-            <label htmlFor="password" className="block mb-1 text-sm text-blue-300">Password</label>
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm text-blue-300"
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -79,11 +94,13 @@ const Login = ({ setToken }) => {
               onChange={(e) => setPassword(e.target.value)}
               minLength="8"
               className="w-full px-4 py-2 rounded-lg bg-[#0f1e36] text-white border border-blue-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required/>
+              required
+            />
           </div>
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-orange-500 hover:bg-orange-600 transition-all text-white font-semibold">
+            className="w-full py-2 rounded-lg bg-orange-500 hover:bg-orange-600 transition-all text-white font-semibold"
+          >
             Submit
           </button>
         </form>

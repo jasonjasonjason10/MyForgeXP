@@ -2,41 +2,49 @@
 @import "keen-slider/keen-slider.min.css";
 
 @font-face {
-  font-family: 'ForgeXP';
-  src: url('./assets/ForgeXP.ttf') format('truetype');
+  font-family: "ForgeXP";
+  src: url("./assets/ForgeXP.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
-
 /* Custom Scrollbar Styling, applying this "Globaly" as to be able to use in various components */
 .scrollbar-thin::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #586ca5; 
-    border-radius: 8px;
-    animation: pulse-scroll 2s infinite;
-    transition: background-color 0.3s ease;
-    
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background-color: #1e3a8a; 
-    border-radius: 8px;
-  }
+  width: 8px;
+}
 
-  /* Scroll bar animation! */
-  @keyframes pulse-scroll {
-    0%, 100% {
-      background-color: #586ca5;
-    }
-    50% {
-      background-color: #7f9cf5;
-    }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #586ca5;
+  border-radius: 8px;
+  animation: pulse-scroll 2s infinite;
+  transition: background-color 0.3s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: #1e3a8a;
+  border-radius: 8px;
+}
+
+/* Scroll bar animation! */
+@keyframes pulse-scroll {
+  0%,
+  100% {
+    background-color: #586ca5;
   }
+  50% {
+    background-color: #7f9cf5;
+  }
+}
 
+.forge-tilt {
+  transform: perspective(400px) rotate3d(1, -1, 0, calc(var(--i, 1) * 8deg));
+  mask: linear-gradient(135deg, #000c 40%, #000, #000c 60%) 100% 100% / 240%
+    240%;
+  transition: 0.4s;
+  cursor: pointer;
+}
 
-  
-  
+.forge-tilt:hover {
+  --i: -1;
+  mask-position: 0 0;
+}
