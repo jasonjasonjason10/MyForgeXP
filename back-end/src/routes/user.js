@@ -4,6 +4,23 @@ const prisma = require('../../prisma')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const tokenAuth = require('../middleware/TokenAuth')
+const multer = require("multer")
+const fs = require('fs')
+const path = require('path')
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images')
+    },
+    filename: (req,file, cb) => {
+        const prefix = `${Date.now()} - `
+        cb(null, `${prefix}${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage })
+
+const defaultAvatar = '/images/defaultavatar1.png'
 
 //============Routers to create=====================
 
@@ -68,7 +85,8 @@ router.post('/register', async (req, res) => {
             username,
             password: hashedPassword,
             fName,
-            lName
+            lName,
+            avatar: defaultAvatar
         }
     })
 
@@ -234,6 +252,49 @@ router.patch("/upgrade/:id", tokenAuth,  async (req, res) => {
     }
 })
 
-// 
+// change your avatar ========================================
+router.put('/:id/avatar', /* tokenauth whatever */ upload.single('avatar'), async (req, res, next) => {
+    try {
+        const id = +req.params.id
+        if (!id) return res.status(400).json({ error: 'ID not found / invalid' })
+
+        if (!req.file) return res.status(400).json({ error: 'No image uploaded' })
+        const newAvatar = `/images/pfp/${req.file.filename}`
+
+        const user = await prisma.user.findUnique({ where: { id } })
+        if (user.avatar !== defaultAvatar) {
+            const oldAvatarPath = path.join(__dirname, '..', 'images', 'pfp', user.avatar)
+            try {
+                await fs.promises.unlink(oldAvatarPath)
+            } catch (err) {
+                if (err.code !== 'ENOENT') {
+                    console.error('Error deleting old avatar:', err)
+                }
+            }
+        }
+
+        const response = await prisma.user.update({ where: { id }, data: { avatar: newAvatar} })
+        return res.status(200).json({ successMessage: 'Avatar updated successfully' })
+    } catch (error) {
+        next(error)
+    }
+})
+
+// !reset your avatar
+// router.put('/:id/avatar/reset', /* tokenauth, */ async (req, res, next) => {
+//     try {
+//         const id = +req.params.id
+//         if (!id) return res.status(400).json({ error: 'ID not found / invalid' })
+
+//         await prisma.user.update({
+//             where: { id },
+//             data: { avatar: defaultAvatar }
+//         })
+
+//         res.status(200).json({ successMessage: "Avatar reset successfully" })
+//     } catch (error) {
+//         next(error)
+//     }
+// })
 
 module.exports = router
