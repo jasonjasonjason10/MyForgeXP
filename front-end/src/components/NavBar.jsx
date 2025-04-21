@@ -43,6 +43,14 @@ export default function NavBar() {
             </Link>
           </li>
           <li>
+            <Link 
+            to="/uploads"
+            className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            >
+              UPLOAD
+            </Link>
+          </li>
+          <li>
             <Link
               to="/all-games"
               className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"

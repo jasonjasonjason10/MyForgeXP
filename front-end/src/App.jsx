@@ -9,6 +9,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Account from "./components/Account/Account";
 import Community from "./components/Community"
+import Uploads from "./components/Account/Uploads";
+
 
 function App() {
   const [token, setToken] = useState(null);
@@ -26,6 +28,7 @@ function App() {
         <Route path="games/:id" element={<SingleGame />} />
         <Route path="account" element={<Account />} />
         <Route path="community" element={<Community />} />
+        <Route path="uploads" element={<Uploads/>}/>
 
       </Route>
     </Routes>
