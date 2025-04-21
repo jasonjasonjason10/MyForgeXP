@@ -1,3 +1,16 @@
+// const [avatar, setAvatar] = useState();
+
+// async function avatarHandle(e) { 
+//   e.preventDefault();
+  
+
+//       <div>
+//         <form onSubmit={avatarHandle} >
+//           <input type="file" accept="images/*" onChange={(e) => {e.target.files[0]}} className="border-solid border bg-amber-700"/>
+//           <button type="submit" className="border-solid -PostId/border m-25">Submit</button>
+//         </form>
+//       </div>
+
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
