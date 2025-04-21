@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-const defaultAvatar = '/images/defaultavatar1.png'
+const defaultAvatar = '/images/pfp/defaultavatar1.png'
 
 //============Routers to create=====================
 
