@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SearchUser from "../SearchUser";
 
 function Community() {
   const [postList, setPostList] = useState([])
@@ -7,12 +8,12 @@ function Community() {
 
   useEffect(() => {
     async function fetchPostList() {
-      const response = await fetch('http://localhost:3000/post/all')
-      const result = await response.json()
-      setPostList(result.post)
+      const response = await fetch("http://localhost:3000/post/all");
+      const result = await response.json();
+      setPostList(result.post);
     }
-    fetchPostList()
-  },[])
+    fetchPostList();
+  }, []);
 
   async function likeHandle(postId) {
     const response = await fetch(`http://localhost:3000/post/${postId}/like`, {

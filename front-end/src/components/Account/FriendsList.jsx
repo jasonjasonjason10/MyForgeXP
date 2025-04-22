@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import SearchUser from "../SearchUser";
+import { useNavigate } from "react-router-dom";
 
 export default function FriendsList() {
   const [users, setUsers] = useState([]);
-  console.log("user list =>", users)
+  const navigate = useNavigate();
+  console.log("user list =>", users);
+
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -20,11 +23,17 @@ export default function FriendsList() {
     fetchUsers();
   }, []);
 
+  function clickHandle() {
+    navigate("../user");
+  }
+
   return (
     <div>
       <h3 className="text-lg font-bold mb-4">All Users</h3>
       <div className="mb-4 ">
-        <SearchUser />
+        <SearchUser 
+        
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -32,6 +41,7 @@ export default function FriendsList() {
           <div
             key={user.id}
             className="flex items-center gap-4 bg-gray-800 rounded p-3 shadow hover:shadow-lg transition"
+            onClick={clickHandle}
           >
             <img
               src={`http://localhost:3000${user.avatar}`}

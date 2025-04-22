@@ -36,9 +36,9 @@ export default function NavBar() {
         {/* Nav links (desktop not mobile) */}
         <ul className="hidden lg:flex gap-6 text-lg">
           {/*!!!MOVE Into Community!!!*/}
-          {/* <li>
+          <li>
             <SearchUser />
-          </li> */}
+          </li>
           <li>
             <Link
               to="/community"
@@ -154,9 +154,13 @@ export default function NavBar() {
                 <Link
                   to="/account"
                   className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                  onClick={() => setIsOpen(false)}
                 >
                   My Account
                 </Link>
+              </li>
+              <li>
+                <SearchUser />
               </li>
             </>
           )}
