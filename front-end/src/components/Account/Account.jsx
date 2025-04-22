@@ -23,11 +23,12 @@ import FavGames from "./FavGames";
 export default function Account() {
   const [activeTab, setActiveTab] = useState("details");
   const [showEditAvatar, setShowEditAvatar] = useState(false);
-
-  const user = {
-    username: "",
-    avatar: "/images/pfp/defaultavatar1.png", //IS THIS CORRECT??
-  };
+  const [user, setUser] = useState({});
+  console.log(user);
+  // const user = {
+  //   username: "",
+  //   avatar: "/images/pfp/defaultavatar1.png", //IS THIS CORRECT??
+  // };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,13 +38,12 @@ export default function Account() {
       try {
         const res = await fetch("http://localhost:3000/user/info", {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         });
-        const data = await res.json();
-        if (res.ok) {
-          setUser(data.user);
-        }
+        const user = await res.json();
+
+        setUser(user.user);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
@@ -69,7 +69,7 @@ export default function Account() {
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
           <img
-            src={user.avatar}
+            src={`http://localhost:3000${user.avatar}`}
             alt="User avatar"
             className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
           />

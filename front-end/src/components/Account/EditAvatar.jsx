@@ -5,6 +5,24 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [file, setFile] = useState(null);
 
+  const changedAvatar = async () => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    console.log("Result =>", formData);
+
+    const response = await fetch(`http://localhost:3000/user/avatar`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+
+      body: formData,
+    });
+    const result = await response.json();
+    if (result.error) {
+      return console.log(result.error);
+    }
+    window.location.reload();
+  };
+
   // Close modal with ESC key!
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -71,7 +89,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
               Cancel
             </button>
             <button
-              onClick={() => onSave({ avatarUrl, file })}
+              onClick={changedAvatar}
               className="px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded"
             >
               Save
