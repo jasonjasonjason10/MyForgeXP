@@ -21,7 +21,7 @@ const upload = multer({ storage })
 router.get('/all', async (req, res) => {
     const post = await prisma.post.findMany();
     
-    if(!posts){
+    if(!post){
         return res.status(404).json({
             error: "no posts found"
         })
