@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 function Community() {
   const [postList, setPostList] = useState([])
   console.log(postList) // ----delete when complete----
-  
+
   useEffect(() => {
     async function fetchPostList() {
       const response = await fetch('http://localhost:3000/post/all')
