@@ -105,26 +105,27 @@ router.post("/register", async (req, res) => {
 
 // get other user =======================================
 
-router.get("/:id", async (req, res, next) => {
-    const id = +req.params.id
-    const allInfo = await prisma.user.findUnique({ where: { id }})
-    if(!allInfo){
-        return res.statusCode(404).json({
-            error: "no user found"
-        })
-}
-    const refinedInfo = {
-        username: allInfo.username,
-        avatar: allInfo.avatar,
-        fName: allInfo.fName,
-        lName: allInfo.lName,
-        createdAt: allInfo.createdAt
-    }
-    res.json({
-        successMessage: "user info returned",
-        user: refinedInfo
-    })
-})
+// router.get("/:id", async (req, res, next) => {
+//     const userId = +req.params.id;
+//     console.log("id =>", id)
+//     const allInfo = await prisma.user.findUnique({ where: { userId }})
+//     if(!allInfo){
+//         return res.statusCode(404).json({
+//             error: "no user found"
+//         })
+// }
+//     const refinedInfo = {
+//         username: allInfo.username,
+//         avatar: allInfo.avatar,
+//         fName: allInfo.fName,
+//         lName: allInfo.lName,
+//         createdAt: allInfo.createdAt
+//     }
+//     res.json({
+//         successMessage: "user info returned",
+//         user: refinedInfo
+//     })
+// })
 
 // get user info by id ==================================
 

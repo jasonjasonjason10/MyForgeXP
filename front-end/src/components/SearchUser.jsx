@@ -1,11 +1,23 @@
+import { useEffect, useState } from "react";
 
 
 
 export default function SearchUser() {
 //==============fetch function====================
-
-
-
+const [user, setUser] = useState([])
+useEffect(() => {
+  
+    async function fetchUsers() {
+      const response = await fetch('http://localhost:3000/user/usernames')
+      const result = await response.json()
+      if(result.error){
+        return console.log("error => ", result.error)
+      }
+      setUser(result.usernames)
+    }
+  
+  fetchUsers()
+})
 
 
 
