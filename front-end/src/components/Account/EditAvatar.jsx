@@ -4,6 +4,20 @@ import { X } from "lucide-react";
 export default function EditAvatar({ isOpen, onClose, onSave }) {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [file, setFile] = useState(null);
+  const [fileError, setFileError] = useState("");
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    const acceptedTypes = ["image/png", "image/jpeg", "image/jpg"];
+
+    if (selectedFile && !acceptedTypes.includes(selectedFile.type)) {
+      setFileError("Unsupported file type. Please upload a JPG or PNG image.");
+      return;
+    }
+
+    setFileError("");
+    setFile(selectedFile);
+  };
 
   const changedAvatar = async () => {
     const formData = new FormData();
@@ -75,9 +89,12 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
               className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-400 "
             />
+            {fileError && (
+              <p className="text-red-400 text-sm mt-2">{fileError}</p>
+            )}
           </div>
 
           {/* Action buttons (need to make a delete maybe?) */}

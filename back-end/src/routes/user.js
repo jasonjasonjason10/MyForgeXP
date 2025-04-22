@@ -103,6 +103,30 @@ router.post("/register", async (req, res) => {
   });
 });
 
+// get other user =======================================
+
+// router.get("/:id", async (req, res, next) => {
+//     const userId = +req.params.id;
+//     console.log("id =>", id)
+//     const allInfo = await prisma.user.findUnique({ where: { userId }})
+//     if(!allInfo){
+//         return res.statusCode(404).json({
+//             error: "no user found"
+//         })
+// }
+//     const refinedInfo = {
+//         username: allInfo.username,
+//         avatar: allInfo.avatar,
+//         fName: allInfo.fName,
+//         lName: allInfo.lName,
+//         createdAt: allInfo.createdAt
+//     }
+//     res.json({
+//         successMessage: "user info returned",
+//         user: refinedInfo
+//     })
+// })
+
 // get user info by id ==================================
 
 router.get("/info", tokenAuth, async (req, res, next) => {
@@ -129,9 +153,28 @@ router.get("/info", tokenAuth, async (req, res, next) => {
   });
 });
 
+// get all usernames=====================================
+router.get("/usernames", async (req, res) => {
+    
+    const allInfo = await prisma.user.findMany();
+    const usernames = allInfo.map((user) => {
+        return {
+            id: user.id,
+            username: user.username
+        }
+        
+        
+    })
+
+    res.json({
+        successMessage: "all usernames returned",
+        allUsers: usernames
+    })
+})
+
 // get all users==========ADMIN ONLY=====================
 
-router.get("/all", tokenAuth, async (req, res) => {
+router.get("/all/info", tokenAuth, async (req, res) => {
   const isAdmin = req.isAdmin;
 
   if (!isAdmin) {
