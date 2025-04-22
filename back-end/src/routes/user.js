@@ -10,7 +10,7 @@ const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    cb(null, "src/images/pfp");
   },
   filename: (req, file, cb) => {
     const prefix = `${Date.now()} - `;
@@ -258,12 +258,13 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 });
 
 // change your avatar ========================================
-router.put(
-  "/:id/avatar",
+router.patch(
+  "/avatar",
+  tokenAuth, 
   /* tokenauth whatever */ upload.single("avatar"),
   async (req, res, next) => {
     try {
-      const id = +req.params.id;
+      const id = req.userId
       if (!id) return res.status(400).json({ error: "ID not found / invalid" });
 
       if (!req.file)
