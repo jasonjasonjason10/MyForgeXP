@@ -10,6 +10,7 @@ import Register from "./components/Register";
 import Account from "./components/Account/Account";
 import Community from "./components/Community/Community"
 import Uploads from "./components/Account/Uploads";
+import SingleUser from "./components/SingleUser/SingleUser";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="account" element={<Account />} />
         <Route path="community" element={<Community />} />
         <Route path="uploads" element={<Uploads/>}/>
+        <Route path="user" element ={<SingleUser />} />
 
       </Route>
     </Routes>
