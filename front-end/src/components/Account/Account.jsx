@@ -38,7 +38,7 @@ export default function Account() {
       try {
         const res = await fetch("http://localhost:3000/user/info", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         const user = await res.json();

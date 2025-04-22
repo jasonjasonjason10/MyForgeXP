@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 function Community() {
   const [postList, setPostList] = useState([])
+  const [postLiked, setPostLiked] = useState(false)
   console.log(postList) // ----delete when complete----
 
   useEffect(() => {
@@ -13,12 +14,18 @@ function Community() {
     fetchPostList()
   },[])
 
-  async function likeHandle() {
-    const response = await fetch(`http://localhost:3000/post/${}/like`)
+  async function likeHandle(postId) {
+    const response = await fetch(`http://localhost:3000/post/${postId}/like`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    const result = await response.json()
+    console.log(result)
   }
 
   return (
-<<<<<<< Updated upstream
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
@@ -38,18 +45,14 @@ function Community() {
                 {post.description}
               </div>
   
-              <div className="text-sm text-blue-300 mt-auto" onClick={likeHandle}>
+              <div className="text-sm text-blue-300 mt-auto" 
+              onClick={() => {likeHandle(post.id)}}>
                 Likes: <span className="font-semibold text-white">{post.likes}</span>
               </div>
             </div>
           ))}
         </div>
       </div>
-=======
-    <div>
-      <h1>Community page</h1>
-      
->>>>>>> Stashed changes
     </div>
   );
 }  

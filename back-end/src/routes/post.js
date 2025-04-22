@@ -86,17 +86,19 @@ router.post('/create', tokenAuth, upload.single('postImage'), async (req, res) =
 router.post('/:id/like', tokenAuth, async (req, res) => {
     const userId = req.userId
     const postId = +req.params.id
-
+    console.log('userId / postId', userId, postId)
     const existingLike = await prisma.like.findUnique({where: {userId_postId: {userId, postId}}})
     if(existingLike){
         await prisma.like.delete({where: {userId_postId: {userId, postId}}})
         return res.json({
-            successMessage: "Post Unliked"
+            successMessage: "Post Unliked",
+            liked: false
         })
     } else {
         await prisma.like.create({ data: {userId, postId}})
         return res.json({
-            successMessage: "Post Liked"
+            successMessage: "Post Liked",
+            liked: true
         })
     }
 })
