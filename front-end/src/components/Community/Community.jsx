@@ -13,6 +13,10 @@ function Community() {
     fetchPostList()
   },[])
 
+  async function likeHandle() {
+    const response = await fetch(`http://localhost:3000/post/${}/like`)
+  }
+
   return (
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
@@ -33,7 +37,7 @@ function Community() {
                 {post.description}
               </div>
   
-              <div className="text-sm text-blue-300 mt-auto">
+              <div className="text-sm text-blue-300 mt-auto" onClick={likeHandle}>
                 Likes: <span className="font-semibold text-white">{post.likes}</span>
               </div>
             </div>
