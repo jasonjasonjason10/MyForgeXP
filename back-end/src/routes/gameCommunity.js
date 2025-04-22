@@ -11,6 +11,7 @@ router.get('/all', async (req, res, next) => {
       if (!communities || communities.length === 0) {
         return res.status(404).json({ error: 'No communities found' });
       }
+
       res.status(200).json(communities);
     } catch (error) {
       next(error);
@@ -24,6 +25,7 @@ router.get('/:id', async (req, res, next) => {
       const community = await prisma.gameCommunity.findUnique({ where: { id } });
 
       if (!community) return res.status(404).json({ error: 'Community not found' });
+
       res.status(200).json(community);
     } catch (error) {
       next(error);
@@ -43,6 +45,7 @@ router.post('/create', tokenAuth, async (req, res, next) => {
     const newCommunity = await prisma.gameCommunity.create({
       data: { gameName, description, coverImage },
     });
+
     res.status(201).json(newCommunity);
   } catch (error) {
     next(error);
@@ -62,6 +65,7 @@ router.put('/update/:id', tokenAuth, async (req, res, next) => {
         where: { id },
         data: { gameName, description, coverImage, isActive },
       });
+
       res.status(200).json({ message: 'Community updated', updated });
     } catch (error) {
       next(error);
@@ -77,6 +81,7 @@ router.delete('/delete/:id', tokenAuth, async (req, res, next) => {
     if (!existing) return res.status(404).json({ error: 'Community not found' });
 
     await prisma.gameCommunity.delete({ where: { id } });
+    
     res.status(200).json({ message: 'Community deleted' });
   } catch (error) {
     next(error);
