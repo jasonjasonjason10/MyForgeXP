@@ -1,4 +1,20 @@
+
+
+
 export default function SearchUser() {
+//==============fetch function====================
+
+
+
+
+
+
+
+
+
+
+
+//================================================
   return (
     <div>
       <input
