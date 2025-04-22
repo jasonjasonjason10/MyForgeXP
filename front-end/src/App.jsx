@@ -8,7 +8,7 @@ import SingleGame from "./components/Games/SingleGame";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Account from "./components/Account/Account";
-import Community from "./components/Community"
+import Community from "./components/Community/Community"
 import Uploads from "./components/Account/Uploads";
 
 
