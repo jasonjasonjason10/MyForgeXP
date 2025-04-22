@@ -2,7 +2,7 @@ import mockData from "../../data/mockData";
 
 export default function AllGames() {
   return (
-    <div className="relative min-h-screen text-white overflow-hidden">
+    <div className="relative min-h-screen text-white overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
       {/* Content wrapper */}
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Content area that grows (why footer wasnt going to bottom)*/}

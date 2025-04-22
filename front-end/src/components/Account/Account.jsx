@@ -1,8 +1,7 @@
 // const [avatar, setAvatar] = useState();
 
-// async function avatarHandle(e) { 
+// async function avatarHandle(e) {
 //   e.preventDefault();
-  
 
 //       <div>
 //         <form onSubmit={avatarHandle} >
@@ -11,7 +10,7 @@
 //         </form>
 //       </div>
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,9 +25,32 @@ export default function Account() {
   const [showEditAvatar, setShowEditAvatar] = useState(false);
 
   const user = {
-    username: "username",
-    avatar: "/images/defaultavatar1.png",
+    username: "",
+    avatar: "/images/pfp/defaultavatar1.png", //IS THIS CORRECT??
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch("http://localhost:3000/user/info", {
+          headers: {
+            Authorization: token,
+          },
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const tabComponents = {
     details: <AccountDetails />,
