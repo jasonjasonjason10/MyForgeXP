@@ -13,22 +13,34 @@ function Community() {
   },[])
 
   return (
-    <div>
-      <h1>Community page</h1>
-      {/* {postList.map((post) => {
-        if(post.postType === "text"){
-          return <div>
-            <h3>
-              post.title
-            </h3>
-            <div>
-              post.description
+    <div className="min-h-screen text-white px-4 py-10">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+          Community Page
+        </h1>
+  
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
+          {postList.map((post) => (
+            <div
+              key={post.id}
+              className="bg-[#13294b] border border-blue-500 rounded-2xl shadow-lg p-5 flex flex-col justify-between">
+              <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
+                {post.title}
+              </h3>
+  
+              <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap">
+                {post.description}
+              </div>
+  
+              <div className="text-sm text-blue-300 mt-auto">
+                Likes: <span className="font-semibold text-white">{post.likes}</span>
+              </div>
             </div>
-          </div>
-        }
-      })} */}
+          ))}
+        </div>
+      </div>
     </div>
   );
-}
+}  
 
 export default Community;
