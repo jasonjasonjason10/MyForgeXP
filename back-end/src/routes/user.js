@@ -160,7 +160,8 @@ router.get("/usernames", async (req, res) => {
     const usernames = allInfo.map((user) => {
         return {
             id: user.id,
-            username: user.username
+            username: user.username,
+            avatar: user.avatar
         }
         
         

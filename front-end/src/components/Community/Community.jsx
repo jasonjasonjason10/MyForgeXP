@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 function Community() {
   const [postList, setPostList] = useState([])
-  console.log(postList)
+  console.log(postList) // ----delete when complete----
   useEffect(() => {
     async function fetchPostList() {
       const response = await fetch('http://localhost:3000/post/all')
@@ -15,7 +15,18 @@ function Community() {
   return (
     <div>
       <h1>Community page</h1>
-      {/* Your account page content goes here */}
+      {/* {postList.map((post) => {
+        if(post.postType === "text"){
+          return <div>
+            <h3>
+              post.title
+            </h3>
+            <div>
+              post.description
+            </div>
+          </div>
+        }
+      })} */}
     </div>
   );
 }
