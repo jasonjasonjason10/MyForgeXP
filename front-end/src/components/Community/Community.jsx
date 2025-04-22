@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchUser from "../SearchUser";
 
-  const navigate = useNavigate();
 
 function Community() {
+  const navigate = useNavigate();
   const [postList, setPostList] = useState([])
   const [postLiked, setPostLiked] = useState(false)
   console.log(postList) // ----delete when complete----
