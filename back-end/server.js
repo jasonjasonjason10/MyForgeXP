@@ -26,7 +26,7 @@ app.use('/post', postRouter)
 //=============game-community routes=================
 
 const gameCommunityRouter = require('./src/routes/gameCommunity')
-app.use('/gamecommunity', gameCommunityRouter)
+app.use('/community', gameCommunityRouter)
 
 //=============comments routes=================
 
