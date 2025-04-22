@@ -15,14 +15,14 @@ await prisma.user.deleteMany();
     const hashedPassword = await bcrypt.hash("password123", 10);
 
 
-    const imgPath = '../src/images/'
+    const imgPath = 'images/'
     // Admin user
     await prisma.user.create({
       data: {
         email: "admin@admin.com",
         username: "admin",
         password: hashedPassword,
-        avatar: `${imgPath}defaultavatar1` ,
+        avatar: `${imgPath}defaultavatar1.png` ,
         isAdmin: true,
       },
     });
@@ -185,6 +185,9 @@ await prisma.user.deleteMany();
   // Run all
   await createUser();
   await createGames();
+  await createPosts();
+  await createComments();
+  await createFavorites();
 
 };
 
