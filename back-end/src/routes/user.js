@@ -155,14 +155,20 @@ router.get("/info", tokenAuth, async (req, res, next) => {
 
 // get all usernames=====================================
 router.get("/usernames", async (req, res) => {
+    
     const allInfo = await prisma.user.findMany();
     const usernames = allInfo.map((user) => {
-        return user.username
+        return {
+            id: user.id,
+            username: user.username
+        }
+        
+        
     })
 
     res.json({
         successMessage: "all usernames returned",
-        usernames: usernames
+        allUsers: usernames
     })
 })
 
