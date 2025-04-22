@@ -34,7 +34,7 @@ export default function FriendsList() {
             className="flex items-center gap-4 bg-gray-800 rounded p-3 shadow hover:shadow-lg transition"
           >
             <img
-              src={user.avatar}
+              src={`http://localhost:3000${user.avatar}`}
               alt={user.username}
               className="w-12 h-12 rounded-full border border-orange-400 object-cover"
             />
