@@ -56,7 +56,7 @@ export default function SearchUser() {
               className="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 cursor-pointer transition"
             >
               <img
-                src={user.avatar || "/images/defaultavatar1.png"}
+                src={`http://localhost:3000${user.avatar}`}
                 alt="avatar"
                 className="w-6 h-6 rounded-full object-cover border border-gray-600"
               />
