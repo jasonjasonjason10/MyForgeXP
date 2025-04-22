@@ -18,6 +18,7 @@ function Community() {
   }
 
   return (
+<<<<<<< Updated upstream
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
@@ -44,6 +45,11 @@ function Community() {
           ))}
         </div>
       </div>
+=======
+    <div>
+      <h1>Community page</h1>
+      
+>>>>>>> Stashed changes
     </div>
   );
 }  
