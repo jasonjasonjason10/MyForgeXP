@@ -6,6 +6,7 @@ const seed = async () => {
 
 await prisma.comment.deleteMany();
 await prisma.favorites.deleteMany();
+await prisma.like.deleteMany();
 await prisma.post.deleteMany();
 await prisma.gameCommunity.deleteMany();
 await prisma.user.deleteMany();
@@ -15,14 +16,14 @@ await prisma.user.deleteMany();
     const hashedPassword = await bcrypt.hash("password123", 10);
 
 
-    const imgPath = '../src/images/'
+    const imgPath = 'images/'
     // Admin user
     await prisma.user.create({
       data: {
         email: "admin@admin.com",
         username: "admin",
         password: hashedPassword,
-        avatar: `${imgPath}defaultavatar1` ,
+        avatar: `${imgPath}defaultavatar1.png` ,
         isAdmin: true,
       },
     });
@@ -76,10 +77,9 @@ await prisma.user.deleteMany();
 
     console.log("Game Communities seeded");
   }
+// post community ==========================
+async function createPosts() {
 
-  // Posts===============================
-  async function createPosts() {
-    
     const user = await prisma.user.findMany()
     const community = await prisma.gameCommunity.findMany()
 
@@ -91,7 +91,6 @@ await prisma.user.deleteMany();
           postType: 'text',
           userId: user[0].id,
           communityId: community[0].id,
-          likes: 10
         },
         {
           title: "Very cinematic",
@@ -99,7 +98,6 @@ await prisma.user.deleteMany();
           postType: 'text',
           userId: user[1].id,
           communityId:  community[1].id,
-          likes: 9
         },
         {
           title: "Addictive gameplay",
@@ -107,7 +105,6 @@ await prisma.user.deleteMany();
           postType: 'text',
           userId: user[2].id,
           communityId: community[2].id,
-          likes: 9
         },
         {
           title: "Insane boss fight",
@@ -116,7 +113,6 @@ await prisma.user.deleteMany();
           postType: 'video',
           userId: user[1].id,
           communityId:  community[0].id,
-          likes: 12
         }
       ]
     });

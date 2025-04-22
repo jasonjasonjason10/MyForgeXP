@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function SearchUser() {
   //==============fetch function====================
   const [user, setUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtered, setFiltered] = useState([]);
+  const navigate = useNavigate();
   console.log("User Array", user);
 
   useEffect(() => {
@@ -25,6 +28,10 @@ export default function SearchUser() {
     }
     fetchUsers();
   }, []);
+
+  function clickHandle() {
+    navigate("../user");
+  }
 
   useEffect(() => {
     const lower = searchTerm.toLowerCase();
@@ -49,11 +56,14 @@ export default function SearchUser() {
       </div>
 
       {searchTerm && filtered.length > 0 && (
-        <ul className="absolute mt-2 w-full bg-gray-900 rounded shadow-lg z-50 max-h-60 overflow-y-auto border border-gray-700">
+        <ul className="absolute mt-2 w-full bg-gray-900 rounded shadow-lg z-50 max-h-60 overflow-y-auto border border-gray-700"
+        >
           {filtered.map((user) => (
             <li
               key={user.id}
               className="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 cursor-pointer transition"
+              onClick={clickHandle}
+              
             >
               <img
                 src={`http://localhost:3000${user.avatar}`}

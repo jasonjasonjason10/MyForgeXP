@@ -11,6 +11,7 @@ import Account from "./components/Account/Account";
 import Community from "./components/Community/Community"
 import Uploads from "./components/Account/Uploads";
 import CreatePost from "./components//Community/CreatePost";
+import SingleUser from "./components/SingleUser/SingleUser";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="community" element={<Community />} />
         <Route path="createpost" element={<CreatePost />} />
         <Route path="uploads" element={<Uploads/>}/>
+        <Route path="user" element ={<SingleUser />} />
 
       </Route>
     </Routes>

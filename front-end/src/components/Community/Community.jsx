@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SearchUser from "../SearchUser";
 
+  const navigate = useNavigate();
 
 function Community() {
   const [postList, setPostList] = useState([])
-  const navigate = useNavigate();
+  const [postLiked, setPostLiked] = useState(false)
   console.log(postList) // ----delete when complete----
+
   useEffect(() => {
     async function fetchPostList() {
-      const response = await fetch('http://localhost:3000/post/all')
-      const result = await response.json()
-      setPostList(result.post)
+      const response = await fetch("http://localhost:3000/post/all");
+      const result = await response.json();
+      setPostList(result.post);
     }
-    fetchPostList()
-  },[])
+    fetchPostList();
+  }, []);
+
+  async function likeHandle(postId) {
+    const response = await fetch(`http://localhost:3000/post/${postId}/like`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    const result = await response.json()
+    console.log(result)
+  }
 
   return (
     <div className="min-h-screen text-white px-4 py-10">
@@ -41,7 +55,8 @@ function Community() {
                 {post.description}
               </div>
   
-              <div className="text-sm text-blue-300 mt-auto">
+              <div className="text-sm text-blue-300 mt-auto" 
+              onClick={() => {likeHandle(post.id)}}>
                 Likes: <span className="font-semibold text-white">{post.likes}</span>
               </div>
             </div>
