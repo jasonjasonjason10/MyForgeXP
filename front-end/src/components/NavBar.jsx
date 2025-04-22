@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import SearchUser from "./SearchUser";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +36,9 @@ export default function NavBar() {
         {/* Nav links (desktop not mobile) */}
         <ul className="hidden lg:flex gap-6 text-lg">
           <li>
+            <SearchUser />
+          </li>
+          <li>
             <Link
               to="/community"
               className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
@@ -43,9 +47,9 @@ export default function NavBar() {
             </Link>
           </li>
           <li>
-            <Link 
-            to="/uploads"
-            className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            <Link
+              to="/uploads"
+              className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             >
               UPLOAD
             </Link>
@@ -143,24 +147,24 @@ export default function NavBar() {
             </>
           ) : (
             <>
-            <li
-              onClick={() => {
-                clickHandle();
-                setIsOpen(false);
-              }}
-              className="hover:text-orange-400 cursor-pointer"
-            >
-              Logout
-            </li>
-             <li>
-             <Link
-               to="/account"
-               className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-             >
-               My Account
-             </Link>
-           </li>
-           </>
+              <li
+                onClick={() => {
+                  clickHandle();
+                  setIsOpen(false);
+                }}
+                className="hover:text-orange-400 cursor-pointer"
+              >
+                Logout
+              </li>
+              <li>
+                <Link
+                  to="/account"
+                  className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                >
+                  My Account
+                </Link>
+              </li>
+            </>
           )}
         </ul>
       )}
