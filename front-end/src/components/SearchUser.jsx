@@ -17,7 +17,7 @@ useEffect(() => {
     }
   
   fetchUsers()
-})
+},[])
 
 
 
