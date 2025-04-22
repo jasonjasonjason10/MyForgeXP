@@ -29,6 +29,7 @@ model User {
   favorites Favorites[]
   community GameCommunity[]
   comments Comment[]
+  likes Like[]
 }
 
 model GameCommunity {
@@ -52,10 +53,21 @@ model Post {
   user User @relation(fields: [userId], references: [id])
   communityId Int
   community GameCommunity @relation(fields: [communityId], references: [id])
-  likes Int?
+  likes Like[]
   favorites Favorites[]
   comments Comment[]
 }
+
+model Like {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  postId Int
+  post Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
+
 
 enum PostType {
   video
