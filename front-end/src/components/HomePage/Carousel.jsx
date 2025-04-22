@@ -31,7 +31,7 @@ export default function Carousel() {
   
 
   return (
-    <div className="relative bg-gray-900 rounded-lg p-4 shadow-lg">
+    <div className="relative bg-gray-900 rounded-lg p-4 shadow-lg ">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold flex items-center gap-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
           Featured Games

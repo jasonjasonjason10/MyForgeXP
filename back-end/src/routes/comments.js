@@ -9,7 +9,7 @@ router.get('/:postId/comments', async (req, res, next) => {
         
         const response = await prisma.comments.findMany({ where: postId})
 
-        if(comments.length === 0) return res.json({ message: 'This post has no comments' })
+        if(comments.length === 0) return res.json({ error: 'This post has no comments' })
 
         res.sendStatus(200).json(response)
     } catch (error) {
