@@ -33,6 +33,9 @@ app.use('/gamecommunity', gameCommunityRouter)
 const commentsRouter = require('./src/routes/comments')
 app.use('/post', commentsRouter)
 
+app.use('/images/pfp', express.static(path.join(__dirname, 'src', 'images', 'pfp')))
+app.use('/images/posts', express.static(path.join(__dirname, 'src', 'images', 'posts')))
+
 app.listen(3000, () => {
   console.log("server running on port 3000");
 });
