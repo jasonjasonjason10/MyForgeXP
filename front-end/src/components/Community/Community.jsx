@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Community() {
   const [postList, setPostList] = useState([])
+  const navigate = useNavigate();
   console.log(postList) // ----delete when complete----
   useEffect(() => {
     async function fetchPostList() {
@@ -18,6 +21,12 @@ function Community() {
         <h1 className="text-4xl font-bold text-center mb-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
           Community Page
         </h1>
+
+        <button
+    onClick={() => navigate("/createpost")}
+    className="bg-orange-500 hover:bg-orange-400 text-white font-semibold py-2 px-4 mb-1 rounded shadow-md transition duration-300">
+    + New Post
+       </button>
   
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {postList.map((post) => (

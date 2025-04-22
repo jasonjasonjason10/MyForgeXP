@@ -10,6 +10,7 @@ import Register from "./components/Register";
 import Account from "./components/Account/Account";
 import Community from "./components/Community/Community"
 import Uploads from "./components/Account/Uploads";
+import CreatePost from "./components//Community/CreatePost";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="games/:id" element={<SingleGame />} />
         <Route path="account" element={<Account />} />
         <Route path="community" element={<Community />} />
+        <Route path="createpost" element={<CreatePost />} />
         <Route path="uploads" element={<Uploads/>}/>
 
       </Route>

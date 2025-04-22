@@ -185,6 +185,9 @@ await prisma.user.deleteMany();
   // Run all
   await createUser();
   await createGames();
+  await createPosts();
+  await createComments();
+  await createFavorites();
 
 };
 
