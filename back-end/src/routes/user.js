@@ -129,9 +129,22 @@ router.get("/info", tokenAuth, async (req, res, next) => {
   });
 });
 
+// get all usernames=====================================
+router.get("/usernames", async (req, res) => {
+    const allInfo = await prisma.user.findMany();
+    const usernames = allInfo.map((user) => {
+        return user.username
+    })
+
+    res.json({
+        successMessage: "all usernames returned",
+        usernames: usernames
+    })
+})
+
 // get all users==========ADMIN ONLY=====================
 
-router.get("/all", tokenAuth, async (req, res) => {
+router.get("/all/info", tokenAuth, async (req, res) => {
   const isAdmin = req.isAdmin;
 
   if (!isAdmin) {
