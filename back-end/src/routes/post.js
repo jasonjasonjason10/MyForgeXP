@@ -84,5 +84,4 @@ router.post('/create', tokenAuth, upload.single('postImage'), async (req, res) =
 
 
 
-
 module.exports = router
