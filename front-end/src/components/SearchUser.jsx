@@ -1,32 +1,25 @@
 import { useEffect, useState } from "react";
-
-
+import { Search } from "lucide-react";
 
 export default function SearchUser() {
-//==============fetch function====================
-const [user, setUser] = useState([])
-useEffect(() => {
-  
+  //==============fetch function====================
+  const [user, setUser] = useState([]);
+  console.log("User Array", user);
+
+  useEffect(() => {
     async function fetchUsers() {
-      const response = await fetch('http://localhost:3000/user/usernames')
-      const result = await response.json()
-      if(result.error){
-        return console.log("error => ", result.error)
+      const response = await fetch("http://localhost:3000/user/usernames");
+      const result = await response.json();
+      if (result.error) {
+        return console.log("error => ", result.error);
       }
-      setUser(result.usernames)
+      setUser(result.allUsers);
     }
-  
-  fetchUsers()
-},[])
 
+    fetchUsers();
+  }, []);
 
-
-
-
-
-
-
-//================================================
+  //================================================
   return (
     <div>
       <input
