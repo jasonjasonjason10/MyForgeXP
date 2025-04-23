@@ -69,22 +69,42 @@ router.get("/user/:id", async (req, res) => {
 })
 
 // create a post
-router.post('/create', tokenAuth, upload.single('postImage'), async (req, res) => {
-    const userId = req.userId
-    const { title, description, postType, communityId } = req.body;
-    
-    console.log("PARAMS => ", req.params)
-    res.json({
-        successMessage: "test"
-    })
+router.post('/create', tokenAuth, upload.single('content'), async (req, res, next) => {
+    try {
+        const userId = req.userId
+        const { title, content, description, postType, communityId } = req.body;
+
+        let postData = {...req.body, userId}
+
+        if (!description && description !== '') {
+            postData.description = null
+        }
+
+        const response = await prisma.post.create({ data: postData })
+        const result = await response.json()
+        res.status(200).json({ result })
+    } catch (error) {
+        next(error)
+    }
 })
 
-
 // edit (update) a post by id
-
-
+router.patch('/edit', tokenAuth, async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+})
 
 // delete a post by id
+router.delete('/delete', tokenAuth, async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        next(error)
+    }
+})
 
 //like toggle===========================
 router.post('/:id/like', tokenAuth, async (req, res) => {
