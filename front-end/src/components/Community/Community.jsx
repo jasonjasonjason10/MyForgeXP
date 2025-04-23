@@ -27,7 +27,7 @@ function Community() {
     })
     const result = await response.json()
     setRefreshToggle(!refreshToggle)
-    console.log("like fetch result =>",result)
+    console.log("like fetch result =>", result)
   }
 
   async function fetchHasLiked(postId) {
@@ -36,10 +36,11 @@ function Community() {
       headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
     })
     const result = await response.json()
-    console.log(`hasliked fetch result => ${postId}`,result)
+    console.log(`hasliked fetch result => ${postId}`,result.boolean)
+    setPostLiked(result.boolean)
+    return result.boolean
   }
 
-  fetchHasLiked(19)
 
   return (
     <div className="min-h-screen text-white px-4 py-10">
@@ -71,7 +72,8 @@ function Community() {
               </div>
               <div className="text-sm text-blue-300 mt-auto" 
               onClick={() => {likeHandle(post.id)}}>
-                {fetchHasLiked(post.id) ? "liked" : "not liked"}
+                {console.log('USE State =>',postLiked)}
+                {postLiked ? "YESS   " : "NOOO   "}
                 Likes: <span className="font-semibold text-white">{post.likes.length}</span>
               </div>
             </div>

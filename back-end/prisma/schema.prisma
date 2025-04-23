@@ -30,6 +30,17 @@ model User {
   community GameCommunity[]
   comments Comment[]
   likes Like[]
+  following Follow[] @relation("Following")
+  Followers Follow[] @relation("FollowedBy")
+}
+
+model Follow {
+  id Int @id @default(autoincrement())
+  followerId Int
+  follower User @relation("Following",fields: [followerId], references: [id])
+  followingId Int
+  following User @relation("FollowedBy",fields: [followingId], references: [id])
+  @@unique([followerId, followingId])
 }
 
 model GameCommunity {

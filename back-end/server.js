@@ -14,6 +14,11 @@ app.use(require("morgan")("dev"));
 const userRouter = require("./src/routes/user");
 app.use("/user", userRouter);
 
+//===========================================
+
+const followRouter = require("./src/routes/follow")
+app.use("/user", followRouter)
+
 //=============favorite routes=================
 
 const favoritesRouter = require("./src/routes/favorites");

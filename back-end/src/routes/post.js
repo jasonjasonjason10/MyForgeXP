@@ -118,7 +118,7 @@ router.post('/hasliked/:id', tokenAuth, async (req, res) => {
 
     res.json({
         successMessage: "returned post like info",
-        Boolean: relationExists
+        boolean: relationExists
     })
 })
 
