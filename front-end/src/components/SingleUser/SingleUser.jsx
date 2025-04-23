@@ -5,11 +5,16 @@ import SingleUserDetails from "./SingleUserDetails";
 import SingleUserFollowers from "./SingleUserFollowers";
 import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
+import Following from "../Account/Following";
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
-  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [showFollowOptions, setShowFollowOptions] = useState(false);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const user = {
     id: 2,
@@ -51,6 +56,55 @@ export default function SingleUser() {
         </div>
         <h2 className="text-xl mt-4 font-bold ">@{user.username}</h2>
       </div>
+      <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
+        <button
+          onClick={() => setShowFollowers(true)}
+          className="hover:text-orange-400 transition flex flex-col cursor-pointer"
+        >
+          <span className="text-lg font-bold">550</span>
+          <span className="text-sm">Followers</span>
+        </button>
+        <button
+          onClick={() => setShowFollowing(true)}
+          className="hover:text-orange-400 transition flex flex-col cursor-pointer"
+        >
+          <span className="text-lg font-bold">946</span>
+          <span className="text-sm">Following</span>
+        </button>
+      </div>
+      <div className="mt-4 relative mb-5 ml-5">
+        {!isFollowing ? (
+          <button
+            onClick={() => setIsFollowing(true)}
+            className="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600 transition"
+          >
+            Follow
+          </button>
+        ) : (
+          <div className="relative inline-block">
+            <button
+              onClick={() => setShowFollowOptions((prev) => !prev)}
+              className="bg-gray-800 border border-orange-400 text-white px-4 py-1 rounded hover:bg-orange-500 transition"
+            >
+              Following ⌄
+            </button>
+
+            {showFollowOptions && (
+              <div className="absolute mt-1 w-32 bg-gray-900 border border-gray-700 rounded shadow-lg z-10">
+                <button
+                  onClick={() => {
+                    setIsFollowing(false);
+                    setShowFollowOptions(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 text-sm text-white hover:bg-gray-700"
+                >
+                  Unfollow
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
         <div className="border-b border-gray-700 pb-2 mb-4">
@@ -85,8 +139,6 @@ export default function SingleUser() {
           </div>
         </div>
 
-      
-
         <div className="bg-gray-800 rounded-md p-4 min-h-[200px]">
           <AnimatePresence mode="wait">
             <motion.div
@@ -106,6 +158,49 @@ export default function SingleUser() {
           Return
         </button>
       </div>
+      {showFollowing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-white text-lg font-bold">Following</h3>
+              <button
+                onClick={() => setShowFollowing(false)}
+                className="text-white hover:text-red-500"
+              >
+                ✖
+              </button>
+            </div>
+            <Following />
+          </motion.div>
+        </div>
+      )}
+
+      {showFollowers && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-white text-lg font-bold">Followers</h3>
+              <button
+                onClick={() => setShowFollowers(false)}
+                className="text-white hover:text-red-500"
+              >
+                ✖
+              </button>
+            </div>
+            <p className="text-gray-300 text-sm">Coming soon...</p>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
