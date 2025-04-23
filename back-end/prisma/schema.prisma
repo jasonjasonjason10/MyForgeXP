@@ -24,6 +24,7 @@ model User {
   isAdmin Boolean @default(false)
   fName String?
   lName String?
+  bio String?
   createdAt DateTime @default(now())
   posts Post[]
   favorites Favorites[]
