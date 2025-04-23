@@ -9,6 +9,7 @@ await prisma.favorites.deleteMany();
 await prisma.like.deleteMany();
 await prisma.post.deleteMany();
 await prisma.gameCommunity.deleteMany();
+await prisma.follow.deleteMany();
 await prisma.user.deleteMany();
 
   // Users================================================
@@ -16,14 +17,13 @@ await prisma.user.deleteMany();
     const hashedPassword = await bcrypt.hash("password123", 10);
 
 
-    const imgPath = 'images/'
     // Admin user
     await prisma.user.create({
       data: {
         email: "admin@admin.com",
         username: "admin",
         password: hashedPassword,
-        avatar: `${imgPath}defaultavatar1.png` ,
+        avatar: `/images/pfp/defaultavatar1.png` ,
         isAdmin: true,
       },
     });
@@ -34,7 +34,7 @@ await prisma.user.deleteMany();
         email: "full@name.com",
         username: "fullNameTest",
         password: hashedPassword,
-        avatar: `${imgPath}defaultavatar2`,
+        avatar: `/images/pfp/defaultavatar2.png`,
         fName: "FirstName",
         lName: "LastName",
       },
