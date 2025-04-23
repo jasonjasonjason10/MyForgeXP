@@ -107,15 +107,21 @@ router.post('/:id/like', tokenAuth, async (req, res) => {
 })
 
 // user like verification================================
-router.post('hasliked/:id', tokenAuth, async (req, res) => {
+router.post('/hasliked/:id', tokenAuth, async (req, res) => {
     const userId = req.userId
     const postId = +req.params.id
-    const postLiked = await prisma.post.findUnique({where: {postId}})
+    const post = await prisma.post.findUnique({
+        where: {id: postId},
+    include: {likes: true}})
+    
+    const relationExists = post.likes.some(like => like.userId === userId)
 
     res.json({
         successMessage: "returned post like info",
-        post: postLiked
+        Boolean: relationExists
     })
 })
 
+
+//=================================================================
 module.exports = router

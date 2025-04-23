@@ -31,6 +31,17 @@ function Community() {
     console.log("like fetch result =>",result)
   }
 
+  async function fetchHasLiked(postId) {
+    const response = await fetch(`http://localhost:3000/post/hasliked/${postId}`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+    })
+    const result = await response.json()
+    console.log(`hasliked fetch result => ${postId}`,result)
+  }
+
+  fetchHasLiked(19)
+
   return (
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
@@ -59,6 +70,7 @@ function Community() {
   
               <div className="text-sm text-blue-300 mt-auto" 
               onClick={() => {likeHandle(post.id)}}>
+                {fetchHasLiked(post.id) ? "liked" : "not liked"}
                 Likes: <span className="font-semibold text-white">{post.likes.length}</span>
               </div>
             </div>
