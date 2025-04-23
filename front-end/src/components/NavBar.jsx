@@ -26,7 +26,7 @@ export default function NavBar() {
             onClick={() => setIsOpen(false)}
           />
           <span
-            className="font-forge text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]"
+            className="font-[SCREAM] text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]"
             onClick={() => setIsOpen(false)}
           >
             ForgeXP

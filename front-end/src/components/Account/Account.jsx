@@ -15,7 +15,7 @@ import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
-import FriendsList from "./FriendsList";
+import Following from "./Following";
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import FavGames from "./FavGames";
@@ -54,7 +54,7 @@ export default function Account() {
 
   const tabComponents = {
     details: <AccountDetails />,
-    friends: <FriendsList />,
+    following: <Following />,
     communities: <Communities />,
     uploads: <Uploads />,
     favorites: <FavGames />,
@@ -99,19 +99,23 @@ export default function Account() {
         <div className="border-b border-gray-700 pb-2 mb-4">
           {/* Desktop Tabs */}
           <div className="hidden sm:flex justify-center gap-3 text-sm sm:text-base">
-            {["details", "friends", "communities", "uploads", "favorites"].map(
-              (tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`hover:text-orange-400 ${
-                    activeTab === tab && "text-orange-500 font-semibold"
-                  }`}
-                >
-                  {tab[0].toUpperCase() + tab.slice(1)}
-                </button>
-              )
-            )}
+            {[
+              "details",
+              "following",
+              "communities",
+              "uploads",
+              "favorites",
+            ].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`hover:text-orange-400 ${
+                  activeTab === tab && "text-orange-500 font-semibold"
+                }`}
+              >
+                {tab[0].toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
           </div>
 
           {/* Mobile Dropdown */}
@@ -123,7 +127,7 @@ export default function Account() {
             >
               {[
                 "details",
-                "friends",
+                "following",
                 "communities",
                 "uploads",
                 "favorites",
