@@ -36,7 +36,7 @@ export default function Register({ setToken, token }) {
         setSuccessMessage(result.successMessage);
 
         setLoading(false);
-        setTimeout(() => navigate("/login"), 1500);
+        setTimeout(() => navigate("/account"), 1500);
       } else {
         setLoading(false);
         setError(result.error || "Registration failed.");

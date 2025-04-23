@@ -28,7 +28,7 @@ export default function FriendsList() {
   }
 
   return (
-    <div>
+    <div className="">
       <h3 className="text-lg font-bold mb-4">All Users</h3>
       <div className="mb-4 ">
         <SearchUser 
@@ -36,11 +36,11 @@ export default function FriendsList() {
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
         {users.map((user) => (
           <div
             key={user.id}
-            className="flex items-center gap-4 bg-gray-800 rounded p-3 shadow hover:shadow-lg transition"
+            className="flex items-center gap-4 bg-gray-800 rounded p-3 shadow hover:shadow-lg transition "
             onClick={clickHandle}
           >
             <img

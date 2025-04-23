@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import SearchUser from "./SearchUser";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
   const clickHandle = () => {
-    localStorage.removeItem("token");
-    console.log(localStorage.getItem("token"));
-    window.location.reload();
+    const confirmed = window.confirm("Are you sure you want to log out?");
+    if (confirmed) {
+      localStorage.removeItem("token");
+      navigate("/");
+    }
   };
 
   return (
@@ -19,8 +23,12 @@ export default function NavBar() {
             src="/images/minilogo.png"
             alt="ForgeXP Logo"
             className="h-8 w-auto drop-shadow-xl"
+            onClick={() => setIsOpen(false)}
           />
-          <span className="font-forge text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]">
+          <span
+            className="font-forge text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]"
+            onClick={() => setIsOpen(false)}
+          >
             ForgeXP
           </span>
         </Link>
@@ -36,9 +44,7 @@ export default function NavBar() {
         {/* Nav links (desktop not mobile) */}
         <ul className="hidden lg:flex gap-6 text-lg">
           {/*!!!MOVE Into Community!!!*/}
-          <li>
-            <SearchUser />
-          </li>
+          
           <li>
             <Link
               to="/community"
