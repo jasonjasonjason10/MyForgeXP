@@ -19,7 +19,11 @@ const upload = multer({ storage })
 
 // get all posts from a community by id
 router.get('/all', async (req, res) => {
-    const post = await prisma.post.findMany();
+    const post = await prisma.post.findMany({
+        include: {
+            likes: true
+        }
+    });
     
     if(!post){
         return res.status(404).json({
@@ -86,7 +90,6 @@ router.post('/create', tokenAuth, upload.single('postImage'), async (req, res) =
 router.post('/:id/like', tokenAuth, async (req, res) => {
     const userId = req.userId
     const postId = +req.params.id
-    console.log('userId / postId', userId, postId)
     const existingLike = await prisma.like.findUnique({where: {userId_postId: {userId, postId}}})
     if(existingLike){
         await prisma.like.delete({where: {userId_postId: {userId, postId}}})
@@ -103,5 +106,22 @@ router.post('/:id/like', tokenAuth, async (req, res) => {
     }
 })
 
+// user like verification================================
+router.post('/hasliked/:id', tokenAuth, async (req, res) => {
+    const userId = req.userId
+    const postId = +req.params.id
+    const post = await prisma.post.findUnique({
+        where: {id: postId},
+    include: {likes: true}})
+    
+    const relationExists = post.likes.some(like => like.userId === userId)
 
+    res.json({
+        successMessage: "returned post like info",
+        Boolean: relationExists
+    })
+})
+
+
+//=================================================================
 module.exports = router

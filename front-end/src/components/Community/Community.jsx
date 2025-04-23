@@ -4,9 +4,10 @@ import SearchUser from "../SearchUser";
 
 function Community() {
   const navigate = useNavigate();
-  const [postList, setPostList] = useState([]);
-  const [postLiked, setPostLiked] = useState(false);
-  console.log(postList); // ----delete when complete----
+  const [refreshToggle, setRefreshToggle] = useState(false)
+  const [postList, setPostList] = useState([])
+  const [postLiked, setPostLiked] = useState(false)
+  console.log("post List => " , postList) // ----delete when complete----
 
   useEffect(() => {
     async function fetchPostList() {
@@ -15,18 +16,30 @@ function Community() {
       setPostList(result.post);
     }
     fetchPostList();
-  }, []);
+  }, [refreshToggle]);
 
   async function likeHandle(postId) {
     const response = await fetch(`http://localhost:3000/post/${postId}/like`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    const result = await response.json();
-    console.log(result);
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    const result = await response.json()
+    setRefreshToggle(!refreshToggle)
+    console.log("like fetch result =>",result)
   }
+
+  async function fetchHasLiked(postId) {
+    const response = await fetch(`http://localhost:3000/post/hasliked/${postId}`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+    })
+    const result = await response.json()
+    console.log(`hasliked fetch result => ${postId}`,result)
+  }
+
+  fetchHasLiked(19)
 
   return (
     <div className="min-h-screen text-white px-4 py-10">
@@ -39,12 +52,10 @@ function Community() {
         </div>
 
         <button
-          onClick={() => navigate("/createpost")}
-          className="bg-orange-500 hover:bg-orange-400 text-white font-semibold py-2 px-4 mb-1 rounded shadow-md transition duration-300"
-        >
-          + New Post
-        </button>
-
+    onClick={() => navigate("/createpost")}
+    className="bg-orange-500 hover:bg-orange-400 text-white font-semibold py-2 px-4 mb-1 rounded shadow-md transition duration-300">
+    + New Post
+      </button>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {postList.map((post) => (
             <div
@@ -58,15 +69,10 @@ function Community() {
               <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap">
                 {post.description}
               </div>
-
-              <div
-                className="text-sm text-blue-300 mt-auto"
-                onClick={() => {
-                  likeHandle(post.id);
-                }}
-              >
-                Likes:{" "}
-                <span className="font-semibold text-white">{post.likes}</span>
+              <div className="text-sm text-blue-300 mt-auto" 
+              onClick={() => {likeHandle(post.id)}}>
+                {fetchHasLiked(post.id) ? "liked" : "not liked"}
+                Likes: <span className="font-semibold text-white">{post.likes.length}</span>
               </div>
             </div>
           ))}
