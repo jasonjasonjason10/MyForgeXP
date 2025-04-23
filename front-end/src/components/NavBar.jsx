@@ -7,7 +7,6 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const clickHandle = () => {
     localStorage.removeItem("token");
-    console.log(localStorage.getItem("token"));
     window.location.reload();
   };
 

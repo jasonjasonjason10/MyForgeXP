@@ -5,9 +5,10 @@ import SearchUser from "../SearchUser";
 
 function Community() {
   const navigate = useNavigate();
+  const [refreshToggle, setRefreshToggle] = useState(false)
   const [postList, setPostList] = useState([])
   const [postLiked, setPostLiked] = useState(false)
-  console.log(postList) // ----delete when complete----
+  console.log("post List => " , postList) // ----delete when complete----
 
   useEffect(() => {
     async function fetchPostList() {
@@ -16,7 +17,7 @@ function Community() {
       setPostList(result.post);
     }
     fetchPostList();
-  }, []);
+  }, [refreshToggle]);
 
   async function likeHandle(postId) {
     const response = await fetch(`http://localhost:3000/post/${postId}/like`, {
@@ -26,7 +27,8 @@ function Community() {
       }
     })
     const result = await response.json()
-    console.log(result)
+    setRefreshToggle(!refreshToggle)
+    console.log("like fetch result =>",result)
   }
 
   return (
@@ -40,7 +42,7 @@ function Community() {
     onClick={() => navigate("/createpost")}
     className="bg-orange-500 hover:bg-orange-400 text-white font-semibold py-2 px-4 mb-1 rounded shadow-md transition duration-300">
     + New Post
-       </button>
+      </button>
   
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {postList.map((post) => (
@@ -57,7 +59,7 @@ function Community() {
   
               <div className="text-sm text-blue-300 mt-auto" 
               onClick={() => {likeHandle(post.id)}}>
-                Likes: <span className="font-semibold text-white">{post.likes}</span>
+                Likes: <span className="font-semibold text-white">{post.likes.length}</span>
               </div>
             </div>
           ))}
