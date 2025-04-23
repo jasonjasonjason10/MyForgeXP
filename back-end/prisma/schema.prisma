@@ -31,7 +31,6 @@ model User {
   community GameCommunity[]
   comments Comment[]
   likes Like[]
-<<<<<<< Updated upstream
   following Follow[] @relation("Following")
   Followers Follow[] @relation("FollowedBy")
 }
@@ -43,8 +42,6 @@ model Follow {
   followingId Int
   following User @relation("FollowedBy",fields: [followingId], references: [id])
   @@unique([followerId, followingId])
-=======
->>>>>>> Stashed changes
 }
 
 model GameCommunity {
