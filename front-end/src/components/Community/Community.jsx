@@ -7,8 +7,6 @@ function Community() {
   const navigate = useNavigate();
   const [refreshToggle, setRefreshToggle] = useState(false)
   const [postList, setPostList] = useState([])
-  const [postLiked, setPostLiked] = useState(false)
-  console.log("post List => " , postList) // ----delete when complete----
 
   useEffect(() => {
     async function fetchPostList() {
@@ -18,29 +16,6 @@ function Community() {
     }
     fetchPostList();
   }, [refreshToggle]);
-
-  async function likeHandle(postId) {
-    const response = await fetch(`http://localhost:3000/post/${postId}/like`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    })
-    const result = await response.json()
-    setRefreshToggle(!refreshToggle)
-    console.log("like fetch result =>",result)
-  }
-
-  async function fetchHasLiked(postId) {
-    const response = await fetch(`http://localhost:3000/post/hasliked/${postId}`, {
-      method: 'POST',
-      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-    })
-    const result = await response.json()
-    console.log(`hasliked fetch result => ${postId}`,result)
-  }
-
-  fetchHasLiked(19)
 
   return (
     <div className="min-h-screen text-white px-4 py-10">
@@ -61,8 +36,8 @@ function Community() {
             <CommCard
               key={post.id}
               post={post}
-              likeHandle={likeHandle}
-              fetchHasLiked={fetchHasLiked}
+              setRefreshToggle={setRefreshToggle}
+              refreshToggle={refreshToggle}
             />
           ))}
         </div>
