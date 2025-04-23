@@ -107,7 +107,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
             </button>
             <button
               onClick={changedAvatar}
-              className="px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded"
+              className="px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded "
             >
               Save
             </button>

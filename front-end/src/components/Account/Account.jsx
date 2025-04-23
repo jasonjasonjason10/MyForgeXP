@@ -24,11 +24,10 @@ export default function Account() {
   const [activeTab, setActiveTab] = useState("details");
   const [showEditAvatar, setShowEditAvatar] = useState(false);
   const [user, setUser] = useState({});
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+
   console.log(user);
-  // const user = {
-  //   username: "",
-  //   avatar: "/images/pfp/defaultavatar1.png", //IS THIS CORRECT??
-  // };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -54,7 +53,6 @@ export default function Account() {
 
   const tabComponents = {
     details: <AccountDetails />,
-    following: <Following />,
     communities: <Communities />,
     uploads: <Uploads />,
     favorites: <FavGames />,
@@ -75,7 +73,7 @@ export default function Account() {
           />
           <button
             onClick={() => setShowEditAvatar(true)}
-            className="absolute bottom-0 right-0 bg-gray-800 text-white p-1 rounded-full border border-white hover:bg-orange-500 transition"
+            className="absolute bottom-0 right-0 bg-gray-800 text-white p-1 rounded-full border border-white hover:bg-orange-500 transition cursor-pointer"
             title="Edit Profile Picture"
           >
             <Pencil size={16} />
@@ -92,24 +90,34 @@ export default function Account() {
         </div>
         <h2 className="text-xl mt-4 font-bold ">@{user.username}</h2>
       </div>
+      <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
+        <button
+          onClick={() => setShowFollowers(true)}
+          className="hover:text-orange-400 transition flex flex-col"
+        >
+          <span className="text-lg font-bold cursor-pointer">550</span>
+          <span className="text-sm cursor-pointer">Followers</span>
+        </button>
+        <button
+          onClick={() => setShowFollowing(true)}
+          className="hover:text-orange-400 transition flex flex-col"
+        >
+          <span className="text-lg font-bold cursor-pointer">946</span>
+          <span className="text-sm cursor-pointer">Following</span>
+        </button>
+      </div>
 
       {/* Tabs (!!!remove "Uploads" tab and put that in Main Content section) */}
-      <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-7">
+      <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-7 ">
         {/* Tabs Section - Responsive */}
         <div className="border-b border-gray-700 pb-2 mb-4">
           {/* Desktop Tabs */}
           <div className="hidden sm:flex justify-center gap-3 text-sm sm:text-base">
-            {[
-              "details",
-              "following",
-              "communities",
-              "uploads",
-              "favorites",
-            ].map((tab) => (
+            {["details", "communities", "uploads", "favorites"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`hover:text-orange-400 ${
+                className={`hover:text-orange-400 cursor-pointer ${
                   activeTab === tab && "text-orange-500 font-semibold"
                 }`}
               >
@@ -125,13 +133,7 @@ export default function Account() {
               onChange={(e) => setActiveTab(e.target.value)}
               className="w-full bg-gray-800 text-white border border-orange-500 rounded px-3 py-2 focus:outline-none focus:ring-2"
             >
-              {[
-                "details",
-                "following",
-                "communities",
-                "uploads",
-                "favorites",
-              ].map((tab) => (
+              {["details", "communities", "uploads", "favorites"].map((tab) => (
                 <option key={tab} value={tab}>
                   {tab[0].toUpperCase() + tab.slice(1)}
                 </option>
@@ -155,6 +157,49 @@ export default function Account() {
           </AnimatePresence>
         </div>
       </div>
+      {showFollowing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-white text-lg font-bold">Following</h3>
+              <button
+                onClick={() => setShowFollowing(false)}
+                className="text-white hover:text-red-500"
+              >
+                ✖
+              </button>
+            </div>
+            <Following />
+          </motion.div>
+        </div>
+      )}
+
+      {showFollowers && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-white text-lg font-bold">Followers</h3>
+              <button
+                onClick={() => setShowFollowers(false)}
+                className="text-white hover:text-red-500"
+              >
+                ✖
+              </button>
+            </div>
+            <p className="text-gray-300 text-sm">Coming soon...</p>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
