@@ -28,19 +28,26 @@ export default function Following() {
   }
 
   return (
-    <div className="">
-      <h3 className="text-lg font-bold mb-4">All Users</h3>
-      <div className="mb-4 ">
-        <SearchUser 
-        
-        />
+    <div className="max-h-[500px] overflow-y-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-bold">All Users</h3>
+        <button
+          className="text-gray-400 hover:text-white text-2xl"
+          title="More options"
+        >
+          ⋯
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
+      <div className="mb-4">
+        <SearchUser />
+      </div>
+
+      <div className="flex flex-col gap-3">
         {users.map((user) => (
           <div
             key={user.id}
-            className="flex items-center gap-4 bg-gray-800 rounded p-3 shadow hover:shadow-lg transition "
+            className="flex items-center gap-4 bg-gray-800 rounded p-3 shadow hover:shadow-lg transition"
             onClick={clickHandle}
           >
             <img
