@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        forge: ["ForgeXP", "sans-serif"],
+        forge: ["SCREAM", "sans-serif"],
       },
       textShadow: {
         glow: "0 0 6px rgba(255, 165, 0, 0.6)", // subtle orange glow

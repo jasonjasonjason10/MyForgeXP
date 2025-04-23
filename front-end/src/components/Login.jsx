@@ -39,7 +39,7 @@ const Login = ({ setToken }) => {
         if (result.isAdmin) {
           navigate("/admin");
         } else {
-          navigate("/");
+          navigate("/account");
         }
       }, 1500);
     } catch (error) {
@@ -49,57 +49,69 @@ const Login = ({ setToken }) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#13294b] text-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-semibold text-center mb-6 text-white">
-          Sign In
-        </h2>
-
-        {error && (
-          <p className="text-red-400 text-sm mb-4 text-center">{error}</p>
-        )}
-        {successMessage && (
-          <p className="text-green-400 text-sm mb-4 text-center">
-            {successMessage}
-          </p>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="email" className="block mb-1 text-sm text-blue-300">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              placeholder="Enter your email"
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg bg-[#0f1e36] text-white border border-blue-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="relative z-10 flex justify-center items-center min-h-screen px-4 my-10">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-cover bg-center border border-blue-500 p-8 rounded-lg shadow-xl w-full max-w-md"
+          style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
+        >
+          <h2 className="text-3xl font-bold text-center mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            Sign In
+          </h2>
+          <div className="flex justify-center my-4">
+            <img
+              src="/images/minilogo.png"
+              alt="ForgeXP Logo"
+              className="h-20 w-auto drop-shadow-xl"
             />
           </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block mb-1 text-sm text-blue-300"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength="8"
-              className="w-full px-4 py-2 rounded-lg bg-[#0f1e36] text-white border border-blue-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
-          </div>
+  
+          {error && (
+            <p className="text-orange-400 text-sm mb-4 text-center">{error}</p>
+          )}
+          {successMessage && (
+            <p className="text-blue-400 text-sm mb-4 text-center">
+              {successMessage}
+            </p>
+          )}
+  
+          <label
+            htmlFor="email"
+            className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+          >
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+  
+          <label
+            htmlFor="password"
+            className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength="8"
+            required
+            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+  
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-orange-500 hover:bg-orange-600 transition-all text-white font-semibold"
+            className="w-full py-2 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded mt-2 transition disabled:opacity-50"
           >
             Submit
           </button>
@@ -107,6 +119,7 @@ const Login = ({ setToken }) => {
       </div>
     </div>
   );
+  
 };
 
 export default Login;

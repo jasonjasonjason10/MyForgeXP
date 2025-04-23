@@ -9,12 +9,12 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     const acceptedTypes = ["image/png", "image/jpeg", "image/jpg"];
-
+  
     if (selectedFile && !acceptedTypes.includes(selectedFile.type)) {
       setFileError("Unsupported file type. Please upload a JPG or PNG image.");
       return;
     }
-
+  
     setFileError("");
     setFile(selectedFile);
   };
@@ -56,7 +56,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
       {/* Centered modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div
-          className="bg-cover bg-center bg-gray-800 text-white p-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+          className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
           style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
         >
           {/* Close button with Lucide icon */}
@@ -92,9 +92,9 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
               onChange={handleFileChange}
               className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-400 "
             />
-            {fileError && (
-              <p className="text-red-400 text-sm mt-2">{fileError}</p>
-            )}
+              {fileError && (
+    <p className="text-red-400 text-sm mt-2">{fileError}</p>
+  )}
           </div>
 
           {/* Action buttons (need to make a delete maybe?) */}

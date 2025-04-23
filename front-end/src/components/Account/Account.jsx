@@ -15,7 +15,7 @@ import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
-import FriendsList from "./FriendsList";
+import Following from "./Following";
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import FavGames from "./FavGames";
@@ -54,7 +54,7 @@ export default function Account() {
 
   const tabComponents = {
     details: <AccountDetails />,
-    friends: <FriendsList />,
+    following: <Following />,
     communities: <Communities />,
     uploads: <Uploads />,
     favorites: <FavGames />,
@@ -94,48 +94,50 @@ export default function Account() {
       </div>
 
       {/* Tabs (!!!remove "Uploads" tab and put that in Main Content section) */}
-      <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-        <div className="flex flex-wrap gap-3 justify-center border-b border-gray-700 pb-2 mb-4 text-sm sm:text-base">
-          <button
-            onClick={() => setActiveTab("details")}
-            className={`hover:text-orange-400 ${
-              activeTab === "details" && "text-orange-500 font-semibold"
-            }`}
-          >
-            Details
-          </button>
-          <button
-            onClick={() => setActiveTab("friends")}
-            className={`hover:text-orange-400 ${
-              activeTab === "friends" && "text-orange-500 font-semibold"
-            }`}
-          >
-            Friends
-          </button>
-          <button
-            onClick={() => setActiveTab("communities")}
-            className={`hover:text-orange-400 ${
-              activeTab === "communities" && "text-orange-500 font-semibold"
-            }`}
-          >
-            Communities
-          </button>
-          <button
-            onClick={() => setActiveTab("uploads")}
-            className={`hover:text-orange-400 ${
-              activeTab === "uploads" && "text-orange-500 font-semibold"
-            }`}
-          >
-            Uploads
-          </button>
-          <button
-            onClick={() => setActiveTab("favorites")}
-            className={`hover:text-orange-400 ${
-              activeTab === "favorites" && "text-orange-500 font-semibold"
-            }`}
-          >
-            Favorites
-          </button>
+      <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-7">
+        {/* Tabs Section - Responsive */}
+        <div className="border-b border-gray-700 pb-2 mb-4">
+          {/* Desktop Tabs */}
+          <div className="hidden sm:flex justify-center gap-3 text-sm sm:text-base">
+            {[
+              "details",
+              "following",
+              "communities",
+              "uploads",
+              "favorites",
+            ].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`hover:text-orange-400 ${
+                  activeTab === tab && "text-orange-500 font-semibold"
+                }`}
+              >
+                {tab[0].toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Dropdown */}
+          <div className="sm:hidden mt-2">
+            <select
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+              className="w-full bg-gray-800 text-white border border-orange-500 rounded px-3 py-2 focus:outline-none focus:ring-2"
+            >
+              {[
+                "details",
+                "following",
+                "communities",
+                "uploads",
+                "favorites",
+              ].map((tab) => (
+                <option key={tab} value={tab}>
+                  {tab[0].toUpperCase() + tab.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Animated content section: !!!Fix exit animation */}
