@@ -18,6 +18,7 @@ function Community() {
   }, [refreshToggle]);
 
   return (
+<<<<<<< Updated upstream
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-10">
@@ -42,6 +43,11 @@ function Community() {
           ))}
         </div>
       </div>
+=======
+    <div>
+      <h1>Community page</h1>
+      
+>>>>>>> Stashed changes
     </div>
   );
 }
