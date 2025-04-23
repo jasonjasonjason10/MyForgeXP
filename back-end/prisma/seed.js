@@ -24,6 +24,7 @@ await prisma.user.deleteMany();
         username: "admin",
         password: hashedPassword,
         avatar: `/images/pfp/defaultavatar1.png` ,
+        bio: "THIS IS THE MOST POWERFUL ACCOUNT KNOWN TO MAN!!!!",
         isAdmin: true,
       },
     });
@@ -37,10 +38,11 @@ await prisma.user.deleteMany();
         avatar: `/images/pfp/defaultavatar2.png`,
         fName: "FirstName",
         lName: "LastName",
+        bio: "uwu im just a quirky individual uwu"
       },
     });
 
-    // no name and no avatar
+    // no name and no avatar and no bio
     
     await prisma.user.create({
       data: {
