@@ -14,7 +14,6 @@ router.post('/follow/:id', tokenAuth, async (req, res) => {
             followingId: followedById
         }}
     })
-    console.log("existing const => ", existingRelation)
     if(existingRelation){
         await prisma.follow.delete({
             where: {followerId_followingId: {
@@ -23,7 +22,7 @@ router.post('/follow/:id', tokenAuth, async (req, res) => {
             }}
         })
         res.json({
-            successMessage: `user:${userId} => unfollcowed => user:${followedById}`,
+            successMessage: `user:${userId} => unfollowed => user:${followedById}`,
             isFollowed: false
         })
     } else {
@@ -42,7 +41,12 @@ router.post('/follow/:id', tokenAuth, async (req, res) => {
 
 router.post('/following', tokenAuth, async (req, res) => {
     const id = req.userId
-
+    const existingUser = await prisma.user.findUnique({where: {id}})
+    if(!existingUser){
+        return res.status(404).json({
+            error: "no user found"
+        })
+    }
     const following = await prisma.follow.findMany({
         where: {
             followerId: id
@@ -51,14 +55,14 @@ router.post('/following', tokenAuth, async (req, res) => {
             following: true
         }
     })
-    if(!following){
-        return res.statusCode(404).json({
-            error: "no users found"
-        })
-    }
     const result = following.map(f => {
         return f.following
     })
+    if(result.length === 0){
+        return res.status(404).json({
+            error: "no users followed"
+        })
+    }
     res.json({
         successMessage: `list of users user:${id} is following`,
         following: result
@@ -67,7 +71,12 @@ router.post('/following', tokenAuth, async (req, res) => {
 
 router.post('/followed', tokenAuth, async (req, res) => {
     const id = req.userId
-
+    const existingUser = await prisma.user.findUnique({where: {id}})
+    if(!existingUser){
+        return res.status(404).json({
+            error: "no user found"
+        })
+    }
     const followedBy = await prisma.follow.findMany({
         where: {
             followingId: id
@@ -76,14 +85,14 @@ router.post('/followed', tokenAuth, async (req, res) => {
             follower: true
         }
     })
-    if(!followedBy){
-        return res.statusCode(404).json({
-            error: "no users found"
-        })
-    }
     const result = followedBy.map((f) => {
         return f.follower
     })
+    if(result.length === 0){
+        res.status(404).json({
+            error: "no users following"
+        })
+    }
     res.json({
         successMessage: `list of users user:${id} is followed by`,
         followedBy: result
