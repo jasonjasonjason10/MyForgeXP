@@ -6,17 +6,17 @@ function CreatePost() {
   const [postType, setPostType] = useState("text");
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaLink, setMediaLink] = useState("");
-  // const [tempCommunity, setTempCommunity] = useState(null)
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log("Submitting Post:");
-    console.log("Title:", title);
-    console.log("Description:", description);
-    console.log("Post Type:", postType);
-    console.log("Media File:", mediaFile);
-    console.log("YouTube Link:", mediaLink);
+    console.log("Submitting Post:", {
+      title,
+      description,
+      postType,
+      mediaFile,
+      mediaLink,
+    });
 
     setTitle("");
     setDescription("");
@@ -24,119 +24,123 @@ function CreatePost() {
     setMediaFile(null);
     setMediaLink("");
 
-    const communityId = await fetchCommunity()
-    await fetchCreatePost(communityId)
+    const communityId = await fetchCommunity();
+    await fetchCreatePost(communityId);
   }
 
   async function fetchCommunity() {
-    const response = await fetch('http://localhost:3000/gamecommunity/all')
-    
-    const result = await response.json()
-    const community = await result[0].id
-    console.log('TYPE OF CONSOLE', typeof community);
-    
-    return community
+    const response = await fetch("http://localhost:3000/gamecommunity/all");
+    const result = await response.json();
+    return result[0]?.id;
   }
 
   async function fetchCreatePost(communityId) {
-    // const communityId = await fetchCommunity()
+    const formData = new FormData();
+    formData.append("communityId", communityId);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("postType", postType);
+    formData.append("content", mediaFile);
 
-    const formData = new FormData()
-    formData.append('communityId', communityId) // FIXME: searchbar of existing communities
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('postType', postType)
-    formData.append('content', mediaFile)
-    
+    const response = await fetch("http://localhost:3000/post/create", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData,
+    });
 
-    // const data = {
-    //   'title': title,
-    //   'description': description,
-    //   'postType': postType,
-    //   'content': mediaFile,
-    //   'communityId': 7
-    // }
-
-    console.log('FORM DATA', formData);
-    
-    
-    const response = await fetch('http://localhost:3000/post/create', {
-      method: 'POST',
-      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`},
-      body: formData
-    })
-    const result = await response.json()
-    console.log('FETCH RESULT HERE ====>', result);
-    
+    const result = await response.json();
+    console.log("FETCH RESULT:", result);
   }
 
   return (
-    <div className="min-h-screen text-white p-6 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Create New Post</h1>
+    <div className="min-h-screen bg-gradient-to-b from-black to-[#1a1a2e] text-white px-6 py-10">
+      <div className="max-w-3xl mx-auto bg-[#1a1a2e] border border-orange-400 p-8 rounded-xl shadow-2xl">
+        <h1 className="text-4xl font-bold mb-8 text-center drop-shadow-md">
+          Create a New Post
+        </h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4" encType="multipart/form-data">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
-        />
-
-        <textarea
-          placeholder="Text (optional)"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-          className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
-        />
-
-        <select
-          value={postType}
-          onChange={(e) => {
-            setPostType(e.target.value);
-            setMediaFile(null);
-            setMediaLink("");
-          }}
-          className="p-2 rounded bg-gray-800 text-white"
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-6"
+          encType="multipart/form-data"
         >
-          <option value="image">Image</option>
-          <option value="video">Video</option>
-          <option value="text">Text</option>
-        </select>
-
-        {postType === "image" && (
           <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setMediaFile(e.target.files[0])}
-            className="text-white"
+            type="text"
+            placeholder="Optional Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300"
           />
-        )}
 
-        {postType === "video" && (
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-gray-300">Upload video file:</label>
-            <input type="file" accept="video/*" onChange={(e) => setMediaFile(e.target.files[0])} className="text-white" />
+          <textarea
+            placeholder="Text (required)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300 min-h-[120px]"
+          />
 
-            <label className="text-sm text-gray-300">Or paste YouTube link:</label>
+          <select
+            value={postType}
+            onChange={(e) => {
+              setPostType(e.target.value);
+              setMediaFile(null);
+              setMediaLink("");
+            }}
+            className="p-3 bg-gray-900 border border-orange-400 rounded-md text-white"
+          >
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+            <option value="text">Text</option>
+          </select>
+
+          {postType === "image" && (
             <input
-              type="text"
-              value={mediaLink}
-              onChange={(e) => setMediaLink(e.target.value)}
-              placeholder="https://youtube.com/..."
-              className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setMediaFile(e.target.files[0])}
+              className="file:bg-white file:text-black file:rounded file:px-4 file:py-1 text-sm text-white"
             />
-          </div>
-        )}
+          )}
 
-        <button
-          type="submit"
-          className="bg-blue-600 hover:bg-blue-500 rounded px-4 py-2 text-white"
-        >
-          Submit Post
-        </button>
-      </form>
+          {postType === "video" && (
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="block mb-1 text-white font-medium">
+                  Upload Video
+                </label>
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) => setMediaFile(e.target.files[0])}
+                  className="file:bg-white file:text-black file:rounded file:px-4 file:py-1 text-sm text-white"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 text-white font-medium">
+                  Or Paste YouTube Link
+                </label>
+                <input
+                  type="text"
+                  value={mediaLink}
+                  onChange={(e) => setMediaLink(e.target.value)}
+                  placeholder="https://youtube.com/..."
+                  className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white w-full"
+                />
+              </div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="bg-white hover:bg-orange-300 text-white font-bold py-3 rounded-md transition duration-300 shadow-lg"
+          >
+            Submit Post
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
