@@ -62,17 +62,17 @@ await prisma.user.deleteMany();
         {
           gameName: "Elden Ring",
           description: "I played in Xbox and PC. This says how much I love this game.",
-          coverImage: "https://i.ebayimg.com/images/g/9owAAOSww4RiKBzU/s-l400.jpg"
+          coverImage: "/images/games/EldenRing.jpg"
         },
         {
           gameName: "Baldur's Gate 3",
           description: "Among the best games of all time? Absolutely.",
-          coverImage: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/7f3af383a3afa12f0835db4496c7630f62ab6369/capsule_616x353.jpg?t=1744744220"
+          coverImage: "/images/games/BauldersGate3.png"
         },
         {
           gameName: "Astro Bot",
           description: "Astro Bot can proudly stand beside the PlayStation icons it celebrates.",
-          coverImage: "https://cdn.mobygames.com/f1e25e84-6c90-11ef-8a5e-02420a000112.webp"
+          coverImage: "/images/games/AstroBot.png"
         }
       ]
     });

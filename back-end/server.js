@@ -31,8 +31,8 @@ app.use("/post", postRouter);
 
 //=============game-community routes=================
 
-const gameCommunityRouter = require("./src/routes/gameCommunity");
-app.use("/gamecommunity", gameCommunityRouter);
+const gameRouter = require("./src/routes/games");
+app.use("/games", gameRouter);
 
 //=============comments routes=================
 
@@ -47,6 +47,10 @@ app.use(
   "/images/posts",
   express.static(path.join(__dirname, "src", "images", "posts"))
 );
+app.use(
+  "/images/games",
+  express.static(path.join(__dirname, "src", "images", "games"))
+)
 
 app.listen(3000, () => {
   console.log("server running on port 3000");
