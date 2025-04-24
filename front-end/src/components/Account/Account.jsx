@@ -3,7 +3,7 @@ import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
-import Following from "./Following";
+import Following from "./Following"; //Not being used at the moment.
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import FavGames from "./FavGames";
@@ -14,12 +14,19 @@ export default function Account() {
   const [user, setUser] = useState({});
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [followerList, setFollowerList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
     following: 0,
   });
-  const [followerList, setFollowerList] = useState([]);
-  const [followingList, setFollowingList] = useState([]);
+
+  const tabComponents = {
+    details: <AccountDetails />,
+    communities: <Communities />,
+    uploads: <Uploads />,
+    favorites: <FavGames />,
+  };
 
   console.log(user);
 
@@ -45,13 +52,8 @@ export default function Account() {
     fetchUserData();
     fetchFollowCounts();
   }, []);
+  //END useEffect
 
-  const tabComponents = {
-    details: <AccountDetails />,
-    communities: <Communities />,
-    uploads: <Uploads />,
-    favorites: <FavGames />,
-  };
   const fetchFollowCounts = async () => {
     try {
       const token = localStorage.getItem("token");
