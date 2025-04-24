@@ -48,7 +48,6 @@ export default function Account() {
         const data = await response.json();
         
         setFollowerList(data.followedBy);
-        setFollowerCount(followerList.legnth)
     };
 
     fetchFollowerList()
