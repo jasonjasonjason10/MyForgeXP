@@ -69,6 +69,20 @@ router.get("/user/:id", async (req, res) => {
     })
 })
 
+// grab post by community id
+router.get('/game/:id', async (req, res) => {
+    const id = +req.params.id
+    const postList = await prisma.post.findMany({
+        where: {
+            communityId: id
+        }
+    })
+    res.json({
+        posts: postList
+    })
+})
+
+
 // create a post
 router.post('/create', tokenAuth, upload.single("content"), async (req, res, next) => {
     try {

@@ -1,26 +1,24 @@
-import { Link } from "react-router-dom";
-import mockData from "../../data/mockData";
+import { Link, Navigate } from "react-router-dom";
 import GameCard from "./GameCard";
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 export default function AllGames() {
 const [gameList, setGameList] = useState([])
-
+const navigate = useNavigate()
 console.log("gameList useState =>", gameList);
-
 
 useEffect(() => {
   async function fetchGameList() {
     const response = await fetch('http://localhost:3000/games/all')
     const result = await response.json()
-    console.log("sec", result);
     setGameList(result.games)
   }
   fetchGameList()
 },[])
 
-function clickHandle() {
+function clickHandle(id) {
   console.log("tp to page :)")
+  navigate(`../games/${id}`)
 }
 
   
@@ -32,7 +30,8 @@ function clickHandle() {
             All Games
           </h2>
           {gameList ? gameList.map((game) => (
-            <div key={game.id} className="border-solid-4" onClick={clickHandle}>
+            <div key={game.id} className="border-solid-4" 
+            onClick={() => {clickHandle(game.id)}}>
               <GameCard game={game}/>
             </div>
           ))
