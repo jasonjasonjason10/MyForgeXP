@@ -31,7 +31,7 @@ return (
         {gameList ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {gameList.map((game) => (
-              <div key={game.id} onClick={() => clickHandle(game)}>
+              <div key={game.id} onClick={() => clickHandle(game.id)}>
                 <GameCard game={game} />
               </div>
             ))}
