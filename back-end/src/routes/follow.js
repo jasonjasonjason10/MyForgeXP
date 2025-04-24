@@ -103,7 +103,7 @@ router.post("/followed", tokenAuth, async (req, res) => {
   });
 });
 
-// !!! 1/3 ADDED BY JASON!!!//  GET /user/follow/counts/:id  (THIS returns number of followers & following to display on a users profile)
+// !!! 1/5 ADDED BY JASON!!!//  GET /user/follow/counts/:id  (THIS returns number of followers & following to display on a users profile)
 router.get("/follow/counts/:id", async (req, res) => {
   const id = +req.params.id;
 
@@ -127,7 +127,7 @@ router.get("/follow/counts/:id", async (req, res) => {
   }
 });
 
-// !!! 2/3 ADDED BY JASON!!!//  (This is to check to fetch if the logged-in user is following this use so that the button will display "Following")
+// !!! 2/5 ADDED BY JASON!!!//  (This is to check to fetch if the logged-in user is following this use so that the button will display "Following")
 router.get("/isfollowing/:id", tokenAuth, async (req, res) => {
   const userId = req.userId;
   const targetId = +req.params.id;
@@ -144,7 +144,7 @@ router.get("/isfollowing/:id", tokenAuth, async (req, res) => {
   res.json({ isFollowing: !!existingRelation });
 });
 
-// !!! 3/3 ADDED BY JASON!!!// (This is a get route that accepts a user ID for displaying a users current followers when modal pops up in single user upon clicking "Followers")
+// !!! 3/5 ADDED BY JASON!!!// (This is to show a users followers)
 router.get("/followed/:id", async (req, res) => {
   const id = +req.params.id;
 
@@ -164,6 +164,56 @@ router.get("/followed/:id", async (req, res) => {
     successMessage: `Users who follow user ${id}`,
     followers: result,
   });
+});
+
+// !!! 4/5 ADDED BY JASON!!!// (This is to show who a user is following)
+router.get("/following/:id", async (req, res) => {
+  const id = +req.params.id;
+
+  const user = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      following: {
+        include: { following: true },
+      },
+    },
+  });
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const followingList = user.following.map((f) => f.following);
+
+  res.json({
+    successMessage: "Following list retrieved",
+    following: followingList,
+  });
+});
+
+// !!! 5/5 ADDED BY JASON!!!// (This shows a logged in users follow count")
+router.get("/follow/counts/me", tokenAuth, async (req, res) => {
+  console.log("Authenticated userId:", req.userId); // ← add this
+  const id = req.userId;
+
+  try {
+    const followers = await prisma.follow.count({
+      where: { followingId: id },
+    });
+
+    const following = await prisma.follow.count({
+      where: { followerId: id },
+    });
+
+    res.status(200).json({
+      successMessage: "Follow counts for logged-in user",
+      followers,
+      following,
+    });
+  } catch (err) {
+    console.error("Error getting follow counts for logged-in user:", err);
+    res.status(500).json({ error: "Failed to get follow counts" });
+  }
 });
 
 module.exports = router;

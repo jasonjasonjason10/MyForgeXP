@@ -23,10 +23,10 @@ export default function SingleUser() {
     followers: 0,
     following: 0,
   });
-  const [followerList, setFollowerList] = useState([]);
 
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
 
+  //SingleUserFollowers not being used here until we implement a search bar, then also add SingleUserFollowing for search purposes
   const tabComponents = {
     details: <SingleUserDetails />,
     friends: <SingleUserFollowers />,
@@ -34,6 +34,7 @@ export default function SingleUser() {
     favorites: <SingleUserFavorites />,
   };
 
+  //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
   const fetchFollowCounts = async () => {
     try {
       const res = await fetch(`http://localhost:3000/user/follow/counts/${id}`);
@@ -47,6 +48,8 @@ export default function SingleUser() {
     }
   };
 
+  //For viewing Followers pop up
+  const [followerList, setFollowerList] = useState([]);
   const openFollowersModal = async () => {
     setShowFollowers(true);
     try {
@@ -55,6 +58,19 @@ export default function SingleUser() {
       setFollowerList(data.followers);
     } catch (err) {
       console.error("Error loading followers", err);
+    }
+  };
+
+  //For viewing Following Pop up
+  const [followingList, setFollowingList] = useState([]);
+  const openFollowingModal = async () => {
+    setShowFollowing(true);
+    try {
+      const res = await fetch(`http://localhost:3000/user/following/${id}`);
+      const data = await res.json();
+      setFollowingList(data.following);
+    } catch (err) {
+      console.error("Error loading following list", err);
     }
   };
 
@@ -102,7 +118,7 @@ export default function SingleUser() {
   };
 
   const handleReturnClick = () => {
-    navigate("/account");
+    navigate("/community");
   };
   if (!user) return <div className="text-white p-4">Loading user...</div>;
 
@@ -129,7 +145,7 @@ export default function SingleUser() {
           </button>
 
           <button
-            onClick={() => setShowFollowing(true)}
+            onClick={() => setShowFollowing(openFollowingModal)}
             className="hover:text-orange-400 transition flex flex-col cursor-pointer"
           >
             <span className="text-lg font-bold">{followCounts.following}</span>
@@ -241,10 +257,27 @@ export default function SingleUser() {
                 ✖
               </button>
             </div>
-            <Following />
+
+            {followingList.length > 0 ? (
+              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                {followingList.map((user) => (
+                  <li key={user.id} className="flex items-center gap-3">
+                    <img
+                      src={`http://localhost:3000${user.avatar}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                    />
+                    <span>{user.username}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 text-sm">No users followed.</p>
+            )}
           </motion.div>
         </div>
       )}
+
       {showFollowers && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <motion.div
