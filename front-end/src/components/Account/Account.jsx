@@ -1,15 +1,3 @@
-// const [avatar, setAvatar] = useState();
-
-// async function avatarHandle(e) {
-//   e.preventDefault();
-
-//       <div>
-//         <form onSubmit={avatarHandle} >
-//           <input type="file" accept="images/*" onChange={(e) => {e.target.files[0]}} className="border-solid border bg-amber-700"/>
-//           <button type="submit" className="border-solid -PostId/border m-25">Submit</button>
-//         </form>
-//       </div>
-
 import { useEffect, useState } from "react";
 import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
@@ -26,6 +14,12 @@ export default function Account() {
   const [user, setUser] = useState({});
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [followCounts, setFollowCounts] = useState({
+    followers: 0,
+    following: 0,
+  });
+  const [followerList, setFollowerList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
 
   console.log(user);
 
@@ -49,6 +43,7 @@ export default function Account() {
     };
 
     fetchUserData();
+    fetchFollowCounts();
   }, []);
 
   const tabComponents = {
@@ -56,6 +51,51 @@ export default function Account() {
     communities: <Communities />,
     uploads: <Uploads />,
     favorites: <FavGames />,
+  };
+  const fetchFollowCounts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3000/user/follow/counts/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setFollowCounts({
+        followers: data.followers,
+        following: data.following,
+      });
+    } catch (err) {
+      console.error("Error fetching follow counts", err);
+    }
+  };
+
+  const openFollowersModal = async () => {
+    setShowFollowers(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3000/user/followed", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setFollowerList(data.followedBy);
+    } catch (err) {
+      console.error("Error loading followers", err);
+    }
+  };
+
+  const openFollowingModal = async () => {
+    setShowFollowing(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3000/user/following", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setFollowingList(data.following);
+    } catch (err) {
+      console.error("Error loading following", err);
+    }
   };
 
   {
@@ -92,17 +132,21 @@ export default function Account() {
       </div>
       <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
         <button
-          onClick={() => setShowFollowers(true)}
+          onClick={openFollowersModal}
           className="hover:text-orange-400 transition flex flex-col"
         >
-          <span className="text-lg font-bold cursor-pointer">550</span>
+          <span className="text-lg font-bold cursor-pointer">
+            {followCounts.followers}
+          </span>
           <span className="text-sm cursor-pointer">Followers</span>
         </button>
         <button
-          onClick={() => setShowFollowing(true)}
+          onClick={openFollowingModal}
           className="hover:text-orange-400 transition flex flex-col"
         >
-          <span className="text-lg font-bold cursor-pointer">946</span>
+          <span className="text-lg font-bold cursor-pointer">
+            {followCounts.following}
+          </span>
           <span className="text-sm cursor-pointer">Following</span>
         </button>
       </div>
@@ -174,7 +218,22 @@ export default function Account() {
                 ✖
               </button>
             </div>
-            <Following />
+            {followingList.length > 0 ? (
+              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                {followingList.map((user) => (
+                  <li key={user.id} className="flex items-center gap-3">
+                    <img
+                      src={`http://localhost:3000${user.avatar}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                    />
+                    <span>{user.username}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-300 text-sm">Not following anyone yet.</p>
+            )}
           </motion.div>
         </div>
       )}
@@ -196,7 +255,22 @@ export default function Account() {
                 ✖
               </button>
             </div>
-            <p className="text-gray-300 text-sm">Coming soon...</p>
+            {followerList.length > 0 ? (
+              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                {followerList.map((user) => (
+                  <li key={user.id} className="flex items-center gap-3">
+                    <img
+                      src={`http://localhost:3000${user.avatar}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                    />
+                    <span>{user.username}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-300 text-sm">No followers yet.</p>
+            )}
           </motion.div>
         </div>
       )}

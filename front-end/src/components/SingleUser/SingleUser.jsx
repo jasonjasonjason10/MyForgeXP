@@ -19,14 +19,59 @@ export default function SingleUser() {
   const [showFollowing, setShowFollowing] = useState(false);
   const [user, setUser] = useState(null);
   const { id } = useParams();
+  const [followCounts, setFollowCounts] = useState({
+    followers: 0,
+    following: 0,
+  });
 
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
 
+  //SingleUserFollowers not being used here until we implement a search bar, then also add SingleUserFollowing for search purposes
   const tabComponents = {
     details: <SingleUserDetails />,
     friends: <SingleUserFollowers />,
     uploads: <SingleUserUploads />,
     favorites: <SingleUserFavorites />,
+  };
+
+  //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
+  const fetchFollowCounts = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/user/follow/counts/${id}`);
+      const data = await res.json();
+      setFollowCounts({
+        followers: data.followers,
+        following: data.following,
+      });
+    } catch (err) {
+      console.error("Failed to fetch follow counts", err);
+    }
+  };
+
+  //For viewing Followers pop up
+  const [followerList, setFollowerList] = useState([]);
+  const openFollowersModal = async () => {
+    setShowFollowers(true);
+    try {
+      const res = await fetch(`http://localhost:3000/user/followed/${id}`);
+      const data = await res.json();
+      setFollowerList(data.followers);
+    } catch (err) {
+      console.error("Error loading followers", err);
+    }
+  };
+
+  //For viewing Following Pop up
+  const [followingList, setFollowingList] = useState([]);
+  const openFollowingModal = async () => {
+    setShowFollowing(true);
+    try {
+      const res = await fetch(`http://localhost:3000/user/following/${id}`);
+      const data = await res.json();
+      setFollowingList(data.following);
+    } catch (err) {
+      console.error("Error loading following list", err);
+    }
   };
 
   useEffect(() => {
@@ -41,18 +86,39 @@ export default function SingleUser() {
     }
 
     fetchUser();
+    fetchFollowCounts();
+    checkIfFollowing();
   }, [id]);
 
-  //!!!THis will be to pass the users info!!///
-  // const tabComponents = {
-  //   details: <SingleUserDetails user={user} />,
-  //   friends: <SingleUserFollowers user={user} />,
-  //   uploads: <SingleUserUploads user={user} />,
-  //   favorites: <SingleUserFavorites user={user} />,
-  // };
+  async function checkIfFollowing() {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:3000/user/isfollowing/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setIsFollowing(data.isFollowing);
+    } catch (err) {
+      console.error("Error checking follow status", err);
+    }
+  }
+
+  const handleFollowToggle = async () => {
+    const token = localStorage.getItem("token");
+    const result = await toggleFollow(user.id, token);
+    if (result) {
+      setIsFollowing(result.isFollowed);
+      fetchFollowCounts(); // updates the numbers
+    }
+  };
 
   const handleReturnClick = () => {
-    navigate("/account");
+    navigate("/community");
   };
   if (!user) return <div className="text-white p-4">Loading user...</div>;
 
@@ -68,65 +134,60 @@ export default function SingleUser() {
         </div>
         <h2 className="text-xl mt-4 font-bold ">@{user.username}</h2>
       </div>
-      <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
-        <button
-          onClick={() => setShowFollowers(true)}
-          className="hover:text-orange-400 transition flex flex-col cursor-pointer"
-        >
-          <span className="text-lg font-bold">550</span>
-          <span className="text-sm">Followers</span>
-        </button>
-        <button
-          onClick={() => setShowFollowing(true)}
-          className="hover:text-orange-400 transition flex flex-col cursor-pointer"
-        >
-          <span className="text-lg font-bold">946</span>
-          <span className="text-sm">Following</span>
-        </button>
-      </div>
-      <div className="mt-4 relative mb-5 ml-5">
-        {!isFollowing ? (
+      <div className="flex flex-col items-center gap-3 mt-4 mb-6">
+        <div className="flex gap-6 text-center justify-center">
           <button
-            onClick={async () => {
-              const token = localStorage.getItem("token");
-              const result = await toggleFollow(user.id, token);
-              if (result?.isFollowed) {
-                setIsFollowing(true);
-              }
-            }}
-            className="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600 transition"
+            onClick={openFollowersModal}
+            className="hover:text-orange-400 transition flex flex-col cursor-pointer"
           >
-            Follow
+            <span className="text-lg font-bold">{followCounts.followers}</span>
+            <span className="text-sm">Followers</span>
           </button>
-        ) : (
-          <div className="relative inline-block">
-            <button
-              onClick={() => setShowFollowOptions((prev) => !prev)}
-              className="bg-gray-800 border border-orange-400 text-white px-4 py-1 rounded hover:bg-orange-500 transition"
-            >
-              Following ⌄
-            </button>
 
-            {showFollowOptions && (
-              <div className="absolute mt-1 w-32 bg-gray-900 border border-gray-700 rounded shadow-lg z-10">
-                <button
-                  onClick={async () => {
-                    const token = localStorage.getItem("token");
-                    const result = await toggleFollow(user.id, token);
-                    if (!result?.isFollowed) {
-                      setIsFollowing(false);
+          <button
+            onClick={() => setShowFollowing(openFollowingModal)}
+            className="hover:text-orange-400 transition flex flex-col cursor-pointer"
+          >
+            <span className="text-lg font-bold">{followCounts.following}</span>
+            <span className="text-sm">Following</span>
+          </button>
+        </div>
+
+        {/* Follow / Following button */}
+        <div className="relative">
+          {!isFollowing ? (
+            <button
+              onClick={handleFollowToggle}
+              className="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600 transition"
+            >
+              Follow
+            </button>
+          ) : (
+            <div className="relative inline-block">
+              <button
+                onClick={() => setShowFollowOptions((prev) => !prev)}
+                className="bg-gray-800 border border-orange-400 text-white px-4 py-1 rounded hover:bg-orange-500 transition"
+              >
+                Following ⌄
+              </button>
+              {showFollowOptions && (
+                <div className="absolute mt-1 w-32 bg-gray-900 border border-gray-700 rounded shadow-lg z-10">
+                  <div
+                    onClick={() => {
+                      handleFollowToggle();
                       setShowFollowOptions(false);
-                    }
-                  }}
-                  className="block w-full text-left px-3 py-2 text-sm text-white hover:bg-gray-700"
-                >
-                  Unfollow
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer"
+                  >
+                    Unfollow
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
         <div className="border-b border-gray-700 pb-2 mb-4">
           {/* Desktop Tabs (??CHANGE TO ALWAYS DROP DOWN??*/}
@@ -196,10 +257,27 @@ export default function SingleUser() {
                 ✖
               </button>
             </div>
-            <Following />
+
+            {followingList.length > 0 ? (
+              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                {followingList.map((user) => (
+                  <li key={user.id} className="flex items-center gap-3">
+                    <img
+                      src={`http://localhost:3000${user.avatar}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                    />
+                    <span>{user.username}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 text-sm">No users followed.</p>
+            )}
           </motion.div>
         </div>
       )}
+
       {showFollowers && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <motion.div
@@ -217,7 +295,23 @@ export default function SingleUser() {
                 ✖
               </button>
             </div>
-            <p className="text-gray-300 text-sm">Coming soon...</p>
+
+            {followerList.length > 0 ? (
+              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                {followerList.map((follower) => (
+                  <li key={follower.id} className="flex items-center gap-3">
+                    <img
+                      src={`http://localhost:3000${follower.avatar}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                    />
+                    <span>{follower.username}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 text-sm">No followers found.</p>
+            )}
           </motion.div>
         </div>
       )}

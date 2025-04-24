@@ -1,6 +1,6 @@
-export async function toggleFollow(userIdToFollow, token) {
+export async function toggleFollow(targetUserId, token) {
     try {
-      const response = await fetch(`http://localhost:3000/user/follow/${userIdToFollow}`, {
+      const response = await fetch(`http://localhost:3000/user/follow/${targetUserId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -9,15 +9,15 @@ export async function toggleFollow(userIdToFollow, token) {
       });
   
       if (!response.ok) {
-        throw new Error("Follow request failed with status " + response.status);
+        throw new Error(`Follow request failed with status ${response.status}`);
       }
   
-      const result = await response.json();
-      return result;
+      return await response.json();
     } catch (err) {
       console.error("Follow error:", err);
-      return { error: "Follow request failed" };
+      throw err;
     }
   }
+  
   
   
