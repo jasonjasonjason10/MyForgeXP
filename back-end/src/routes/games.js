@@ -2,20 +2,30 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../../prisma');
 const tokenAuth = require('../middleware/TokenAuth');
+const multer = require('multer')
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "src/images/games");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+
+const upload = multer({ storage });
+
+//====NOT SURE IF ANY MULTER STORAGE ABOVE WORKS====
+
 
 // Get all communities
 router.get('/all', async (req, res, next) => {
-    try {
-      const communities = await prisma.gameCommunity.findMany();
 
-      if (!communities || communities.length === 0) {
-        return res.status(404).json({ error: 'No communities found' });
-      }
-
-      res.status(200).json(communities);
-    } catch (error) {
-      next(error);
-    }
+      const games = await prisma.gameCommunity.findMany();
+      res.status(200).json({
+        games: games
+      })
   });
 
 // Get single community by ID
