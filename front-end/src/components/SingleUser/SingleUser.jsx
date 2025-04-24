@@ -23,7 +23,6 @@ export default function SingleUser() {
     followers: 0,
     following: 0,
   });
-
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
 
   //SingleUserFollowers not being used here until we implement a search bar, then also add SingleUserFollowing for search purposes
@@ -33,6 +32,22 @@ export default function SingleUser() {
     uploads: <SingleUserUploads />,
     favorites: <SingleUserFavorites />,
   };
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await fetch(`http://localhost:3000/user/${id}`);
+        const data = await response.json();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Failed to load user:", error);
+      }
+    }
+
+    fetchUser();
+    fetchFollowCounts();
+    checkIfFollowing();
+  }, [id]);
 
   //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
   const fetchFollowCounts = async () => {
@@ -74,22 +89,6 @@ export default function SingleUser() {
     }
   };
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await fetch(`http://localhost:3000/user/${id}`);
-        const data = await response.json();
-        setUser(data.user);
-      } catch (error) {
-        console.error("Failed to load user:", error);
-      }
-    }
-
-    fetchUser();
-    fetchFollowCounts();
-    checkIfFollowing();
-  }, [id]);
-
   async function checkIfFollowing() {
     try {
       const token = localStorage.getItem("token");
@@ -116,6 +115,32 @@ export default function SingleUser() {
       fetchFollowCounts(); // updates the numbers
     }
   };
+
+  // const handleUserClick = (userId) => {
+  //   console.log("Navigating to user:", userId);
+  //   setShowFollowers(false); // Close the modal first
+  //   setShowFollowing(false); // Optional: close both just in case
+  //   setTimeout(() => {
+  //     navigate(`/user/${userId}`);
+  //   }, 100); // Give the modal time to disappear
+  // };
+
+  const handleUserClick = (userId) => {
+    const currentUserId = localStorage.getItem("userId"); // assuming you're storing it here
+  
+    setShowFollowers(false);
+    setShowFollowing(false);
+  
+    setTimeout(() => {
+      if (parseInt(currentUserId) === userId) {
+        navigate("/account");
+      } else {
+        navigate(`/user/${userId}`);
+      }
+    }, 100);
+  };
+  
+  
 
   const handleReturnClick = () => {
     navigate("/community");
@@ -299,14 +324,18 @@ export default function SingleUser() {
             {followerList.length > 0 ? (
               <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
                 {followerList.map((follower) => (
-                  <li key={follower.id} className="flex items-center gap-3">
-                    <img
-                      src={`http://localhost:3000${follower.avatar}`}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
-                    />
-                    <span>{follower.username}</span>
-                  </li>
+              <li
+              key={follower.id}
+              onClick={() => handleUserClick(follower.id)}
+              className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
+            >
+              <img
+                src={`http://localhost:3000${follower.avatar}`}
+                alt="avatar"
+                className="w-8 h-8 rounded-full object-cover border border-gray-500"
+              />
+              <span>{follower.username}</span>
+            </li>
                 ))}
               </ul>
             ) : (
