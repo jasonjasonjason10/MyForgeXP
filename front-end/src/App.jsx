@@ -8,11 +8,10 @@ import SingleGame from "./components/Games/SingleGame";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Account from "./components/Account/Account";
-import Community from "./components/Community/Community"
+import Community from "./components/Community/Community";
 import Uploads from "./components/Account/Uploads";
 import CreatePost from "./components//Community/CreatePost";
 import SingleUser from "./components/SingleUser/SingleUser";
-
 
 function App() {
   const [token, setToken] = useState(null);
@@ -31,10 +30,8 @@ function App() {
         <Route path="account" element={<Account />} />
         <Route path="community" element={<Community />} />
         <Route path="createpost" element={<CreatePost />} />
-        <Route path="uploads" element={<Uploads/>}/>
+        <Route path="uploads" element={<Uploads />} />
         <Route path="user/:id" element={<SingleUser />} />
-
-
       </Route>
     </Routes>
   );

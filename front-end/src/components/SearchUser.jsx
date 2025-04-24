@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 export default function SearchUser() {
-  //==============fetch function====================
   const [user, setUser] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtered, setFiltered] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(-1); // for keyboard navigation, a little extra touch
   const navigate = useNavigate();
-  console.log("User Array", user);
+  const listRef = useRef(null);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -29,19 +28,38 @@ export default function SearchUser() {
     fetchUsers();
   }, []);
 
-  function clickHandle() {
-    navigate("../user");
-  }
-
   useEffect(() => {
-    const lower = searchTerm.toLowerCase();
-    const filteredResults = user.filter((user) =>
-      user.username.toLowerCase().includes(lower)
-    );
-    setFiltered(filteredResults);
+    const timeout = setTimeout(() => {
+      const lower = searchTerm.toLowerCase();
+      const filteredResults = user.filter((user) =>
+        user.username.toLowerCase().includes(lower)
+      );
+      setFiltered(filteredResults);
+      setActiveIndex(-1); // reset on new search
+    }, 300); // wait 300ms after typing stops
+
+    return () => clearTimeout(timeout);
   }, [searchTerm, user]);
 
-  //!!!NOTE: when this search bar component is moved to the Community page. Styling will need to change!!!
+  const handleClick = (userId) => {
+    navigate(`/user/${userId}`);
+    setSearchTerm("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (filtered.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      setActiveIndex((prev) => (prev + 1) % filtered.length);
+    } else if (e.key === "ArrowUp") {
+      setActiveIndex((prev) => (prev - 1 + filtered.length) % filtered.length);
+    } else if (e.key === "Enter" && activeIndex >= 0) {
+      handleClick(filtered[activeIndex].id);
+    } else if (e.key === "Escape") {
+      setSearchTerm("");
+    }
+  };
+
   return (
     <div className="relative w-64">
       <div className="flex items-center bg-gray-800 text-white rounded-full px-4 py-2 shadow-sm border border-blue-500 focus-within:ring-2 focus-within:ring-blue-600">
@@ -51,19 +69,25 @@ export default function SearchUser() {
           placeholder="Search Users..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="bg-transparent text-white placeholder-gray-400 outline-none w-full"
         />
       </div>
 
       {searchTerm && filtered.length > 0 && (
-        <ul className="absolute mt-2 w-full bg-gray-900 rounded shadow-lg z-50 max-h-60 overflow-y-auto border border-gray-700"
+        <ul
+          className="absolute mt-2 w-full bg-gray-900 rounded shadow-lg z-50 max-h-60 overflow-y-auto border border-gray-700"
+          ref={listRef}
         >
-          {filtered.map((user) => (
+          {filtered.map((user, index) => (
             <li
               key={user.id}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-gray-700 cursor-pointer transition"
-              onClick={clickHandle}
-              
+              className={`flex items-center gap-3 px-4 py-2 cursor-pointer transition ${
+                index === activeIndex
+                  ? "bg-gray-700 text-orange-400"
+                  : "hover:bg-gray-700"
+              }`}
+              onClick={() => handleClick(user.id)}
             >
               <img
                 src={`http://localhost:3000${user.avatar}`}
@@ -75,6 +99,7 @@ export default function SearchUser() {
           ))}
         </ul>
       )}
+
       {searchTerm && filtered.length === 0 && (
         <div className="absolute mt-2 w-full bg-gray-900 text-gray-400 text-sm px-4 py-2 rounded shadow border border-gray-700">
           No users found.

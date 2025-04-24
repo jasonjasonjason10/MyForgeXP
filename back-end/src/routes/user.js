@@ -343,6 +343,35 @@ router.patch(
   }
 );
 
+// !!!!!JASON added this, the get user info by id function is for fetching the currently logged in users info!!!!!// also, i moved it to the very bottom because if it reads this first then My Account page breaks.
+router.get("/:id", async (req, res) => {
+  const userId = +req.params.id;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    return res.status(404).json({
+      error: "No user found",
+    });
+  }
+
+  const refinedUser = {
+    id: user.id,
+    username: user.username,
+    avatar: user.avatar,
+    fName: user.fName,
+    lName: user.lName,
+    createdAt: user.createdAt,
+  };
+
+  res.status(200).json({
+    successMessage: "User profile retrieved",
+    user: refinedUser,
+  });
+});
+
 // !reset your avatar
 // router.put('/:id/avatar/reset', /* tokenauth, */ async (req, res, next) => {
 //     try {
