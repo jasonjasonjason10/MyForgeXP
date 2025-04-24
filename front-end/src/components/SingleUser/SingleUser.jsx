@@ -19,6 +19,7 @@ export default function SingleUser() {
   const [showFollowing, setShowFollowing] = useState(false);
   const [user, setUser] = useState(null);
   const { id } = useParams();
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
     following: 0,
@@ -32,6 +33,19 @@ export default function SingleUser() {
     uploads: <SingleUserUploads />,
     favorites: <SingleUserFavorites />,
   };
+
+  useEffect(() => {
+    async function fetchSelf() {
+      const response = await fetch(`http://localhost:3000/user/info`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const result = await response.json();
+      setCurrentUserId(result.user.id);
+    }
+    fetchSelf();
+  }, []);
 
   useEffect(() => {
     async function fetchUser() {
@@ -126,21 +140,18 @@ export default function SingleUser() {
   // };
 
   const handleUserClick = (userId) => {
-    const currentUserId = localStorage.getItem("userId"); // assuming you're storing it here
-  
+
     setShowFollowers(false);
     setShowFollowing(false);
-  
+
     setTimeout(() => {
-      if (parseInt(currentUserId) === userId) {
+      if (currentUserId === userId) {
         navigate("/account");
       } else {
         navigate(`/user/${userId}`);
       }
     }, 100);
   };
-  
-  
 
   const handleReturnClick = () => {
     navigate("/community");
@@ -324,18 +335,18 @@ export default function SingleUser() {
             {followerList.length > 0 ? (
               <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
                 {followerList.map((follower) => (
-              <li
-              key={follower.id}
-              onClick={() => handleUserClick(follower.id)}
-              className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
-            >
-              <img
-                src={`http://localhost:3000${follower.avatar}`}
-                alt="avatar"
-                className="w-8 h-8 rounded-full object-cover border border-gray-500"
-              />
-              <span>{follower.username}</span>
-            </li>
+                  <li
+                    key={follower.id}
+                    onClick={() => handleUserClick(follower.id)}
+                    className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
+                  >
+                    <img
+                      src={`http://localhost:3000${follower.avatar}`}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                    />
+                    <span>{follower.username}</span>
+                  </li>
                 ))}
               </ul>
             ) : (
