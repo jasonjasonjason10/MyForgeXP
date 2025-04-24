@@ -28,7 +28,6 @@ return (
         <h2 className="text-3xl font-bold mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
           All Games
         </h2>
-
         {gameList ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {gameList.map((game) => (
