@@ -3,18 +3,19 @@ const router = express.Router()
 const multer = require("multer")
 const prisma = require('../../prisma')
 const tokenAuth = require('../middleware/TokenAuth')
+const path = require('path')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'src/images/posts')
+        cb(null, "src/images/posts")
     },
     filename: (req, file, cb) => {
-        const prefix = `${Date.now()}-UserId/${req.userId}`// FIGURE OUT HOW TO THROW POST ID ON THIS GUY
+        const prefix = `${Date.now()}-${req.userId}`// FIGURE OUT HOW TO THROW POST ID ON THIS GUY
         cb(null, `${prefix}-${file.originalname}`)
     }
 })
 
-const upload = multer({ storage })
+const upload = multer({ storage });
 
 
 // get all posts from a community by id
@@ -69,20 +70,23 @@ router.get("/user/:id", async (req, res) => {
 })
 
 // create a post
-router.post('/create', tokenAuth, upload.single('content'), async (req, res, next) => {
+router.post('/create', tokenAuth, upload.single("content"), async (req, res, next) => {
     try {
         const userId = req.userId
-        const { title, content, description, postType, communityId } = req.body;
+        const { title, description, postType } = req.body;
 
-        let postData = {...req.body, userId}
+        const communityId = +req.body.communityId
+        let postData = {...req.body, userId, communityId}
 
-        if (!description && description !== '') {
+        if (req.file) postData.content = `images/posts/${req.file.filename}`
+
+        if (!description || description === '') {
             postData.description = null
         }
 
-        const response = await prisma.post.create({ data: postData })
-        const result = await response.json()
-        res.status(200).json({ result })
+
+        const createPost = await prisma.post.create({ data: postData })
+        res.status(200).json({ successMessage: 'Post CREATED !', post: createPost })
     } catch (error) {
         next(error)
     }
