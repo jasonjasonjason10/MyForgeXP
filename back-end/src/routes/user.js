@@ -343,16 +343,6 @@ router.patch(
   }
 );
 
-// request to get user id
-router.get('/id', tokenAuth, async (req, res) => {
-  const id = req.userId
-
-  res.json({
-    successMessage: 'user id returned',
-    id: id
-  })
-})
-
 
 
 // !!!!!JASON added this, the get user info by id function is for fetching the currently logged in users info!!!!!// also, i moved it to the very bottom because if it reads this first then My Account page breaks.
