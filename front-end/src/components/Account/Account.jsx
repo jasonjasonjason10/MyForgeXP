@@ -88,12 +88,6 @@ export default function Account() {
     fetchUserData();
   }, []);
 
-  const tabComponents = {
-    details: <AccountDetails />,
-    communities: <Communities />,
-    uploads: <Uploads />,
-    favorites: <FavGames />,
-  };
   {
     /* Remember that a version of this is needed to display an admin dashboard for when logged in as admin */
   }
