@@ -153,26 +153,22 @@ router.get("/info", tokenAuth, async (req, res, next) => {
   });
 });
 
-
 // get all usernames=====================================
 router.get("/usernames", async (req, res) => {
-    
-    const allInfo = await prisma.user.findMany();
-    const usernames = allInfo.map((user) => {
-        return {
-            id: user.id,
-            username: user.username,
-            avatar: user.avatar
-        }
-        
-        
-    })
+  const allInfo = await prisma.user.findMany();
+  const usernames = allInfo.map((user) => {
+    return {
+      id: user.id,
+      username: user.username,
+      avatar: user.avatar,
+    };
+  });
 
-    res.json({
-        successMessage: "all usernames returned",
-        allUsers: usernames
-    })
-})
+  res.json({
+    successMessage: "all usernames returned",
+    allUsers: usernames,
+  });
+});
 
 // get all users==========ADMIN ONLY=====================
 
@@ -305,11 +301,11 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 // change your avatar ========================================
 router.patch(
   "/avatar",
-  tokenAuth, 
+  tokenAuth,
   /* tokenauth whatever */ upload.single("avatar"),
   async (req, res, next) => {
     try {
-      const id = req.userId
+      const id = req.userId;
       if (!id) return res.status(400).json({ error: "ID not found / invalid" });
 
       if (!req.file)

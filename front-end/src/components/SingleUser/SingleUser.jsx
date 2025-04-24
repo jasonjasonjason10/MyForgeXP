@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,6 +8,7 @@ import SingleUserFollowers from "./SingleUserFollowers";
 import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
 import Following from "../Account/Following";
+import { toggleFollow } from "../../API/index";
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
@@ -14,16 +17,10 @@ export default function SingleUser() {
   const [showFollowOptions, setShowFollowOptions] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [user, setUser] = useState(null);
+  const { id } = useParams();
 
-  const user = {
-    id: 2,
-    username: "mockuser123",
-    avatar: "/images/pfp/defaultavatar1.png",
-    fName: "Mock",
-    lName: "User",
-    createdAt: "2023-10-01T00:00:00.000Z",
-  };
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const tabComponents = {
     details: <SingleUserDetails />,
@@ -31,6 +28,20 @@ export default function SingleUser() {
     uploads: <SingleUserUploads />,
     favorites: <SingleUserFavorites />,
   };
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await fetch(`http://localhost:3000/user/${id}`);
+        const data = await response.json();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Failed to load user:", error);
+      }
+    }
+
+    fetchUser();
+  }, [id]);
 
   //!!!THis will be to pass the users info!!///
   // const tabComponents = {
@@ -43,6 +54,7 @@ export default function SingleUser() {
   const handleReturnClick = () => {
     navigate("/account");
   };
+  if (!user) return <div className="text-white p-4">Loading user...</div>;
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-4xl mx-auto ">
@@ -75,7 +87,13 @@ export default function SingleUser() {
       <div className="mt-4 relative mb-5 ml-5">
         {!isFollowing ? (
           <button
-            onClick={() => setIsFollowing(true)}
+            onClick={async () => {
+              const token = localStorage.getItem("token");
+              const result = await toggleFollow(user.id, token);
+              if (result?.isFollowed) {
+                setIsFollowing(true);
+              }
+            }}
             className="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600 transition"
           >
             Follow
@@ -92,9 +110,13 @@ export default function SingleUser() {
             {showFollowOptions && (
               <div className="absolute mt-1 w-32 bg-gray-900 border border-gray-700 rounded shadow-lg z-10">
                 <button
-                  onClick={() => {
-                    setIsFollowing(false);
-                    setShowFollowOptions(false);
+                  onClick={async () => {
+                    const token = localStorage.getItem("token");
+                    const result = await toggleFollow(user.id, token);
+                    if (!result?.isFollowed) {
+                      setIsFollowing(false);
+                      setShowFollowOptions(false);
+                    }
                   }}
                   className="block w-full text-left px-3 py-2 text-sm text-white hover:bg-gray-700"
                 >
@@ -105,7 +127,6 @@ export default function SingleUser() {
           </div>
         )}
       </div>
-
       <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
         <div className="border-b border-gray-700 pb-2 mb-4">
           {/* Desktop Tabs (??CHANGE TO ALWAYS DROP DOWN??*/}
@@ -179,7 +200,6 @@ export default function SingleUser() {
           </motion.div>
         </div>
       )}
-
       {showFollowers && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <motion.div

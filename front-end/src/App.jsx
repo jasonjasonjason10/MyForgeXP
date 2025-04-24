@@ -32,7 +32,8 @@ function App() {
         <Route path="community" element={<Community />} />
         <Route path="createpost" element={<CreatePost />} />
         <Route path="uploads" element={<Uploads/>}/>
-        <Route path="user" element ={<SingleUser />} />
+        <Route path="user/:id" element={<SingleUser />} />
+
 
       </Route>
     </Routes>

@@ -43,7 +43,7 @@ export default function Following() {
         <SearchUser />
       </div>
 
-      <div className="flex flex-col gap-3">
+      {/* <div className="flex flex-col gap-3">
         {users.map((user) => (
           <div
             key={user.id}
@@ -58,7 +58,7 @@ export default function Following() {
             <span className="font-semibold text-white">@{user.username}</span>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
