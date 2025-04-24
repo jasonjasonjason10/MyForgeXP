@@ -1,64 +1,39 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 function CreatePost() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [postType, setPostType] = useState("text");
   const [mediaFile, setMediaFile] = useState(null);
-  const [mediaLink, setMediaLink] = useState("");
-  // const [tempCommunity, setTempCommunity] = useState(null)
+  // const [mediaLink, setMediaLink] = useState("");
+
+  const navigate = useNavigate()
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log("Submitting Post:");
-    console.log("Title:", title);
-    console.log("Description:", description);
-    console.log("Post Type:", postType);
-    console.log("Media File:", mediaFile);
-    console.log("YouTube Link:", mediaLink);
-
-    setTitle("");
-    setDescription("");
-    setPostType("image");
-    setMediaFile(null);
-    setMediaLink("");
-
     const communityId = await fetchCommunity()
     await fetchCreatePost(communityId)
+
+    navigate('/community')
   }
 
   async function fetchCommunity() {
     const response = await fetch('http://localhost:3000/gamecommunity/all')
     
     const result = await response.json()
-    const community = await result[0].id
-    console.log('TYPE OF CONSOLE', typeof community);
-    
+    const community = await result[0].id    
     return community
   }
 
   async function fetchCreatePost(communityId) {
-    // const communityId = await fetchCommunity()
-
     const formData = new FormData()
-    formData.append('communityId', communityId) // FIXME: searchbar of existing communities
+    formData.append('communityId', communityId)
     formData.append('title', title)
     formData.append('description', description)
     formData.append('postType', postType)
     formData.append('content', mediaFile)
-    
-
-    // const data = {
-    //   'title': title,
-    //   'description': description,
-    //   'postType': postType,
-    //   'content': mediaFile,
-    //   'communityId': 7
-    // }
-
-    console.log('FORM DATA', formData);
-    
     
     const response = await fetch('http://localhost:3000/post/create', {
       method: 'POST',
@@ -66,8 +41,7 @@ function CreatePost() {
       body: formData
     })
     const result = await response.json()
-    console.log('FETCH RESULT HERE ====>', result);
-    
+    return result
   }
 
   return (
@@ -80,6 +54,7 @@ function CreatePost() {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
           className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
         />
 
@@ -87,7 +62,6 @@ function CreatePost() {
           placeholder="Text (optional)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          required
           className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
         />
 
@@ -96,7 +70,7 @@ function CreatePost() {
           onChange={(e) => {
             setPostType(e.target.value);
             setMediaFile(null);
-            setMediaLink("");
+            // setMediaLink("");
           }}
           className="p-2 rounded bg-gray-800 text-white"
         >
@@ -119,14 +93,14 @@ function CreatePost() {
             <label className="text-sm text-gray-300">Upload video file:</label>
             <input type="file" accept="video/*" onChange={(e) => setMediaFile(e.target.files[0])} className="text-white" />
 
-            <label className="text-sm text-gray-300">Or paste YouTube link:</label>
+            {/* <label className="text-sm text-gray-300">Or paste YouTube link:</label>
             <input
               type="text"
               value={mediaLink}
               onChange={(e) => setMediaLink(e.target.value)}
               placeholder="https://youtube.com/..."
               className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
-            />
+            /> */}
           </div>
         )}
 

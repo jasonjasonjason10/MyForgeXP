@@ -78,7 +78,7 @@ router.post('/create', tokenAuth, upload.single("content"), async (req, res, nex
         const communityId = +req.body.communityId
         let postData = {...req.body, userId, communityId}
 
-        if (req.file) postData.content = `images/posts/${req.file.filename}`
+        if (req.file) postData.content = `/images/posts/${req.file.filename}`
 
         if (!description || description === '') {
             postData.description = null
