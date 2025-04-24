@@ -24,25 +24,28 @@ function clickHandle() {
 }
 
   
-  return (
-    <div className="relative min-h-screen text-white overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <main className="flex-grow p-6">
-          <h2 className="text-3xl font-bold mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-            All Games
-          </h2>
-          {gameList ? gameList.map((game) => (
-            <div key={game.id} className="border-solid-4" onClick={clickHandle}>
-              <GameCard game={game}/>
-            </div>
-          ))
-        : <h2>"loading . . ."</h2>
-        }
-          <div>
+return (
+  <div className="relative min-h-screen text-white overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+    <div className="relative z-10 flex flex-col min-h-screen">
+      <main className="flex-grow p-6">
+        <h2 className="text-3xl font-bold mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+          All Games
+        </h2>
+
+        {gameList ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {gameList.map((game) => (
+              <div key={game.id} onClick={() => clickHandle(game)}>
+                <GameCard game={game} />
+              </div>
+            ))}
           </div>
-        </main>
-      </div>
+        ) : (
+          <h2>"loading . . ."</h2>
+        )}
+      </main>
     </div>
-  );
+  </div>
+);
 }
 
