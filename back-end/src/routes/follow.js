@@ -62,11 +62,6 @@ router.post("/following", tokenAuth, async (req, res) => {
   const result = following.map((f) => {
     return f.following;
   });
-  if (result.length === 0) {
-    return res.status(404).json({
-      error: "no users followed",
-    });
-  }
   res.json({
     successMessage: `list of users user:${id} is following`,
     following: result,
@@ -92,11 +87,6 @@ router.post("/followed", tokenAuth, async (req, res) => {
   const result = followedBy.map((f) => {
     return f.follower;
   });
-  if (result.length === 0) {
-    res.status(404).json({
-      error: "no users following",
-    });
-  }
   res.json({
     successMessage: `list of users user:${id} is followed by`,
     followedBy: result,

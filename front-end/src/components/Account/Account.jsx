@@ -28,8 +28,44 @@ export default function Account() {
     favorites: <FavGames />,
   };
 
-  console.log(user);
 
+  useEffect(() => {
+
+    const fetchFollowingList = async () => {
+        const response = await fetch("http://localhost:3000/user/following", {
+          method: "POST",
+          headers: {Authorization: `Bearer ${localStorage.getItem("token")}`},
+        });
+        const data = await response.json();
+        setFollowingList(data.following);
+    };
+
+    const fetchFollowerList = async () => {
+        const response = await fetch("http://localhost:3000/user/followed", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        const data = await response.json();
+        
+        setFollowerList(data.followedBy);
+        setFollowerCount(followerList.legnth)
+    };
+
+    fetchFollowerList()
+    fetchFollowingList()
+  },[showFollowing, showFollowers])
+
+
+  useEffect(() => {
+    setFollowCounts({
+      followers: followerList.length,
+      following: followingList.length
+    })
+  },[followerList, followingList])
+
+
+
+//===========User info useEffect==================
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
@@ -50,56 +86,14 @@ export default function Account() {
     };
 
     fetchUserData();
-    fetchFollowCounts();
   }, []);
-  //END useEffect
 
-  const fetchFollowCounts = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/user/follow/counts/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFollowCounts({
-        followers: data.followers,
-        following: data.following,
-      });
-    } catch (err) {
-      console.error("Error fetching follow counts", err);
-    }
+  const tabComponents = {
+    details: <AccountDetails />,
+    communities: <Communities />,
+    uploads: <Uploads />,
+    favorites: <FavGames />,
   };
-
-  const openFollowersModal = async () => {
-    setShowFollowers(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/user/followed", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFollowerList(data.followedBy);
-    } catch (err) {
-      console.error("Error loading followers", err);
-    }
-  };
-
-  const openFollowingModal = async () => {
-    setShowFollowing(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/user/following", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFollowingList(data.following);
-    } catch (err) {
-      console.error("Error loading following", err);
-    }
-  };
-
   {
     /* Remember that a version of this is needed to display an admin dashboard for when logged in as admin */
   }
@@ -134,7 +128,7 @@ export default function Account() {
       </div>
       <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
         <button
-          onClick={openFollowersModal}
+          onClick={() => {setShowFollowers(true)}}
           className="hover:text-orange-400 transition flex flex-col"
         >
           <span className="text-lg font-bold cursor-pointer">
@@ -143,7 +137,7 @@ export default function Account() {
           <span className="text-sm cursor-pointer">Followers</span>
         </button>
         <button
-          onClick={openFollowingModal}
+          onClick={() => {setShowFollowing(true)}}
           className="hover:text-orange-400 transition flex flex-col"
         >
           <span className="text-lg font-bold cursor-pointer">
