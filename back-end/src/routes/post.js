@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
         cb(null, "src/images/posts")
     },
     filename: (req, file, cb) => {
-        const prefix = `${Date.now()}-UserId/${req.userId}`// FIGURE OUT HOW TO THROW POST ID ON THIS GUY
+        const prefix = `${Date.now()}-${req.userId}`// FIGURE OUT HOW TO THROW POST ID ON THIS GUY
         cb(null, `${prefix}-${file.originalname}`)
     }
 })
@@ -76,9 +76,9 @@ router.post('/create', tokenAuth, upload.single("content"), async (req, res, nex
         const { title, description, postType } = req.body;
 
         const communityId = +req.body.communityId
-        const content = `/images/post/${req.file.filename}`
+        let postData = {...req.body, userId, communityId}
 
-        let postData = {...req.body, userId, communityId, content}
+        if (req.file) postData.content = `images/posts/${req.file.filename}`
 
         if (!description || description === '') {
             postData.description = null
