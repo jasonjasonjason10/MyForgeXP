@@ -9,6 +9,7 @@ import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
 import Following from "../Account/Following";
 import { toggleFollow } from "../../API/index";
+import ReturnButton from "../ReturnButton";
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
@@ -140,7 +141,6 @@ export default function SingleUser() {
   // };
 
   const handleUserClick = (userId) => {
-
     setShowFollowers(false);
     setShowFollowing(false);
 
@@ -153,9 +153,9 @@ export default function SingleUser() {
     }, 100);
   };
 
-  const handleReturnClick = () => {
-    navigate("/community");
-  };
+  // const handleReturnClick = () => {
+  //   navigate("/community");
+  // };
   if (!user) return <div className="text-white p-4">Loading user...</div>;
 
   return (
@@ -272,10 +272,8 @@ export default function SingleUser() {
         </div>
       </div>
       <div className="flex justify-center mt-12 ">
-        <button className="button" onClick={handleReturnClick}>
-          Return
-        </button>
-      </div>
+  <ReturnButton />
+</div>
       {showFollowing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <motion.div
@@ -296,14 +294,18 @@ export default function SingleUser() {
 
             {followingList.length > 0 ? (
               <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-                {followingList.map((user) => (
-                  <li key={user.id} className="flex items-center gap-3">
+                {followingList.map((followedUser) => (
+                  <li
+                    key={followedUser.id}
+                    onClick={() => handleUserClick(followedUser.id)}
+                    className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
+                  >
                     <img
-                      src={`http://localhost:3000${user.avatar}`}
+                      src={`http://localhost:3000${followedUser.avatar}`}
                       alt="avatar"
                       className="w-8 h-8 rounded-full object-cover border border-gray-500"
                     />
-                    <span>{user.username}</span>
+                    <span>{followedUser.username}</span>
                   </li>
                 ))}
               </ul>
