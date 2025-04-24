@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +17,9 @@ export default function Account() {
   const [showFollowing, setShowFollowing] = useState(false);
   const [followerList, setFollowerList] = useState([]);
   const [followingList, setFollowingList] = useState([]);
+  const navigate = useNavigate();
+  const [currentUserId, setCurrentUserId] = useState(null);
+
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
     following: 0,
@@ -28,43 +32,38 @@ export default function Account() {
     favorites: <FavGames />,
   };
 
-
   useEffect(() => {
-
     const fetchFollowingList = async () => {
-        const response = await fetch("http://localhost:3000/user/following", {
-          method: "POST",
-          headers: {Authorization: `Bearer ${localStorage.getItem("token")}`},
-        });
-        const data = await response.json();
-        setFollowingList(data.following);
+      const response = await fetch("http://localhost:3000/user/following", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const data = await response.json();
+      setFollowingList(data.following);
     };
 
     const fetchFollowerList = async () => {
-        const response = await fetch("http://localhost:3000/user/followed", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        const data = await response.json();
-        
-        setFollowerList(data.followedBy);
+      const response = await fetch("http://localhost:3000/user/followed", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const data = await response.json();
+
+      setFollowerList(data.followedBy);
     };
 
-    fetchFollowerList()
-    fetchFollowingList()
-  },[showFollowing, showFollowers])
-
+    fetchFollowerList();
+    fetchFollowingList();
+  }, [showFollowing, showFollowers]);
 
   useEffect(() => {
     setFollowCounts({
       followers: followerList.length,
-      following: followingList.length
-    })
-  },[followerList, followingList])
+      following: followingList.length,
+    });
+  }, [followerList, followingList]);
 
-
-
-//===========User info useEffect==================
+  //===========User info useEffect==================
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
@@ -77,8 +76,8 @@ export default function Account() {
           },
         });
         const user = await res.json();
-
         setUser(user.user);
+        setCurrentUserId(user.user.id);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
@@ -86,6 +85,19 @@ export default function Account() {
 
     fetchUserData();
   }, []);
+
+  const handleUserClick = (userId) => {
+    setShowFollowers(false);
+    setShowFollowing(false);
+
+    setTimeout(() => {
+      if (userId === currentUserId) {
+        navigate("/account");
+      } else {
+        navigate(`/user/${userId}`);
+      }
+    }, 100);
+  };
 
   {
     /* Remember that a version of this is needed to display an admin dashboard for when logged in as admin */
@@ -121,7 +133,9 @@ export default function Account() {
       </div>
       <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
         <button
-          onClick={() => {setShowFollowers(true)}}
+          onClick={() => {
+            setShowFollowers(true);
+          }}
           className="hover:text-orange-400 transition flex flex-col"
         >
           <span className="text-lg font-bold cursor-pointer">
@@ -130,7 +144,9 @@ export default function Account() {
           <span className="text-sm cursor-pointer">Followers</span>
         </button>
         <button
-          onClick={() => {setShowFollowing(true)}}
+          onClick={() => {
+            setShowFollowing(true);
+          }}
           className="hover:text-orange-400 transition flex flex-col"
         >
           <span className="text-lg font-bold cursor-pointer">
@@ -210,7 +226,11 @@ export default function Account() {
             {followingList.length > 0 ? (
               <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
                 {followingList.map((user) => (
-                  <li key={user.id} className="flex items-center gap-3">
+                  <li
+                    key={user.id}
+                    onClick={() => handleUserClick(user.id)}
+                    className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
+                  >
                     <img
                       src={`http://localhost:3000${user.avatar}`}
                       alt="avatar"
@@ -247,7 +267,11 @@ export default function Account() {
             {followerList.length > 0 ? (
               <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
                 {followerList.map((user) => (
-                  <li key={user.id} className="flex items-center gap-3">
+                  <li
+                    key={user.id}
+                    onClick={() => handleUserClick(user.id)}
+                    className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
+                  >
                     <img
                       src={`http://localhost:3000${user.avatar}`}
                       alt="avatar"
