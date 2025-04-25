@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
@@ -8,47 +8,51 @@ function CreatePost() {
   const [mediaFile, setMediaFile] = useState(null);
   // const [mediaLink, setMediaLink] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const communityId = await fetchCommunity()
-    await fetchCreatePost(communityId)
+    const communityId = await fetchCommunity();
+    await fetchCreatePost(communityId);
 
-    navigate('/community')
+    navigate("/community");
   }
 
   async function fetchCommunity() {
-    const response = await fetch('http://localhost:3000/gamecommunity/all')
-    
-    const result = await response.json()
-    const community = await result[0].id    
-    return community
+    const response = await fetch("http://localhost:3000/gamecommunity/all");
+
+    const result = await response.json();
+    const community = await result[0].id;
+    return community;
   }
 
   async function fetchCreatePost(communityId) {
-    const formData = new FormData()
-    formData.append('communityId', communityId)
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('postType', postType)
-    formData.append('content', mediaFile)
-    
-    const response = await fetch('http://localhost:3000/post/create', {
-      method: 'POST',
-      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`},
-      body: formData
-    })
-    const result = await response.json()
-    return result
+    const formData = new FormData();
+    formData.append("communityId", communityId);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("postType", postType);
+    formData.append("content", mediaFile);
+
+    const response = await fetch("http://localhost:3000/post/create", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      body: formData,
+    });
+    const result = await response.json();
+    return result;
   }
 
   return (
     <div className="min-h-screen text-white p-6 max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Create New Post</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4" encType="multipart/form-data">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4"
+        encType="multipart/form-data"
+      >
         <input
           type="text"
           placeholder="Title"
@@ -91,7 +95,12 @@ function CreatePost() {
         {postType === "video" && (
           <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-300">Upload video file:</label>
-            <input type="file" accept="video/*" onChange={(e) => setMediaFile(e.target.files[0])} className="text-white" />
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => setMediaFile(e.target.files[0])}
+              className="text-white"
+            />
 
             {/* <label className="text-sm text-gray-300">Or paste YouTube link:</label>
             <input
@@ -106,7 +115,9 @@ function CreatePost() {
 
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-500 rounded px-4 py-2 text-white"
+          className="bg-blue-700 hover:bg-blue-800 rounded px-4 py-2 text-white"
+          // className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+          // style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
         >
           Submit Post
         </button>
