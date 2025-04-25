@@ -26,7 +26,7 @@ export default function NavBar() {
             onClick={() => setIsOpen(false)}
           />
           <span
-            className="font-[SCREAM] text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]"
+            className=" text-orange-500 text-2xl tracking-wide drop-shadow-[0_0_10px_rgba(255,115,0,0.8)]"
             onClick={() => setIsOpen(false)}
           >
             ForgeXP
@@ -44,7 +44,7 @@ export default function NavBar() {
         {/* Nav links (desktop not mobile) */}
         <ul className="hidden lg:flex gap-6 text-lg">
           {/*!!!MOVE Into Community!!!*/}
-          
+
           <li>
             <Link
               to="/community"
@@ -83,7 +83,6 @@ export default function NavBar() {
             </>
           ) : (
             <>
-            
               <li>
                 <Link
                   to="/account"
