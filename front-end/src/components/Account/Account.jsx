@@ -8,6 +8,8 @@ import Following from "./Following"; //Not being used at the moment.
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import FavGames from "./FavGames";
+import { X } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 export default function Account() {
   const [activeTab, setActiveTab] = useState("details");
@@ -19,6 +21,7 @@ export default function Account() {
   const [followingList, setFollowingList] = useState([]);
   const navigate = useNavigate();
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [showOptions, setShowOptions] = useState(false);
 
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
@@ -207,29 +210,41 @@ export default function Account() {
         </div>
       </div>
       {showFollowing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-white text-lg font-bold">Following</h3>
-              <button
-                onClick={() => setShowFollowing(false)}
-                className="text-white hover:text-red-500"
-              >
-                ✖
-              </button>
-            </div>
-            {followingList.length > 0 ? (
-              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-                {followingList.map((user) => (
+        <>
+          {/* Backdrop blur and dark layer */}
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+
+          {/* Centered modal container */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
+            >
+              <div className="relative mb-4">
+                <h3 className="text-2xl font-bold text-white">Following</h3>
+                <button
+                  className="absolute top-2 right-3 text-gray-400 hover:text-white"
+                  onClick={() => setShowFollowing(false)}
+                  title="Close"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {followingList.length > 0 ? (
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                  {followingList.map((user) => (
                   <li
-                    key={user.id}
+                  key={user.id}
+                  className="relative flex items-center justify-between p-2 border-b border-blue-400 hover:border-orange-400"
+                >
+                  {/* Avatar + Username */}
+                  <div
+                    className="flex items-center gap-3 cursor-pointer"
                     onClick={() => handleUserClick(user.id)}
-                    className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
                   >
                     <img
                       src={`http://localhost:3000${user.avatar}`}
@@ -237,55 +252,126 @@ export default function Account() {
                       className="w-8 h-8 rounded-full object-cover border border-gray-500"
                     />
                     <span>{user.username}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-300 text-sm">Not following anyone yet.</p>
-            )}
-          </motion.div>
-        </div>
+                  </div>
+                
+                  {/* Three-dot dropdown */}
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFollowingList((prev) =>
+                          prev.map((u) =>
+                            u.id === user.id
+                              ? { ...u, showOptions: !u.showOptions }
+                              : { ...u, showOptions: false }
+                          )
+                        );
+                      }}
+                      className="text-gray-400 hover:text-white"
+                    >
+                      <MoreHorizontal size={20} />
+                    </button>
+                
+                    {user.showOptions && (
+                      <div className="absolute right-0 mt-1 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
+                        <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                          Unfollow
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </li>
+                
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-300 text-sm">
+                  Not following anyone yet.
+                </p>
+              )}
+            </motion.div>
+          </div>
+        </>
       )}
 
       {showFollowers && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-white text-lg font-bold">Followers</h3>
-              <button
-                onClick={() => setShowFollowers(false)}
-                className="text-white hover:text-red-500"
-              >
-                ✖
-              </button>
-            </div>
-            {followerList.length > 0 ? (
-              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-                {followerList.map((user) => (
-                  <li
-                    key={user.id}
-                    onClick={() => handleUserClick(user.id)}
-                    className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded"
-                  >
-                    <img
-                      src={`http://localhost:3000${user.avatar}`}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
-                    />
-                    <span>{user.username}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-300 text-sm">No followers yet.</p>
-            )}
-          </motion.div>
-        </div>
+        <>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
+            >
+              <div className="relative mb-4">
+                <h3 className="text-2xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                  Following
+                </h3>
+                <button
+                  className="absolute top-2 right-3 text-gray-400 hover:text-white "
+                  onClick={() => setShowFollowers(false)}
+                  title="Close"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              {followerList.length > 0 ? (
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                  {followerList.map((follower) => (
+                    <li
+                      key={follower.id}
+                      className="relative flex items-center justify-between cursor-pointer p-2 border-b border-blue-400 hover:border-orange-400"
+                    >
+                      {/* Avatar + Username (clickable) */}
+                      <div
+                        className="flex items-center gap-3"
+                        onClick={() => handleUserClick(follower.id)}
+                      >
+                        <img
+                          src={`http://localhost:3000${follower.avatar}`}
+                          alt="avatar"
+                          className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                        />
+                        <span>{follower.username}</span>
+                      </div>
+
+                      {/* Three-dot dropdown */}
+                      <div className="relative">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFollowerList((prev) =>
+                              prev.map((f) =>
+                                f.id === follower.id
+                                  ? { ...f, showOptions: !f.showOptions }
+                                  : { ...f, showOptions: false }
+                              )
+                            );
+                          }}
+                          className="text-gray-400 hover:text-white"
+                        >
+                          <MoreHorizontal size={20} />
+                        </button>
+
+                        {follower.showOptions && (
+                          <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
+                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                              Remove
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-300 text-sm">No followers yet.</p>
+              )}
+            </motion.div>
+          </div>
+        </>
       )}
     </div>
   );
