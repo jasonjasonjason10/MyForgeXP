@@ -299,11 +299,7 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 });
 
 // change your avatar ========================================
-router.patch(
-  "/avatar",
-  tokenAuth,
-  /* tokenauth whatever */ upload.single("avatar"),
-  async (req, res, next) => {
+router.patch("/avatar", tokenAuth, upload.single("avatar"), async (req, res, next) => {
     try {
       const id = req.userId;
       if (!id) return res.status(400).json({ error: "ID not found / invalid" });
