@@ -16,7 +16,6 @@ await prisma.user.deleteMany();
   async function createUser() {
     const hashedPassword = await bcrypt.hash("password123", 10);
 
-
     // Admin user
     await prisma.user.create({
       data: {
@@ -43,7 +42,6 @@ await prisma.user.deleteMany();
     });
 
     // no name and no avatar and no bio
-    
     await prisma.user.create({
       data: {
         email: "no@name.com",
@@ -61,24 +59,110 @@ await prisma.user.deleteMany();
       data: [
         {
           gameName: "Elden Ring",
-          description: "I played in Xbox and PC. This says how much I love this game.",
-          coverImage: "/images/games/EldenRing.jpg"
+          description: "A triumphant open-world Soulslike with awe-inspiring bosses and exploration. Demanding yet deeply rewarding, albeit with occasional repetition.",
+          coverImage: "/src/images/pfp/game-elden-ring.png"
         },
         {
           gameName: "Baldur's Gate 3",
-          description: "Among the best games of all time? Absolutely.",
-          coverImage: "/images/games/BauldersGate3.png"
+          description: "A masterpiece of choice-driven storytelling with deep combat, unforgettable characters, and staggering reactivity. Sets a new bar for CRPGs.",
+          coverImage: "/src/images/pfp/game-buldur's-gate3.png"
         },
         {
-          gameName: "Astro Bot",
-          description: "Astro Bot can proudly stand beside the PlayStation icons it celebrates.",
-          coverImage: "/images/games/AstroBot.png"
+          gameName: "Counter-Strike 2",
+          description: "The definitive tactical shooter evolves with upgraded visuals and smoke mechanics, retaining its ultra-competitive core. Server issues and missing features frustrate veterans, but its polished gunplay remains unmatched.",
+          coverImage: "/src/images/pfp/game-counterstrike2.png"
+        },
+        {
+          gameName: "Helldivers 2",
+          description: "Chaotic, satirical fun with frenetic team-based action. Friendly fire and stratagems create hilarious (and brutal) moments, though progression grinds late-game.",
+          coverImage: "/src/images/pfp/game-helldivers2.png"
+        },
+        {
+          gameName: "Stardew Valley",
+          description: "A timeless, heartwarming escape with farming, mining, and relationships. Continues to charm with endless content and mod support.",
+          coverImage: "/src/images/pfp/game-stardewvalley.jpeg"
+        },
+        {
+          gameName: "Call of Duty: Modern Warfare III",
+          description: "Solid gunplay and a strong multiplayer suite are marred by a rushed campaign and aggressive monetization. For diehard fans only.",
+          coverImage: "/src/images/pfp/game-call-of-duty3.jpg"
+        },
+        {
+          gameName: "Cyberpunk 2077",
+          description: "Redeemed by 2.0 and Phantom Liberty, offering a gripping narrative, improved gameplay, and Night City’s dazzling immersion.",
+          coverImage: "/src/images/pfp/game-cyberpund2077.png"
+        },
+        {
+          gameName: "PUBG: BATTLEGROUNDS",
+          description: "The BR pioneer remains tense and tactical, though clunky movement and dated visuals show its age next to competitors.",
+          coverImage: "/src/images/pfp/game-pubg.png"
+        },
+        {
+          gameName: "Apex Legends",
+          description: "Fast-paced, movement-driven combat with stellar gunplay, but hampered by uneven balance and a steep learning curve.",
+          coverImage: "/src/images/pfp/game-apex.jpg"
+        },
+        {
+          gameName: "Grand Theft Auto V",
+          description: "A decade later, its world and chaos still entertain, though re-releases test patience. Online mode’s grind overshadows its brilliance.",
+          coverImage: "/src/images/pfp/game-grandtheft.jpg"
+        },
+        {
+          gameName: "Dota 2",
+          description: "The pinnacle of competitive MOBAs with unmatched depth and strategy. Steep learning curve and toxic community can deter newcomers, but its free-to-play model and ever-evolving meta keep it thriving.",
+          coverImage: "/src/images/pfp/game-dota2.png"
+        },
+        {
+          gameName: "Lost Ark",
+          description: "A visually stunning ARPG-MMO hybrid with satisfying combat and tons of content. Hampered by grind-heavy endgame and aggressive monetization, but a blast for casual play.",
+          coverImage: "/src/images/pfp/game-lost-ark.jpg"
+        },
+        {
+          gameName: "Destiny 2",
+          description: "Superb gunplay and epic raids make it a shooter standout, but convoluted storytelling and relentless monetization frustrate. Best with friends.",
+          coverImage: "/src/images/pfp/game-destiny2.png"
+        },
+        {
+          gameName: "Hogwarts Legacy",
+          description: "A magical open-world love letter to Harry Potter fans, packed with charm but held back by shallow RPG mechanics and repetitive tasks.",
+          coverImage: "/src/images/pfp/game-hogwarts.png"
+        },
+        {
+          gameName: "Palworld",
+          description: "'Pokémon with guns' delivers addicting base-building and creature-catching, though janky AI and repetitive gameplay show its early-access roots.",
+          coverImage: "/src/images/pfp/game-palworld.png"
+        },
+        {
+          gameName: "Team Fortress 2",
+          description: "The free-to-play pioneer still delivers chaotic 12v12 battles with unmatched personality. While lacking updates, its perfect class balance and timeless art style keep it thriving 17 years later.",
+          coverImage: "/src/images/pfp/game-teamfortress2.jpg"
+        },
+        {
+          gameName: "Rust",
+          description: "A brutal social experiment where naked players club each other for scrap metal. The ultimate high-stakes survival experience, though the learning curve is vertical and toxicity runs rampant.",
+          coverImage: "/src/images/pfp/game-rust.png"
+        },
+        {
+          gameName: "Terraria",
+          description: "The ultimate 2D sandbox with staggering depth - fight eldritch horrors one minute, build a floating castle the next. Regular free updates put AAA studios to shame.",
+          coverImage: "/src/images/pfp/game-Terraria.png"
+        },
+        {
+          gameName: "War Thunder",
+          description: "The most comprehensive vehicle combat sim, featuring everything from WWII biplanes to modern tanks. Grindy monetization mars otherwise stellar realistic battles.",
+          coverImage: "/src/images/pfp/game-warthunder.jpg"
+        },
+        {
+          gameName: "Monster Hunter: World",
+          description: "Hunting behemoths has never felt this good - each weapon plays like its own game, and monsters are living ecosystems. The perfect mix of methodical and monstrous.",
+          coverImage: "/src/images/pfp/game-monsterhunter.png"
         }
       ]
     });
 
     console.log("Game Communities seeded");
   }
+
 // post community ==========================
 async function createPosts() {
 
