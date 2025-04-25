@@ -185,37 +185,6 @@ function CreatePost() {
           </button>
         </form>
       </div>
-//=======prev main stuff==================
-//         {postType === "video" && (
-//           <div className="flex flex-col gap-2">
-//             <label className="text-sm text-gray-300">Upload video file:</label>
-//             <input
-//               type="file"
-//               accept="video/*"
-//               onChange={(e) => setMediaFile(e.target.files[0])}
-//               className="text-white"
-//             />
-
-//             {/* <label className="text-sm text-gray-300">Or paste YouTube link:</label>
-//             <input
-//               type="text"
-//               value={mediaLink}
-//               onChange={(e) => setMediaLink(e.target.value)}
-//               placeholder="https://youtube.com/..."
-//               className="p-2 rounded bg-gray-800 text-white placeholder-gray-400"
-//             /> */}
-//           </div>
-//         )}
-
-//         <button
-//           type="submit"
-//           className="bg-blue-700 hover:bg-blue-800 rounded px-4 py-2 text-white"
-//           // className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
-//           // style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
-//         >
-//           Submit Post
-//         </button>
-//       </form>
     </div>
   );
 }
