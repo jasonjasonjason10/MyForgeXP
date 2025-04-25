@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 
 const CommunityCard = ({ post, likeHandle, fetchHasLiked, setRefreshToggle, refreshToggle }) => {
   const [postLiked, setPostLiked] = useState(false)
+  const [postFav, setPostFav] = useState(false)
+  const [favToggle, setFavToggle] = useState(false)
+  const address = 'http://localhost:3000/'
+console.log('post Fav => ', postFav)
 useEffect(() => {
   fetchHasLiked(post.id)
 }, [refreshToggle])
 
+useEffect(() => {
+  fetchHasFav(post.id)
+},[favToggle])
+
 async function likeHandle(postId) {
-  const response = await fetch(`http://localhost:3000/post/${postId}/like`, {
+  const response = await fetch(`${address}post/${postId}/like`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -17,7 +25,7 @@ async function likeHandle(postId) {
 }
 
   async function fetchHasLiked(postId) {
-    const response = await fetch(`http://localhost:3000/post/hasliked/${postId}`, {
+    const response = await fetch(`${address}post/hasliked/${postId}`, {
       method: 'POST',
       headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
     })
@@ -25,7 +33,31 @@ async function likeHandle(postId) {
     return setPostLiked(result.boolean)
   }
 
+  async function fetchHasFav(postId) {
+    const response = await fetch(`${address}user/hasfav/${postId}`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+    })
+    const result = await response.json()
+    return setPostFav(result.boolean)
+  }
 
+  async function favHandle(postId) {
+    console.log("fav this mf")
+    const response = await fetch(`${address}user/favorite/${postId}`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+    })
+    setFavToggle(!favToggle)
+
+  }
+
+  let favClass = 'p-4 bg-red-700'
+  if(postFav){
+    favClass = 'p-4 bg-green-700'
+  } else {
+    favClass = 'p-4 bg-red-700'
+  }
 
   return (
     <div className="bg-[#13294b] border border-blue-500 rounded-2xl shadow-lg p-5 flex flex-col justify-between">
@@ -43,6 +75,9 @@ async function likeHandle(postId) {
       >
         {postLiked ? "liked" : "not liked"} | Likes:{" "}
         <span className="font-semibold text-white">{post.likes.length}</span>
+      </div>
+      <div className={favClass} onClick={() => favHandle(post.id)}>
+        Save Post
       </div>
     </div>
   );
