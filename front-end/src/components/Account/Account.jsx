@@ -7,7 +7,7 @@ import AccountDetails from "./AccountDetails";
 import Following from "./Following"; //Not being used at the moment.
 import Communities from "./Communities";
 import Uploads from "./Uploads";
-import FavGames from "./FavGames";
+import Favorites from "./Favorites";
 import { X } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
 
@@ -29,11 +29,13 @@ export default function Account() {
   });
 
   const tabComponents = {
-    details: <AccountDetails />,
-    communities: <Communities />,
-    uploads: <Uploads />,
-    favorites: <FavGames />,
+    details: <AccountDetails user={user} />,
+    communities: <Communities user={user} />,
+    uploads: <Uploads user={user} />,
+    favorites: <Favorites user={user} />,
   };
+
+  console.log('user useState =>', user)
 
   useEffect(() => {
     const fetchFollowingList = async () => {
@@ -69,9 +71,6 @@ export default function Account() {
   //===========User info useEffect==================
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
       try {
         const res = await fetch("http://localhost:3000/user/info", {
           headers: {

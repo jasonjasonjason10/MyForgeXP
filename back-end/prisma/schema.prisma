@@ -28,7 +28,7 @@ model User {
   createdAt DateTime @default(now())
   posts Post[]
   favorites Favorites[]
-  community GameCommunity[]
+  communities GameCommunity[] @relation("UserCommunities")
   comments Comment[]
   likes Like[]
   following Follow[] @relation("Following")
@@ -51,7 +51,7 @@ model GameCommunity {
   description String?
   coverImage String?
   posts Post[]
-  users User[]
+  users User[] @relation("UserCommunities")
 }
 
 model Post {

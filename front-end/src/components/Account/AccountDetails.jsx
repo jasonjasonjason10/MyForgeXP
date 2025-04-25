@@ -1,4 +1,4 @@
-export default function AccountDetails() {
+export default function AccountDetails({user}) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-[#0f172a] to-[#1a1a2e] text-white px-6 py-10 max-w-5xl mx-auto font-mono">
       <h2 className="text-4xl font-bold mb-10 text-cyan-300 tracking-wide drop-shadow-[0_0_10px_#22d3ee]">
@@ -11,7 +11,7 @@ export default function AccountDetails() {
           Bio
         </h3>
         <p className="text-cyan-100 text-lg">
-          creazy gammer.
+          {user.bio}
         </p>
       </div>
 
