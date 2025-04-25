@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
-import Following from "./Following";
+import Following from "./Following"; //Not being used at the moment.
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import FavGames from "./FavGames";
+import { X } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 export default function Account() {
   const [activeTab, setActiveTab] = useState("details");
@@ -14,15 +17,56 @@ export default function Account() {
   const [user, setUser] = useState({});
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [followerList, setFollowerList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
+  const navigate = useNavigate();
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [showOptions, setShowOptions] = useState(false);
+
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
     following: 0,
   });
-  const [followerList, setFollowerList] = useState([]);
-  const [followingList, setFollowingList] = useState([]);
 
-  console.log(user);
+  const tabComponents = {
+    details: <AccountDetails />,
+    communities: <Communities />,
+    uploads: <Uploads />,
+    favorites: <FavGames />,
+  };
 
+  useEffect(() => {
+    const fetchFollowingList = async () => {
+      const response = await fetch("http://localhost:3000/user/following", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const data = await response.json();
+      setFollowingList(data.following);
+    };
+
+    const fetchFollowerList = async () => {
+      const response = await fetch("http://localhost:3000/user/followed", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const data = await response.json();
+
+      setFollowerList(data.followedBy);
+    };
+
+    fetchFollowerList();
+    fetchFollowingList();
+  }, [showFollowing, showFollowers]);
+
+  useEffect(() => {
+    setFollowCounts({
+      followers: followerList.length,
+      following: followingList.length,
+    });
+  }, [followerList, followingList]);
+
+  //===========User info useEffect==================
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
@@ -35,67 +79,27 @@ export default function Account() {
           },
         });
         const user = await res.json();
-
         setUser(user.user);
+        setCurrentUserId(user.user.id);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
     };
 
     fetchUserData();
-    fetchFollowCounts();
   }, []);
 
-  const tabComponents = {
-    details: <AccountDetails />,
-    communities: <Communities />,
-    uploads: <Uploads />,
-    favorites: <FavGames />,
-  };
-  const fetchFollowCounts = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/user/follow/counts/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFollowCounts({
-        followers: data.followers,
-        following: data.following,
-      });
-    } catch (err) {
-      console.error("Error fetching follow counts", err);
-    }
-  };
+  const handleUserClick = (userId) => {
+    setShowFollowers(false);
+    setShowFollowing(false);
 
-  const openFollowersModal = async () => {
-    setShowFollowers(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/user/followed", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFollowerList(data.followedBy);
-    } catch (err) {
-      console.error("Error loading followers", err);
-    }
-  };
-
-  const openFollowingModal = async () => {
-    setShowFollowing(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/user/following", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setFollowingList(data.following);
-    } catch (err) {
-      console.error("Error loading following", err);
-    }
+    setTimeout(() => {
+      if (userId === currentUserId) {
+        navigate("/account");
+      } else {
+        navigate(`/user/${userId}`);
+      }
+    }, 100);
   };
 
   {
@@ -132,7 +136,9 @@ export default function Account() {
       </div>
       <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
         <button
-          onClick={openFollowersModal}
+          onClick={() => {
+            setShowFollowers(true);
+          }}
           className="hover:text-orange-400 transition flex flex-col"
         >
           <span className="text-lg font-bold cursor-pointer">
@@ -141,7 +147,9 @@ export default function Account() {
           <span className="text-sm cursor-pointer">Followers</span>
         </button>
         <button
-          onClick={openFollowingModal}
+          onClick={() => {
+            setShowFollowing(true);
+          }}
           className="hover:text-orange-400 transition flex flex-col"
         >
           <span className="text-lg font-bold cursor-pointer">
@@ -202,77 +210,168 @@ export default function Account() {
         </div>
       </div>
       {showFollowing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-white text-lg font-bold">Following</h3>
-              <button
-                onClick={() => setShowFollowing(false)}
-                className="text-white hover:text-red-500"
-              >
-                ✖
-              </button>
-            </div>
-            {followingList.length > 0 ? (
-              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-                {followingList.map((user) => (
-                  <li key={user.id} className="flex items-center gap-3">
+        <>
+          {/* Backdrop blur and dark layer */}
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+
+          {/* Centered modal container */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
+            >
+              <div className="relative mb-4">
+                <h3 className="text-2xl font-bold text-white">Following</h3>
+                <button
+                  className="absolute top-2 right-3 text-gray-400 hover:text-white"
+                  onClick={() => setShowFollowing(false)}
+                  title="Close"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {followingList.length > 0 ? (
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                  {followingList.map((user) => (
+                  <li
+                  key={user.id}
+                  className="relative flex items-center justify-between p-2 border-b border-blue-400 hover:border-orange-400"
+                >
+                  {/* Avatar + Username */}
+                  <div
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => handleUserClick(user.id)}
+                  >
                     <img
                       src={`http://localhost:3000${user.avatar}`}
                       alt="avatar"
                       className="w-8 h-8 rounded-full object-cover border border-gray-500"
                     />
                     <span>{user.username}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-300 text-sm">Not following anyone yet.</p>
-            )}
-          </motion.div>
-        </div>
+                  </div>
+                
+                  {/* Three-dot dropdown */}
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFollowingList((prev) =>
+                          prev.map((u) =>
+                            u.id === user.id
+                              ? { ...u, showOptions: !u.showOptions }
+                              : { ...u, showOptions: false }
+                          )
+                        );
+                      }}
+                      className="text-gray-400 hover:text-white"
+                    >
+                      <MoreHorizontal size={20} />
+                    </button>
+                
+                    {user.showOptions && (
+                      <div className="absolute right-0 mt-1 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
+                        <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                          Unfollow
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </li>
+                
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-300 text-sm">
+                  Not following anyone yet.
+                </p>
+              )}
+            </motion.div>
+          </div>
+        </>
       )}
 
       {showFollowers && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-900 p-6 rounded-lg border border-blue-500 max-w-lg w-full shadow-lg"
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-white text-lg font-bold">Followers</h3>
-              <button
-                onClick={() => setShowFollowers(false)}
-                className="text-white hover:text-red-500"
-              >
-                ✖
-              </button>
-            </div>
-            {followerList.length > 0 ? (
-              <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-                {followerList.map((user) => (
-                  <li key={user.id} className="flex items-center gap-3">
-                    <img
-                      src={`http://localhost:3000${user.avatar}`}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
-                    />
-                    <span>{user.username}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-300 text-sm">No followers yet.</p>
-            )}
-          </motion.div>
-        </div>
+        <>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
+            >
+              <div className="relative mb-4">
+                <h3 className="text-2xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                  Following
+                </h3>
+                <button
+                  className="absolute top-2 right-3 text-gray-400 hover:text-white "
+                  onClick={() => setShowFollowers(false)}
+                  title="Close"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              {followerList.length > 0 ? (
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                  {followerList.map((follower) => (
+                    <li
+                      key={follower.id}
+                      className="relative flex items-center justify-between cursor-pointer p-2 border-b border-blue-400 hover:border-orange-400"
+                    >
+                      {/* Avatar + Username (clickable) */}
+                      <div
+                        className="flex items-center gap-3"
+                        onClick={() => handleUserClick(follower.id)}
+                      >
+                        <img
+                          src={`http://localhost:3000${follower.avatar}`}
+                          alt="avatar"
+                          className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                        />
+                        <span>{follower.username}</span>
+                      </div>
+
+                      {/* Three-dot dropdown */}
+                      <div className="relative">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFollowerList((prev) =>
+                              prev.map((f) =>
+                                f.id === follower.id
+                                  ? { ...f, showOptions: !f.showOptions }
+                                  : { ...f, showOptions: false }
+                              )
+                            );
+                          }}
+                          className="text-gray-400 hover:text-white"
+                        >
+                          <MoreHorizontal size={20} />
+                        </button>
+
+                        {follower.showOptions && (
+                          <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
+                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                              Remove
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-300 text-sm">No followers yet.</p>
+              )}
+            </motion.div>
+          </div>
+        </>
       )}
     </div>
   );

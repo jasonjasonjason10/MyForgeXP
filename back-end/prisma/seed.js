@@ -156,7 +156,7 @@ await prisma.user.deleteMany();
           gameName: "Monster Hunter: World",
           description: "Hunting behemoths has never felt this good - each weapon plays like its own game, and monsters are living ecosystems. The perfect mix of methodical and monstrous.",
           coverImage: "/src/images/pfp/game-monsterhunter.png"
-        },
+        }
       ]
     });
 
