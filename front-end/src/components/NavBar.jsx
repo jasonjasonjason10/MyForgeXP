@@ -83,12 +83,7 @@ export default function NavBar() {
             </>
           ) : (
             <>
-              <li
-                onClick={clickHandle}
-                className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-pointer"
-              >
-                Logout
-              </li>
+            
               <li>
                 <Link
                   to="/account"
@@ -96,6 +91,12 @@ export default function NavBar() {
                 >
                   My Account
                 </Link>
+              </li>
+              <li
+                onClick={clickHandle}
+                className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-pointer"
+              >
+                Logout
               </li>
             </>
           )}
