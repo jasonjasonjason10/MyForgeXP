@@ -67,7 +67,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
             <X size={20} />
           </button>
 
-          <h2 className="text-2xl font-bold mb-4 text-orange-400">
+          <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
             Edit Avatar
           </h2>
 
@@ -79,7 +79,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder="Paste image URL..."
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
             />
           </div>
 
@@ -90,7 +90,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-400 "
+              className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-700 file:text-white hover:file:bg-blue-400 "
             />
               {fileError && (
     <p className="text-red-400 text-sm mt-2">{fileError}</p>
