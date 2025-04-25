@@ -12,6 +12,7 @@ app.use(require("morgan")("dev"));
 //=============user routes===================
 
 const userRouter = require("./src/routes/user");
+console.log("User routes registered");
 app.use("/user", userRouter);
 
 //===========================================
@@ -51,3 +52,4 @@ app.use(
 app.listen(3000, () => {
   console.log("server running on port 3000");
 });
+

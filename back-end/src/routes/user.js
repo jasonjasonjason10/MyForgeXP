@@ -25,6 +25,10 @@ const defaultAvatar = "/images/pfp/defaultavatar1.png";
 //============Routers to create=====================
 
 // Login Funtion ========================================
+router.get("/ping", (req, res) => {
+  res.send("User router is working!");
+});
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -345,16 +349,18 @@ router.patch(
 
 // !!!!!JASON added this, the get user info by id function is for fetching the currently logged in users info!!!!!// also, i moved it to the very bottom because if it reads this first then My Account page breaks.
 router.get("/:id", async (req, res) => {
-  const userId = +req.params.id;
+  const userId = Number(req.params.id);
+
+  if (!userId) {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });
 
   if (!user) {
-    return res.status(404).json({
-      error: "No user found",
-    });
+    return res.status(404).json({ error: "No user found" });
   }
 
   const refinedUser = {
@@ -371,6 +377,7 @@ router.get("/:id", async (req, res) => {
     user: refinedUser,
   });
 });
+
 
 // !reset your avatar
 // router.put('/:id/avatar/reset', /* tokenauth, */ async (req, res, next) => {

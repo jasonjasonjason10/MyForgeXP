@@ -5,7 +5,6 @@ export default function Communities() {
       description: "description",
       coverImage: "https://i.ebayimg.com/images/g/9owAAOSww4RiKBzU/s-l400.jpg",
     },
-
     {
       gameName: "Baldur's Gate 3",
       description: "description",
@@ -15,39 +14,38 @@ export default function Communities() {
   ];
 
   return (
-    <div className="text-white p-6 max-w-4xl mx-auto">
-      <h3 className="text-3xl font-bold mb-6 text-orange-300 border-b border-orange-400 pb-2">
-        Communities You've Joined
+    <div className="min-h-screen bg-gradient-to-br from-black via-[#0f172a] to-[#1a1a2e] text-white px-6 py-10 max-w-5xl mx-auto font-mono">
+      <h3 className="text-4xl font-bold mb-10 text-cyan-300 tracking-wide drop-shadow-[0_0_10px_#22d3ee]">
+        Your Communities
       </h3>
 
-      <div className="space-y-6">
-        {communities.map((comm) => (
-            <div
-            key={comm.id}
-            className="bg-[#1a1a2e] rounded-xl p-5 border border-orange-500 shadow-md"
+      <div className="space-y-8">
+        {communities.map((comm, index) => (
+          <div
+            key={index}
+            className="bg-[#111827] border border-cyan-500 rounded-2xl shadow-[0_0_15px_#22d3ee40] hover:shadow-cyan-400 transition duration-300 p-6"
           >
-            <div className="flex gap-4 items-start">
+            <div className="flex gap-6 items-start">
               <img
                 src={comm.coverImage}
                 alt={comm.gameName}
-                className="w-24 h-24 object-cover rounded-md border border-orange-300"
+                className="w-28 h-28 object-cover rounded-lg border border-cyan-300 shadow-inner"
               />
 
               <div className="flex-1">
-                <h4 className="text-xl font-semibold text-orange-200 mb-1">
+                <h4 className="text-2xl font-semibold text-cyan-200 mb-2 drop-shadow-[0_0_6px_#67e8f9]">
                   {comm.gameName}
                 </h4>
-                <p className="text-orange-100 text-sm mb-2">
+                <p className="text-cyan-100 text-sm mb-3">
                   {comm.description || "No description available."}
                 </p>
 
-
-                <p className="text-sm text-orange-100">
+                <p className="text-sm text-cyan-200 font-light">
                   Posts: 3 · Likes: 12 · Comments: 5
                 </p>
 
-                <button className="mt-3 text-sm font-semibold text-orange-400 hover:text-orange-300 hover:underline transition">
-                  View Community Page →
+                <button className="mt-4 text-sm font-bold text-cyan-300 hover:text-white hover:underline tracking-wide transition">
+                  Enter Community →
                 </button>
               </div>
             </div>
