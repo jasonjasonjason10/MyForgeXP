@@ -136,7 +136,10 @@ router.post("/register", async (req, res) => {
 router.get("/info", tokenAuth, async (req, res, next) => {
   const id = req.userId;
 
-  const allInfo = await prisma.user.findUnique({ where: { id } });
+  const allInfo = await prisma.user.findUnique({ 
+    where: { id },
+    include: { communities: true, favorites: true, posts: true } 
+  });
   const refinedInfo = {
     id: allInfo.id,
     email: allInfo.email,
@@ -146,9 +149,10 @@ router.get("/info", tokenAuth, async (req, res, next) => {
     fName: allInfo.fName,
     lName: allInfo.lName,
     createdAt: allInfo.createdAt,
-    //posts?
-    //communities?
-    //comments?
+    bio: allInfo.bio,
+    communities: allInfo.communities,
+    favorites: allInfo.favorites,
+    posts: allInfo.posts
   };
 
   res.status(200).json({
@@ -262,6 +266,58 @@ router.put("/update/:id", tokenAuth, async (req, res) => {
     });
   }
 });
+
+// user adding a community to their feed ==============
+router.post(`/join-game/:id`, tokenAuth, async (req, res) => {
+  const userId = req.userId
+  const communityId = +req.params.id
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: {id: userId},
+      include: {communities: true}
+    })
+    if(!existingUser){
+      return res.status(404).json({
+        error: 'no found user'
+      })
+    }
+    const existingComm = await prisma.gameCommunity.findUnique({
+      where: {id: communityId}
+    })
+    if(!existingComm){
+      return res.status(404).json({
+        error: "no game found"
+      })
+    }
+    const existingConnection = existingUser.communities.some(comm => comm.id === communityId)
+    if(existingConnection){
+      const user = await prisma.user.update({
+        where: {id: userId},
+        data: {
+          communities: {
+            disconnect: {id: communityId}
+          }
+        }
+      })
+      return res.json({
+        successMessage: 'user community relation deleted',
+        data: user
+      })
+    }
+    const user = await prisma.user.update({
+      where: {id: userId},
+      data: { communities: {
+        connect:  {id: communityId}
+      }}
+    })
+    res.json({
+      successMessage: 'user community relation created',
+      data: user
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 // admin update ========================================
 

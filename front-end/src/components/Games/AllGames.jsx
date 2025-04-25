@@ -46,9 +46,9 @@ export default function AllGames() {
       <div className="relative z-10 flex flex-col min-h-screen">
         <main className="flex-grow p-6">
           {isAdmin && (
-           <div className="mb-6">
-           <AddGameButton onClick={() => setShowGameForm(true)} />
-         </div>
+            <div className="mb-6">
+              <AddGameButton onClick={() => setShowGameForm(true)} />
+          </div>
           )}
 
           <h2 className="text-4xl font-bold mb-6 border-b border-blue-600 flex justify-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] pb-2">
