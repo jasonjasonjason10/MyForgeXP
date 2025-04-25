@@ -2,9 +2,17 @@ import { useEffect, useState } from "react";
 import UserFavCard from "./UserFavCard";
 export default function Favorites({user}) {
   const [favPosts, setFavPosts] = useState(null)
-  console.log("fav useState", favPosts)
+  const address = 'http://localhost:3000/'
   useEffect(() => {
-    setFavPosts(user.favorites)
+    async function fetchFavPosts() {
+      const response = await fetch(`${address}user/favorites`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
+      const result = await response.json()
+      setFavPosts(result.posts)
+    }
+    fetchFavPosts()
   },[])
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-[#0f172a] to-[#1a1a2e] text-white px-6 py-10 max-w-6xl mx-auto font-mono">

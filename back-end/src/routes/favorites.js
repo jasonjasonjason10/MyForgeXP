@@ -1,54 +1,83 @@
 const express = require('express')
+const tokenAuth = require('../middleware/TokenAuth')
+const prisma = require('../../prisma')
 const router = express.Router()
 
-// get all favorited from a user
-router.get('/:userId/favorites', async (req, res, next) => {
-    try {
-        const userId =+ req.params.userId
-        if (!userId) return res.json({ error: 'User not found / User ID invalid' })
+// Fav post toggle================
+router.post('/favorite/:id', tokenAuth, async (req, res) => {
+    const userId = req.userId
+    const postId = +req.params.id
 
-        const response = await prisma.favorites.findMany({ where: {userId} })
-
-        if (favorites.length === 0) return res.json({ error: 'User has no favorited posts'})
-
-        res.sendStatus(200).json(response)
-    } catch (error) {
-        next(error)
+    const existingPost = await prisma.post.findUnique({
+        where: {id: postId}
+    })
+    if(!existingPost){
+        return res.status(404).json({
+            error: 'no post found'
+        })
+    }
+    const existingRelation = await prisma.favorites.findUnique({
+        where: {
+            userId_postId: {userId, postId}
+        }
+    })
+    if(existingRelation){
+        await prisma.favorites.delete({
+            where: {
+                userId_postId: {userId, postId}
+            }
+        })
+        return res.json({
+            successMessage: 'favorite relation destroyed',
+            data: existingRelation
+        })
+    } else {
+        const relation = await prisma.favorites.create({
+            data: {userId, postId}
+        })
+        res.json({
+            successMessage: 'favorite relation created',
+            data: relation
+        })
     }
 })
 
-// favorite a post
-router.post('/:userId/favorites', async (req, res, next) => {
-    try {
-        const userId =+ req.params.userId
-        if (!userId) return res.status(400).json({ error: 'User not found / User ID invalid' })
+// get all user favorites ================
+router.post('/favorites', tokenAuth, async (req, res) => {
+    const userId = req.userId
 
-        const { postId } =+ req.body
-        if (!postId) return res.json({ error: 'Post not found / Post ID invalid' })
-
-        const response = await prisma.favorites.create({ data: userId, postId })
-
-        res.sendStatus(201).json(response)
-    } catch (error) {
-        next(error)
-    }
+    const favorites = await prisma.favorites.findMany({
+        where: {userId},
+        include: {
+            post: true
+        }
+    })
+    const posts = favorites.map((post) => (
+        post.post
+    ))
+    res.json({
+        successMessage: 'returning all user favorites',
+        posts
+    })
 })
 
-// 'un-favorite' a post
-router.delete('/:userId/favorites/:id', async (req, res, next) => {
-    try {
-        const userId =+ req.params.userId
-        if (!userId) return res.json({ error: 'User not found / User ID invalid' })
-
-        const id =+ req.params.id
-        if (!id) return res.json({ error: 'Post not found / Post ID invalid' })
-
-        const response = await prisma.favorites.delete({ where: {userId, id} })
-
-        res.sendStatus(200).json({ successMessage: 'Post succesfully un-favorited!' })
-    } catch (error) {
-        next(error)
+// user fav check ============
+router.post('/hasfav/:id', tokenAuth, async (req, res) => {
+    const userId = req.userId
+    const postId = +req.params.id
+    const post = await prisma.favorites.findUnique({
+        where: {userId_postId: {userId, postId}}
+    })
+    if(post){
+        res.json({
+            boolean: true
+        })
+    }else {
+        res.json({
+            boolean:false
+        })
     }
+
 })
 
 module.exports = router

@@ -1,10 +1,11 @@
 function UserFavCard({post}) {
     return ( 
         <>
-        <h1>helloword</h1>
+        <div>~~post#{post.id}~~</div>
         <div>{post.title}</div>
+        <div>~~~~~~~~~~~~~~~~</div>
         </>
-     );
+    );
 }
 
 export default UserFavCard;
