@@ -1,11 +1,15 @@
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import mockData from "../../data/mockData";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+const address = "http://localhost:3000";
 
 export default function Carousel() {
+  const [gameList, setGameList] = useState([])
+  console.log('game useState => ', gameList);
+  
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
@@ -29,7 +33,17 @@ export default function Carousel() {
     },
   });
   
+  useEffect(() => {
+    async function fetchGames() {
+      const response = await fetch(`${address}/games/all`)
+      const result = await response.json()
+      setGameList(result.games)
+    }
+    fetchGames()
+  }, [])
 
+
+  
   return (
     <div className="relative bg-gray-900 rounded-lg p-4 shadow-lg ">
       <div className="flex justify-between items-center mb-4">
@@ -61,13 +75,13 @@ export default function Carousel() {
 
       {/* Carousel */}
       <div ref={sliderRef} className="keen-slider ">
-        {mockData.map((game) => (
+        {gameList.map((game) => (
           <div key={game.id} className="keen-slider__slide p-4 sm:p-5 lg:p-6">
             <Link to={`/games/${game.id}`}>
               <div className="bg-gray-800 rounded-lg border border-transparent hover:border-blue-400 hover:scale-105 transition duration-200 shadow p-2">
                 <img
-                  src={game.cover}
-                  alt={game.name}
+                  src={`${address}${game.coverImage}`}
+                  alt={game.gxameName}
                   className="w-full h-48 object-cover object-center rounded-md"
                 />
                 <div className="pt-3">
@@ -83,7 +97,7 @@ export default function Carousel() {
 
       {/* section dot indicator */}
       <div className="flex justify-center mt-4">
-        {Array.from({ length: mockData.length }).map((_, idx) => (
+        {Array.from({ length: gameList.length }).map((_, idx) => (
           <button
             key={idx}
             onClick={() => instanceRef.current?.moveToIdx(idx)}
