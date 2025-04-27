@@ -95,7 +95,7 @@ export default function SingleGame() {
               </button>
 
               {/* Create Post Button */}
-              <button onClick={navigate(`/createpost/${game.id}`)} className="px-6 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg font-semibold transition">
+              <button onClick={() => navigate(`/createpost/${game.id}`)} className="px-6 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg font-semibold transition">
                 Create Post
               </button>
             </div>
