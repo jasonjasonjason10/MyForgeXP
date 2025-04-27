@@ -29,7 +29,7 @@ function App() {
         <Route path="games/:id" element={<SingleGame />} />
         <Route path="account" element={<Account />} />
         <Route path="community" element={<Community />} />
-        <Route path="createpost" element={<CreatePost />} />
+        <Route path="createpost/:id" element={<CreatePost />} />
         <Route path="uploads" element={<Uploads />} />
         <Route path="user/:id" element={<SingleUser />} />
       </Route>

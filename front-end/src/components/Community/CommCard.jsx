@@ -5,7 +5,6 @@ const CommunityCard = ({ post, likeHandle, fetchHasLiked, setRefreshToggle, refr
   const [postFav, setPostFav] = useState(false)
   const [favToggle, setFavToggle] = useState(false)
   const address = 'http://localhost:3000/'
-console.log('post Fav => ', postFav)
 useEffect(() => {
   fetchHasLiked(post.id)
 }, [refreshToggle])
@@ -43,13 +42,11 @@ async function likeHandle(postId) {
   }
 
   async function favHandle(postId) {
-    console.log("fav this mf")
     const response = await fetch(`${address}user/favorite/${postId}`, {
       method: 'POST',
       headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
     })
     setFavToggle(!favToggle)
-
   }
 
   let favClass = 'p-4 bg-red-700'
@@ -57,6 +54,16 @@ async function likeHandle(postId) {
     favClass = 'p-4 bg-green-700'
   } else {
     favClass = 'p-4 bg-red-700'
+  }
+
+  let contentPath = post.content
+
+  function videoSrc(contentPath) {
+    if (contentPath.startsWith('http://') || contentPath.startsWith('https://')) {
+      return contentPath
+    } else {
+      return `http://localhost:3000${contentPath}`
+    }
   }
 
   return (
@@ -68,6 +75,18 @@ async function likeHandle(postId) {
       <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap">
         {post.description}
       </div>
+      
+      {post.PostType === 'image' && (
+        <div>
+          <img className='h-[180px] w-[320px]' src={`http://localhost:3000${contentPath}`} alt="" />
+        </div>
+      )}
+
+      {post.PostType === "video" && (
+        <div>
+          <video className='h-[180px] w-[320px]' src={videoSrc(contentPath)}></video>
+        </div>
+      )}
 
       <div
         className="text-sm text-blue-300 mt-auto cursor-pointer hover:underline"

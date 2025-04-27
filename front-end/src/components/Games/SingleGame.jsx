@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import GamePostCard from "./GamePostCard";
 
 export default function SingleGame() {
@@ -11,6 +11,7 @@ export default function SingleGame() {
   const [clickCheck, setClickCheck] = useState(false)
   console.log('user useState => ', isUserSubbed)
   const address = 'http://localhost:3000/'
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchGame() {
@@ -71,6 +72,11 @@ export default function SingleGame() {
     <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-4xl mx-auto">
       <div className="bg-gray-900 rounded-lg p-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
         <h2 className="text-3xl font-bold mb-4">{game.gameName}</h2>
+        <button
+            onClick={() => navigate(`/createpost/${game.id}`)}
+            className="bg-orange-500 hover:bg-orange-400 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300">
+            + New Post
+        </button>
         <div className={subClass} onClick={subHandle}>
           ~~FAVORITE GAME~~
         </div>

@@ -87,9 +87,13 @@ router.get('/game/:id', async (req, res) => {
 router.post('/create', tokenAuth, upload.single("content"), async (req, res, next) => {
     try {
         const userId = req.userId
-        const { title, description, postType } = req.body;
+        if (!userId) return res.status(400).json({ error: 'No user ID uploaded, maybe check if you are logged in?'})
+        
+        const { title, description, PostType } = req.body;
 
         const communityId = +req.body.communityId
+        if (!communityId) return res.status(400).json({ error: 'No community ID uploaded' })
+        
         let postData = {...req.body, userId, communityId}
 
         if (req.file) postData.content = `/images/posts/${req.file.filename}`

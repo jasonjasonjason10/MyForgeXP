@@ -174,21 +174,21 @@ async function createPosts() {
         {
           title: "Loved it!",
           description: "Amazing open-world and challenging bosses.",
-          postType: 'text',
+          PostType: 'text',
           userId: user[0].id,
           communityId: community[0].id,
         },
         {
           title: "Very cinematic",
           description: "Incredible acting and writing.",
-          postType: 'text',
+          PostType: 'text',
           userId: user[1].id,
           communityId:  community[1].id,
         },
         {
           title: "Addictive gameplay",
           description: "Super charming and fun.",
-          postType: 'text',
+          PostType: 'text',
           userId: user[2].id,
           communityId: community[2].id,
         },
@@ -196,7 +196,7 @@ async function createPosts() {
           title: "Insane boss fight",
           content: "https://www.youtube.com/watch?v=D_iqjI2p7F4",
           description: "Malenia: 'I have never known defeat'.",
-          postType: 'video',
+          PostType: 'video',
           userId: user[1].id,
           communityId:  community[0].id,
         }
