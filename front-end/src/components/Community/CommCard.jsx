@@ -130,12 +130,28 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   }
 
   async function favHandle(postId) {
-    console.log("fav this mf");
     const response = await fetch(`${address}user/favorite/${postId}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    setFavToggle(!favToggle);
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+    })
+    setFavToggle(!favToggle)
+  }
+
+  let favClass = 'p-4 bg-red-700'
+  if(postFav){
+    favClass = 'p-4 bg-green-700'
+  } else {
+    favClass = 'p-4 bg-red-700'
+
+
+  let contentPath = post.content
+
+  function videoSrc(contentPath) {
+    if (contentPath.startsWith('http://') || contentPath.startsWith('https://')) {
+      return contentPath
+    } else {
+      return `http://localhost:3000${contentPath}`
+    }
   }
 
   return (
@@ -149,6 +165,18 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
       <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
         {post.description}
       </div>
+      
+      {post.PostType === 'image' && (
+        <div>
+          <img className='h-[180px] w-[320px]' src={`http://localhost:3000${contentPath}`} alt="" />
+        </div>
+      )}
+
+      {post.PostType === "video" && (
+        <div>
+          <video className='h-[180px] w-[320px]' src={videoSrc(contentPath)}></video>
+        </div>
+      )}
 
       {/* Like Button */}
       <div className="mt-4 flex justify-between items-center">

@@ -93,7 +93,7 @@
 // }
 
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import GamePostCard from "./GamePostCard";
 
 export default function SingleGame() {
@@ -105,7 +105,7 @@ export default function SingleGame() {
   const [clickCheck, setClickCheck] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [liked, setLiked] = useState(false);
-
+  const navigate = useNavigate()
   const address = "http://localhost:3000/";
 
   useEffect(() => {

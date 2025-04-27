@@ -59,7 +59,7 @@ model Post {
   title String
   content String? // where you store the video|photo
   description String? // for text post, or a desc for video|photo
-  postType PostType
+  PostType PostType @default(text)
   createdAt DateTime @default(now())
   userId Int 
   user User @relation(fields: [userId], references: [id])
