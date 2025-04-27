@@ -35,7 +35,7 @@ export default function Account() {
     favorites: <Favorites user={user} />,
   };
 
-  console.log('user useState =>', user)
+  console.log("user useState =>", user);
 
   useEffect(() => {
     const fetchFollowingList = async () => {
@@ -236,51 +236,50 @@ export default function Account() {
               {followingList.length > 0 ? (
                 <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
                   {followingList.map((user) => (
-                  <li
-                  key={user.id}
-                  className="relative flex items-center justify-between p-2 border-b border-blue-400 hover:border-orange-400"
-                >
-                  {/* Avatar + Username */}
-                  <div
-                    className="flex items-center gap-3 cursor-pointer"
-                    onClick={() => handleUserClick(user.id)}
-                  >
-                    <img
-                      src={`http://localhost:3000${user.avatar}`}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
-                    />
-                    <span>{user.username}</span>
-                  </div>
-                
-                  {/* Three-dot dropdown */}
-                  <div className="relative">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFollowingList((prev) =>
-                          prev.map((u) =>
-                            u.id === user.id
-                              ? { ...u, showOptions: !u.showOptions }
-                              : { ...u, showOptions: false }
-                          )
-                        );
-                      }}
-                      className="text-gray-400 hover:text-white"
+                    <li
+                      key={user.id}
+                      className="relative flex items-center justify-between p-2 border-b border-blue-400 hover:border-orange-400"
                     >
-                      <MoreHorizontal size={20} />
-                    </button>
-                
-                    {user.showOptions && (
-                      <div className="absolute right-0 mt-1 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                        <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
-                          Unfollow
-                        </div>
+                      {/* Avatar + Username */}
+                      <div
+                        className="flex items-center gap-3 cursor-pointer"
+                        onClick={() => handleUserClick(user.id)}
+                      >
+                        <img
+                          src={`http://localhost:3000${user.avatar}`}
+                          alt="avatar"
+                          className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                        />
+                        <span>{user.username}</span>
                       </div>
-                    )}
-                  </div>
-                </li>
-                
+
+                      {/* Three-dot dropdown */}
+                      <div className="relative">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFollowingList((prev) =>
+                              prev.map((u) =>
+                                u.id === user.id
+                                  ? { ...u, showOptions: !u.showOptions }
+                                  : { ...u, showOptions: false }
+                              )
+                            );
+                          }}
+                          className="text-gray-400 hover:text-white"
+                        >
+                          <MoreHorizontal size={20} />
+                        </button>
+
+                        {user.showOptions && (
+                          <div className="absolute right-0 mt-1 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
+                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                              Unfollow
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </li>
                   ))}
                 </ul>
               ) : (

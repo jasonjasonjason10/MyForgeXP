@@ -1,34 +1,28 @@
-export default function AccountDetails({user}) {
+export default function AccountDetails({ user }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#0f172a] to-[#1a1a2e] text-white px-6 py-10 max-w-5xl mx-auto font-mono">
-      <h2 className="text-4xl font-bold mb-10 text-cyan-300 tracking-wide drop-shadow-[0_0_10px_#22d3ee]">
-        Your Profile
+    <div className="min-h-screen bg-gray-800 text-white px-6 py-10 max-w-5xl mx-auto ">
+      <h2 className="text-4xl font-bold mb-6  flex justify-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] pb-2]">
+        My Profile
       </h2>
 
       {/* Bio Section */}
-      <div className="bg-[#111827] border border-cyan-400 rounded-xl p-6 mb-10 shadow-[0_0_20px_#22d3ee50] hover:shadow-cyan-400 transition duration-300">
-        <h3 className="text-2xl font-semibold text-cyan-200 mb-4 tracking-wider drop-shadow-[0_0_6px_#67e8f9]">
-          Bio
-        </h3>
-        <p className="text-cyan-100 text-lg">
-          {user.bio}
-        </p>
+      <div className="bg-[#111827] border border-blue-700 rounded-xl p-3 mb-10 shadow-[0_0_20px_#22d3ee60] ">
+        <h3 className="text-xl  font-bold flex justify-center  ">Bio</h3>
+        <br />
+        <p className="text-white">{user.bio}</p>
       </div>
 
       {/* Settings Section */}
-      <div className="bg-[#111827] border border-purple-500 rounded-xl p-6 shadow-[0_0_20px_#9333ea50] hover:shadow-purple-400 transition duration-300">
-        <h3 className="text-2xl font-semibold text-purple-300 mb-4 tracking-wider drop-shadow-[0_0_6px_#c084fc]">
+      <div className="bg-[#111827] border border-blue-700 rounded-xl p-6 shadow-[0_0_20px_#9333ea50] ">
+        <h3 className="text-xl  font-bold flex justify-center mb-4  ">
           Settings
         </h3>
         <div className="flex flex-col gap-4 text-purple-100">
           <button className="hover:text-purple-400 transition duration-200">
-          Change Password
+            Account Settings
           </button>
-          <button className="hover:text-purple-400 transition duration-200">
-          Account Settings
-          </button>
-          <hr className="border-purple-700 my-4" />
-          <button className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-pink-600 hover:to-purple-500 px-5 py-2 rounded-md font-bold w-fit text-white tracking-wide transition duration-300">
+          <hr className="border-orange-500 my-4" />
+          <button className="border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300 px-5 py-2 rounded-md font-bold w-fit text-white ">
             Log Out
           </button>
         </div>
