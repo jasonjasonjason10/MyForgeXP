@@ -33,7 +33,7 @@ export default function SingleUser() {
   //SingleUserFollowers not being used here until we implement a search bar, then also add SingleUserFollowing for search purposes
   const tabComponents = {
     details: <SingleUserDetails />,
-    friends: <SingleUserFollowers />,
+
     uploads: <SingleUserUploads />,
     favorites: <SingleUserFavorites />,
   };
@@ -231,7 +231,7 @@ export default function SingleUser() {
         <div className="border-b border-gray-700 pb-2 mb-4 ">
           {/* Desktop Tabs (??CHANGE TO ALWAYS DROP DOWN??*/}
           <div className="hidden sm:flex justify-center gap-3 text-sm sm:text-base  ">
-            {["details", "friends", "uploads", "favorites"].map((tab) => (
+            {["details", "uploads", "favorites"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -251,7 +251,7 @@ export default function SingleUser() {
               onChange={(e) => setActiveTab(e.target.value)}
               className="w-full bg-gray-800 text-white border border-orange-500 rounded px-3 py-2 focus:outline-none focus:ring-2"
             >
-              {["details", "friends", "uploads", "favorites"].map((tab) => (
+              {["details", "uploads", "favorites"].map((tab) => (
                 <option key={tab} value={tab}>
                   {tab[0].toUpperCase() + tab.slice(1)}
                 </option>
@@ -304,49 +304,49 @@ export default function SingleUser() {
 
               {followingList.length > 0 ? (
                 <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-               {followingList.map((followedUser) => (
-  <li
-    key={followedUser.id}
-    className="relative flex items-center justify-between cursor-pointer p-2 border-b border-blue-400 hover:border-orange-400"
-  >
-    <div
-      className="flex items-center gap-3"
-      onClick={() => handleUserClick(followedUser.id)}
-    >
-      <img
-        src={`http://localhost:3000${followedUser.avatar}`}
-        alt="avatar"
-        className="w-8 h-8 rounded-full object-cover border border-gray-500"
-      />
-      <span>{followedUser.username}</span>
-    </div>
+                  {followingList.map((followedUser) => (
+                    <li
+                      key={followedUser.id}
+                      className="relative flex items-center justify-between cursor-pointer p-2 border-b border-blue-400 hover:border-orange-400"
+                    >
+                      <div
+                        className="flex items-center gap-3"
+                        onClick={() => handleUserClick(followedUser.id)}
+                      >
+                        <img
+                          src={`http://localhost:3000${followedUser.avatar}`}
+                          alt="avatar"
+                          className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                        />
+                        <span>{followedUser.username}</span>
+                      </div>
 
-    <div className="relative">
-      <button
-        onClick={() =>
-          setFollowingList((prev) =>
-            prev.map((f) =>
-              f.id === followedUser.id
-                ? { ...f, showOptions: !f.showOptions }
-                : { ...f, showOptions: false }
-            )
-          )
-        }
-        className="text-gray-400 hover:text-white"
-      >
-        <MoreHorizontal size={20} />
-      </button>
+                      <div className="relative">
+                        <button
+                          onClick={() =>
+                            setFollowingList((prev) =>
+                              prev.map((f) =>
+                                f.id === followedUser.id
+                                  ? { ...f, showOptions: !f.showOptions }
+                                  : { ...f, showOptions: false }
+                              )
+                            )
+                          }
+                          className="text-gray-400 hover:text-white"
+                        >
+                          <MoreHorizontal size={20} />
+                        </button>
 
-      {followedUser.showOptions && (
-        <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-          <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
-            Unfollow
-          </div>
-        </div>
-      )}
-    </div>
-  </li>
-))}
+                        {followedUser.showOptions && (
+                          <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
+                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                              Unfollow
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               ) : (
                 <p className="text-gray-400 text-sm">No users followed.</p>
