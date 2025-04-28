@@ -73,7 +73,7 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
     return (
       <div>
           <iframe
-            className="h-[180px] w-[320px] cursor-pointer"
+            className="h-[180px] w-[320px]"
             src={`https://www.youtube.com/embed/${videoId}`}
             allowFullScreen
           ></iframe>
