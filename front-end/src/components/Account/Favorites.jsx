@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import UserFavCard from "./UserFavCard";
 
 export default function Favorites({ user }) {
+
   const [favPosts, setFavPosts] = useState([]);
+
   const address = "http://localhost:3000/";
 
   useEffect(() => {

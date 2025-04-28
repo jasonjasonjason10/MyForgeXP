@@ -26,12 +26,12 @@ export default function NewGameForm({ isOpen, onClose }) {
     }
 
     const formData = new FormData();
-    formData.append("title", title);
+    formData.append("gameName", title);
     formData.append("description", description);
-    formData.append("image", file);
+    formData.append("coverImage", file);
 
     try {
-      const response = await fetch(`http://localhost:3000/games`, {
+      const response = await fetch(`http://localhost:3000/games/create`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: formData,
@@ -43,8 +43,13 @@ export default function NewGameForm({ isOpen, onClose }) {
         return alert("Failed to add game.");
       }
 
+      setTitle('')
+      setDescription('')
+      setFile(null)
+
       alert("Game added successfully!");
-      onClose();
+
+      window.location.reload();
     } catch (err) {
       console.error("Submit failed:", err);
       alert("Something went wrong.");
@@ -80,6 +85,7 @@ export default function NewGameForm({ isOpen, onClose }) {
             <X size={20} />
           </button>
           <h2 className="text-2xl font-bold mb-4 text-white">Add New Game</h2>
+          <h3 className="text-sm font-bold mb-4 text-red-500">Make sure cover image is in vertical format</h3>
           <div className="mb-4">
             <label className="block mb-2 font-semibold">Title</label>
             <input
