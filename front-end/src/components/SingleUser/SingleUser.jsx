@@ -30,7 +30,7 @@ export default function SingleUser() {
 
   const tabComponents = {
     details: <SingleUserDetails />,
-    uploads: <SingleUserUploads />,
+    uploads: <SingleUserUploads userPosts={userPosts} />,
   };
 
   useEffect(() => {
