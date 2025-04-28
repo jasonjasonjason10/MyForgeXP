@@ -236,7 +236,7 @@ router.put("/update/:id", tokenAuth, async (req, res) => {
       error: "No Existing User to Update",
     });
   }
-  const { email, username, password, avatar, fName, lName } = req.body;
+  const { email, username, password, avatar, fName, lName, bio } = req.body;
   let hashedPassword = undefined;
   if (password) {
     hashedPassword = await bcrypt.hash(password, 10);
@@ -252,6 +252,7 @@ router.put("/update/:id", tokenAuth, async (req, res) => {
         avatar,
         fName,
         lName,
+        bio
       },
     });
 
@@ -411,6 +412,7 @@ router.get("/:id", async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
+    include: { communities: true, favorites: true, posts: true }
   });
 
   if (!user) {
@@ -424,6 +426,8 @@ router.get("/:id", async (req, res) => {
     fName: user.fName,
     lName: user.lName,
     createdAt: user.createdAt,
+    favorites: user.favorites,
+    posts: user.posts
   };
 
   res.status(200).json({
