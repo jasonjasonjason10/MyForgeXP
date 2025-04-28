@@ -6,8 +6,8 @@ function CreatePost() {
   const [description, setDescription] = useState("");
   const [PostType, setPostType] = useState("text");
   const [content, setContent] = useState(null);
-  
-  const params = useParams()
+
+  const params = useParams();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -19,11 +19,11 @@ function CreatePost() {
 
   async function fetchCreatePost() {
     const formData = new FormData();
-    console.log(['COMMUNITYID HERE', params])
+    console.log(["COMMUNITYID HERE", params]);
     formData.append("communityId", params.id);
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("postType", PostType);
+    formData.append("PostType", PostType);
     formData.append("content", content);
 
     const response = await fetch("http://localhost:3000/post/create", {
@@ -55,7 +55,7 @@ function CreatePost() {
             required
             className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300"
           />
-              
+
           <textarea
             placeholder="Description (optional)"
             value={description}
