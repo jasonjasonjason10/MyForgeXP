@@ -475,4 +475,24 @@ router.get("/:id", async (req, res) => {
 //     }
 // })
 
+// user to delete his/her own post
+  router.delete("/post/:id", tokenAuth, async (req, res) => {
+    const id = +req.params.id;
+    const userId = req.userId;
+    const post = await prisma.post.findUnique({
+      where: { id },
+    });
+    if (!post) {
+      return res.status(404).json({ error: "No post found" });
+    }
+    if (post.userId !== userId) {
+      return res.status(403).json({ error: "Not authorized to delete this post" });
+    }
+    await prisma.post.delete({
+      where: { id },
+    });
+    res.status(200).json({ successMessage: "Post deleted successfully" });
+  });
+
+
 module.exports = router;
