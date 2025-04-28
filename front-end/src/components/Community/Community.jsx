@@ -24,7 +24,7 @@ function Community() {
           <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
             Community Page
           </h1>
-          <SearchUser />
+          <SearchUser  />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
