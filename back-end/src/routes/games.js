@@ -9,10 +9,11 @@ const storage = multer.diskStorage({
     cb(null, "src/images/games");
   },
   filename: (req, file, cb) => {
-    const prefix = Date.now();
-    cb(null, `${prefixfile}-${originalname}`);
-  },
-});
+
+    
+    cb(null, `${prefixfile}-${originalname}`)
+  }
+})
 
 const upload = multer({ storage });
 
@@ -44,11 +45,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // Create community
-router.post(
-  "/create",
-  tokenAuth,
-  upload.single("cover"),
-  async (req, res, next) => {
+router.post("/create", tokenAuth, upload.single("cover"), async (req, res, next) => {
     try {
       const { gameName, description } = req.body;
       const isAdmin = req.isAdmin;

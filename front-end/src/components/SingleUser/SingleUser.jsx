@@ -22,6 +22,16 @@ export default function SingleUser() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [userPosts, setUserPosts] = useState(null)
+  console.log('fer is a bad person', userPosts)
+  const [followCounts, setFollowCounts] = useState({
+    followers: 0,
+    following: 0,
+  });
+  const [showOptions, setShowOptions] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
+
   const tabComponents = {
     details: <SingleUserDetails />,
     uploads: <SingleUserUploads />,
@@ -47,6 +57,94 @@ export default function SingleUser() {
     }
     fetchUser();
   }, [id]);
+
+
+  useEffect(() => {
+    if(user){
+      setUserPosts(user.posts)
+    }
+  }, [user])
+
+  //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
+  const fetchFollowCounts = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/user/follow/counts/${id}`);
+      const data = await res.json();
+      setFollowCounts({
+        followers: data.followers,
+        following: data.following,
+      });
+    } catch (err) {
+      console.error("Failed to fetch follow counts", err);
+    }
+  };
+
+  //For viewing Followers pop up
+  const [followerList, setFollowerList] = useState([]);
+  const openFollowersModal = async () => {
+    setShowFollowers(true);
+    try {
+      const res = await fetch(`http://localhost:3000/user/followed/${id}`);
+      const data = await res.json();
+      setFollowerList(data.followers);
+    } catch (err) {
+      console.error("Error loading followers", err);
+    }
+  };
+
+  //For viewing Following Pop up
+  const [followingList, setFollowingList] = useState([]);
+  const openFollowingModal = async () => {
+    setShowFollowing(true);
+    try {
+      const res = await fetch(`http://localhost:3000/user/following/${id}`);
+      const data = await res.json();
+      setFollowingList(data.following);
+    } catch (err) {
+      console.error("Error loading following list", err);
+    }
+  };
+
+  async function checkIfFollowing() {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:3000/user/isfollowing/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setIsFollowing(data.isFollowing);
+    } catch (err) {
+      console.error("Error checking follow status", err);
+    }
+  }
+
+  const handleFollowToggle = async () => {
+    const token = localStorage.getItem("token");
+    const result = await toggleFollow(user.id, token);
+    if (result) {
+      setIsFollowing(result.isFollowed);
+      fetchFollowCounts(); // updates the numbers
+    }
+  };
+
+
+  const handleUserClick = (userId) => {
+    setShowFollowers(false);
+    setShowFollowing(false);
+
+    setTimeout(() => {
+      if (currentUserId === userId) {
+        navigate("/account");
+      } else {
+        navigate(`/user/${userId}`);
+      }
+    }, 100);
+  };
 
   if (!user) return <div className="text-white p-4">Loading user...</div>;
 
