@@ -6,8 +6,7 @@ import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
 import ReturnButton from "../ReturnButton";
 import { toggleFollow } from "../../API/index";
-import { X } from "lucide-react";
-import { MoreHorizontal } from "lucide-react";
+
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
@@ -22,7 +21,6 @@ export default function SingleUser() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  
   const [userPosts, setUserPosts] = useState(null)
   console.log('fer is a bad person', userPosts)
 

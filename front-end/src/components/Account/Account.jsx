@@ -4,12 +4,12 @@ import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
-import Following from "./Following"; //Not being used at the moment.
+import SettingsModal from "./Settings";
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import Favorites from "./Favorites";
 import { X } from "lucide-react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Settings as SettingsIcon } from "lucide-react";
 
 export default function Account() {
   const [activeTab, setActiveTab] = useState("details");
@@ -21,7 +21,9 @@ export default function Account() {
   const [followingList, setFollowingList] = useState([]);
   const navigate = useNavigate();
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [showOptions, setShowOptions] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
+  // const [showOptions, setShowOptions] = useState(false);
 
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
@@ -101,6 +103,27 @@ export default function Account() {
     }, 100);
   };
 
+  const handleSaveSettings = async (updatedData) => {
+    try {
+      const response = await fetch("http://localhost:3000/user/update", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser.user);
+        setShowSettings(false);
+      }
+    } catch (error) {
+      console.error("Error updating settings:", error);
+    }
+  };
+
   {
     /* Remember that a version of this is needed to display an admin dashboard for when logged in as admin */
   }
@@ -131,7 +154,18 @@ export default function Account() {
             }}
           />
         </div>
-        <h2 className="text-xl mt-4 font-bold ">@{user.username}</h2>
+        {/* <h2 className="text-xl mt-4 font-bold ">@{user.username}</h2> */}
+        <div className="flex items-center gap-2 mt-4">
+          <h2 className="text-xl font-bold">@{user.username}</h2>
+
+          <button
+            onClick={() => setShowSettings(true)}
+            className="text-gray-400 hover:text-orange-400 transition"
+            title="Edit Settings"
+          >
+            <SettingsIcon size={20} />
+          </button>
+        </div>
       </div>
       <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
         <button
@@ -234,7 +268,7 @@ export default function Account() {
               </div>
 
               {followingList.length > 0 ? (
-                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                   {followingList.map((user) => (
                     <li
                       key={user.id}
@@ -272,10 +306,13 @@ export default function Account() {
                         </button>
 
                         {user.showOptions && (
-                          <div className="absolute right-0 mt-1 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                          <div className="fixed z-[9999] right-6 top-auto mt-1 w-24 bg-gray-900 border border-gray-700 rounded shadow-lg">
+                            <button
+                              onClick={() => handleUnfollow(user.id)}
+                              className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-orange-600 cursor-pointer"
+                            >
                               Unfollow
-                            </div>
+                            </button>
                           </div>
                         )}
                       </div>
@@ -316,7 +353,7 @@ export default function Account() {
                 </button>
               </div>
               {followerList.length > 0 ? (
-                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                   {followerList.map((follower) => (
                     <li
                       key={follower.id}
@@ -354,10 +391,13 @@ export default function Account() {
                         </button>
 
                         {follower.showOptions && (
-                          <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                          <div className="fixed z-[9999] right-6 top-auto mt-1 w-24 bg-gray-900 border border-gray-700 rounded shadow-lg">
+                            <button
+                              onClick={() => handleRemove(follower.id)}
+                              className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-orange-600 cursor-pointer"
+                            >
                               Remove
-                            </div>
+                            </button>
                           </div>
                         )}
                       </div>
@@ -368,6 +408,19 @@ export default function Account() {
                 <p className="text-gray-300 text-sm">No followers yet.</p>
               )}
             </motion.div>
+          </div>
+        </>
+      )}
+      {showSettings && (
+        <>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <SettingsModal
+              isOpen={showSettings}
+              onClose={() => setShowSettings(false)}
+              user={user}
+              onSave={handleSaveSettings}
+            />
           </div>
         </>
       )}
