@@ -23,7 +23,7 @@ function CreatePost() {
     formData.append("communityId", params.id);
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("PostType", PostType);
+    formData.append("postType", PostType);
     formData.append("content", content);
 
     const response = await fetch("http://localhost:3000/post/create", {

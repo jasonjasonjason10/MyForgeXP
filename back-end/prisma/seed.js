@@ -60,7 +60,7 @@ await prisma.user.deleteMany();
         {
           gameName: "Elden Ring",
           description: "A triumphant open-world Soulslike with awe-inspiring bosses and exploration. Demanding yet deeply rewarding, albeit with occasional repetition.",
-          coverImage: "/images/games/cover-elden-ring.png",
+          coverImage: "/images/games/cover-elden-ring.jpg",
           heroImage: "/images/games/hero-elden-ring.png"
         },
         {
@@ -78,8 +78,8 @@ await prisma.user.deleteMany();
         {
           gameName: "Helldivers 2",
           description: "Chaotic, satirical fun with frenetic team-based action. Friendly fire and stratagems create hilarious (and brutal) moments, though progression grinds late-game.",
-          coverImage: "/images/games/cover-helldivers-2.png",
-          heroImage: "/images/games/hero-helldivers-2.png"
+          coverImage: "/images/games/cover-hell-divers-2.png",
+          heroImage: "/images/games/hero-hell-divers-2.png"
         },
         {
           gameName: "Stardew Valley",
@@ -162,7 +162,7 @@ await prisma.user.deleteMany();
         {
           gameName: "Terraria",
           description: "The ultimate 2D sandbox with staggering depth - fight eldritch horrors one minute, build a floating castle the next. Regular free updates put AAA studios to shame.",
-          coverImage: "/images/games/cover-terarria.png",
+          coverImage: "/images/games/cover-terraria.png",
           heroImage: "/images/games/hero-terarria.png"
         },
         {
@@ -196,21 +196,21 @@ async function createPosts() {
         {
           title: "Loved it!",
           description: "Amazing open-world and challenging bosses.",
-          PostType: 'text',
+          postType: 'text',
           userId: user[0].id,
           communityId: community[0].id,
         },
         {
           title: "Very cinematic",
           description: "Incredible acting and writing.",
-          PostType: 'text',
+          postType: 'text',
           userId: user[1].id,
           communityId:  community[1].id,
         },
         {
           title: "Addictive gameplay",
           description: "Super charming and fun.",
-          PostType: 'text',
+          postType: 'text',
           userId: user[2].id,
           communityId: community[2].id,
         },
@@ -218,7 +218,7 @@ async function createPosts() {
           title: "Insane boss fight",
           content: "https://www.youtube.com/watch?v=D_iqjI2p7F4",
           description: "Malenia: 'I have never known defeat'.",
-          PostType: 'video',
+          postType: 'video',
           userId: user[1].id,
           communityId:  community[0].id,
         }
