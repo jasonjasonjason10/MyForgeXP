@@ -15,11 +15,9 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   }, [favToggle]);
 
   async function likeHandle(postId) {
-    const response = await fetch(`${address}post/${postId}/like`, {
+    await fetch(`${address}post/${postId}/like`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setRefreshToggle(!refreshToggle);
   }
@@ -43,27 +41,27 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   }
 
   async function favHandle(postId) {
-    const response = await fetch(`${address}user/favorite/${postId}`, {
-      method: 'POST',
-      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-    })
-    setFavToggle(!favToggle)
+    await fetch(`${address}user/favorite/${postId}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    setFavToggle(!favToggle);
   }
 
-  let favClass = 'p-4 bg-red-700'
-  if(postFav){
-    favClass = 'p-4 bg-green-700'
+  let favClass = "p-4 bg-red-700";
+  if (postFav) {
+    favClass = "p-4 bg-green-700";
   } else {
-    favClass = 'p-4 bg-red-700'
+    favClass = "p-4 bg-red-700";
+  }
 
-
-  let contentPath = post.content
+  let contentPath = post.content;
 
   function videoSrc(contentPath) {
-    if (contentPath.startsWith('http://') || contentPath.startsWith('https://')) {
-      return contentPath
+    if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
+      return contentPath;
     } else {
-      return `http://localhost:3000${contentPath}`
+      return `http://localhost:3000${contentPath}`;
     }
   }
 
@@ -78,16 +76,17 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
       <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
         {post.description}
       </div>
-      
-      {post.PostType === 'image' && (
+
+      {/* Media */}
+      {post.PostType === "image" && (
         <div>
-          <img className='h-[180px] w-[320px]' src={`http://localhost:3000${contentPath}`} alt="" />
+          <img className="h-[180px] w-[320px]" src={`http://localhost:3000${contentPath}`} alt="" />
         </div>
       )}
 
       {post.PostType === "video" && (
         <div>
-          <video className='h-[180px] w-[320px]' src={videoSrc(contentPath)}></video>
+          <video className="h-[180px] w-[320px]" src={videoSrc(contentPath)} controls></video>
         </div>
       )}
 
@@ -96,18 +95,17 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
         <button
           onClick={() => likeHandle(post.id)}
           className={`px-3 py-1 rounded-md text-xs font-semibold transition 
-            ${
-              postLiked
-                ? "bg-orange-500 hover:bg-orange-400"
-                : "bg-gray-600 hover:bg-gray-500 border border-orange-500"
-            }`}
+          ${
+            postLiked
+              ? "bg-orange-500 hover:bg-orange-400"
+              : "bg-gray-600 hover:bg-gray-500 border border-orange-500"
+          }`}
         >
-          {postLiked ? " Liked" : "🤍 Like"}
+          {postLiked ? "Liked" : "🤍 Like"}
         </button>
 
         <span className="text-gray-400 text-xs">
-          Likes:{" "}
-          <span className="text-white font-bold">{post.likes.length}</span>
+          Likes: <span className="text-white font-bold">{post.likes.length}</span>
         </span>
       </div>
 
@@ -115,17 +113,26 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
       <div
         onClick={() => favHandle(post.id)}
         className={`mt-4 text-center text-xs font-semibold cursor-pointer rounded-md transition p-3 w-32 mx-auto
-    ${
-      postFav
-        ? "bg-orange-500 hover:bg-orange-400 border border-blue-700"
-        : " border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300"
-    }`}
+        ${
+          postFav
+            ? "bg-orange-500 hover:bg-orange-400 border border-blue-700"
+            : "border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300"
+        }`}
       >
         {postFav ? "Favorited" : "Add to Favorites"}
+      </div>
+
+      {/* Admin Delete Button */}
+      <div className="mt-4 flex justify-center">
+        <button
+          onClick={() => console.log(`Delete Post ID: ${post.id}`)}
+          className="bg-grey-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs shadow-md transition duration-200"
+        >
+          Delete Post
+        </button>
       </div>
     </div>
   );
 };
-}
 
 export default CommunityCard;
