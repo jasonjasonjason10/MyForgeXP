@@ -9,10 +9,11 @@ const storage = multer.diskStorage({
     cb(null, "src/images/games");
   },
   filename: (req, file, cb) => {
-    const prefix = Date.now();
-    cb(null, `${prefixfile}-${originalname}`);
-  },
-});
+
+    
+    cb(null, `${prefixfile}-${originalname}`)
+  }
+})
 
 const upload = multer({ storage });
 

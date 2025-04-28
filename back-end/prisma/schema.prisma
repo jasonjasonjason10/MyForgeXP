@@ -50,6 +50,7 @@ model GameCommunity {
   isActive Boolean @default(false)
   description String?
   coverImage String?
+  heroImage String?
   posts Post[]
   users User[] @relation("UserCommunities")
 }
