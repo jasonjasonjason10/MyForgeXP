@@ -20,6 +20,3 @@ function UserPostCard({ post }) {
   }
   
   export default UserPostCard;
-  
-  
-  
