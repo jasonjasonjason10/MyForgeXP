@@ -32,12 +32,12 @@ export default function SinglePost({ post, goBack }) {
       <div className="bg-[#111827] p-6 rounded-xl shadow-lg flex flex-col items-center">
         <button
           onClick={goBack}
-          className="self-start mb-6 px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded-md text-sm font-semibold"
+         className="self-start mb-6 px-4 py-2 border border-blue-700 rounded-md text-sm font-semibold hover:shadow-[0_0_10px_2px_rgba(29,78,216,0.7)] transition-shadow duration-300"
         >
           ← Back to Uploads
         </button>
   
-        <h2 className="text-3xl font-bold text-orange-400 mb-6">{post.title}</h2>
+        <h2 className="text-3xl font-bold text-white mb-6">{post.title}</h2>
   
         <p className="text-gray-300 mb-6 text-center">{post.description}</p>
   

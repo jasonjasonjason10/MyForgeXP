@@ -30,7 +30,7 @@ export default function Account() {
   const tabComponents = {
     details: <AccountDetails user={user} />,
     communities: <Communities user={user} />,
-    uploads: <Uploads user={user} />,
+    posts: <Uploads user={user} />,
     favorites: <Favorites user={user} />,
   };
 
@@ -200,7 +200,7 @@ export default function Account() {
         <div className="border-b border-gray-700 pb-2 mb-4">
           {/* Desktop Tabs */}
           <div className="hidden sm:flex justify-center gap-3 text-sm sm:text-base">
-            {["details", "communities", "uploads", "favorites"].map((tab) => (
+            {["details", "communities", "posts", "favorites"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -220,7 +220,7 @@ export default function Account() {
               onChange={(e) => setActiveTab(e.target.value)}
               className="w-full bg-gray-800 text-white border border-orange-500 rounded px-3 py-2 focus:outline-none focus:ring-2"
             >
-              {["details", "communities", "uploads", "favorites"].map((tab) => (
+              {["details", "communities", "posts", "favorites"].map((tab) => (
                 <option key={tab} value={tab}>
                   {tab[0].toUpperCase() + tab.slice(1)}
                 </option>
