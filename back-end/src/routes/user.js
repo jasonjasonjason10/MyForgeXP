@@ -180,16 +180,12 @@ router.get("/usernames", async (req, res) => {
 
 // get all users==========ADMIN ONLY=====================
 
-router.get("/all/info", tokenAuth, async (req, res) => {
-  const isAdmin = req.isAdmin;
-
-  if (!isAdmin) {
-    return res.status(401).json({
-      error: "No Admin Privilege",
-    });
-  }
-
-  const allUsers = await prisma.user.findMany();
+router.get("/all/info", async (req, res) => {
+  const allUsers = await prisma.user.findMany({
+    select: {
+      id: true
+    }
+  });
 
   res.status(200).json({
     successMessage: "all active users",
@@ -204,22 +200,47 @@ router.delete("/delete/:id", tokenAuth, async (req, res) => {
   const userId = req.userId;
   const id = +req.params.id;
 
-  const userExists = await prisma.user.findUnique({ where: { id } });
-  if (!userExists) {
-    return res.status(404).json({
-      error: "No Existing User To Delete",
+  try {
+    const userExists = await prisma.user.findUnique({ where: { id } });
+    if (!userExists) {
+      return res.status(404).json({
+        error: "No Existing User To Delete",
+      });
+    }
+    const placementUserId = await prisma.user.findUnique({
+      where: { username: 'Deleted User' },
     });
-  }
-  if (isAdmin || userId === id) {
-    const user = await prisma.user.delete({ where: { id } });
-    return res.status(200).json({
-      successMessage: "userDeleted",
-      user: user,
-    });
-  } else {
-    return res.status(401).json({
-      error: "Not Auth",
-    });
+    if(!placementUserId){
+      return res.json({
+        error: 'no placementUserId found'
+      })
+    }
+    const deleteFav = await prisma.favorites.deleteMany({
+      where: { userId: id }
+    })
+    const deleteCom = await prisma.comment.deleteMany({
+      where: {userId: id }
+    }) 
+    if(isAdmin || userId === id) {
+      const replacePost = await prisma.post.updateMany({
+        where: { userId: id },
+        data: { userId: placementUserId.id }
+      })
+      console.log('replacement => ', replacePost)
+      const user = await prisma.user.delete({
+        where: {id}
+      })
+      return res.status(200).json({
+        successMessage: "userDeleted",
+        user: user,
+      });
+    } else {
+      return res.status(401).json({
+        error: "Not Auth",
+      });
+    }
+  } catch (error) {
+    console.log("error here =>", error)
   }
 });
 
