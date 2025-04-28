@@ -7,7 +7,6 @@ import SingleUserFavorites from "./SingleUserFavorites";
 import ReturnButton from "../ReturnButton";
 import { toggleFollow } from "../../API/index";
 
-
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
   const [user, setUser] = useState(null);
@@ -15,14 +14,17 @@ export default function SingleUser() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
-  const [followCounts, setFollowCounts] = useState({ followers: 0, following: 0 });
+  const [followCounts, setFollowCounts] = useState({
+    followers: 0,
+    following: 0,
+  });
   const [showEditAvatar, setShowEditAvatar] = useState(false);
   const [newAvatar, setNewAvatar] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [userPosts, setUserPosts] = useState(null)
-  console.log('fer is a bad person', userPosts)
+  const [userPosts, setUserPosts] = useState(null);
+  console.log("fer is a bad person", userPosts);
 
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
@@ -53,12 +55,11 @@ export default function SingleUser() {
     fetchUser();
   }, [id]);
 
-
   useEffect(() => {
-    if(user){
-      setUserPosts(user.posts)
+    if (user) {
+      setUserPosts(user.posts);
     }
-  }, [user])
+  }, [user]);
 
   //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
   const fetchFollowCounts = async () => {
@@ -127,7 +128,6 @@ export default function SingleUser() {
     }
   };
 
-
   const handleUserClick = (userId) => {
     setShowFollowers(false);
     setShowFollowing(false);
@@ -149,31 +149,28 @@ export default function SingleUser() {
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
           <img
-            src={newAvatar ? URL.createObjectURL(newAvatar) : `http://localhost:3000${user.avatar}`}
+            src={
+              newAvatar
+                ? URL.createObjectURL(newAvatar)
+                : `http://localhost:3000${user.avatar}`
+            }
             alt="User avatar"
             className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg"
           />
-          <button
-            onClick={() => setShowEditAvatar(true)}
-            className="absolute bottom-0 right-0 bg-gray-800 hover:bg-orange-500 text-white p-1 rounded-full border border-white transition"
-            title="Edit Profile Picture"
-          >
-            ✏️
-          </button>
         </div>
 
-        <h2 className="text-xl mt-4 font-bold mt-4">@{user.username}</h2>
+        <h2 className="text-xl mt-4 font-bold">@{user.username}</h2>
 
         {/* Admin action buttons */}
         <div className="flex flex-wrap gap-2 mt-6 justify-center">
           <button className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
-          Delete User
+            Delete User
           </button>
           <button className="px-4 py-2 border border-gray-500 text-blue-400 rounded-md text-sm bg-transparent">
-          Promote to Admin
+            Promote to Admin
           </button>
           <button className="px-4 py-2 border border-gray-500 text-orange-400 rounded-md text-sm bg-transparent">
-          Edit User Info
+            Edit User Info
           </button>
         </div>
       </div>
@@ -181,7 +178,9 @@ export default function SingleUser() {
       {/* Edit Avatar */}
       {showEditAvatar && (
         <div className="bg-gray-800 border border-orange-400 rounded-lg p-6 mb-6 text-center">
-          <h3 className="text-lg mb-4 font-semibold text-orange-400">Change Profile Picture</h3>
+          <h3 className="text-lg mb-4 font-semibold text-orange-400">
+            Change Profile Picture
+          </h3>
           <input
             type="file"
             accept="image/*"
@@ -193,7 +192,7 @@ export default function SingleUser() {
               onClick={() => setShowEditAvatar(false)}
               className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
             >
-            Cancel
+              Cancel
             </button>
             <button
               onClick={() => {
@@ -201,7 +200,7 @@ export default function SingleUser() {
               }}
               className="bg-orange-500 hover:bg-orange-400 text-white px-4 py-2 rounded"
             >
-            Save New Avatar
+              Save New Avatar
             </button>
           </div>
         </div>

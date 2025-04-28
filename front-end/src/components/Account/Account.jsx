@@ -103,26 +103,29 @@ export default function Account() {
     }, 100);
   };
 
-  const handleSaveSettings = async (updatedData) => {
+  const handleSaveSettings = async (updatedFields) => {
     try {
-      const response = await fetch("http://localhost:3000/user/update", {
-        method: "PATCH",
+      const response = await fetch(`http://localhost:3000/user/update/${user.id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify(updatedFields), // <- SEND THE WHOLE OBJECT
       });
-
+  
       if (response.ok) {
-        const updatedUser = await response.json();
-        setUser(updatedUser.user);
+        const result = await response.json();
+        setUser(result.updatedData); // <- Update with new user info
         setShowSettings(false);
+      } else {
+        console.error("Failed to update user");
       }
     } catch (error) {
-      console.error("Error updating settings:", error);
+      console.error("Error updating user:", error);
     }
   };
+  
 
   {
     /* Remember that a version of this is needed to display an admin dashboard for when logged in as admin */

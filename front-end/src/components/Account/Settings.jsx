@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
 export default function SettingsModal({ isOpen, onClose, user, onSave }) {
   const [username, setUsername] = useState(user.username || "");
   const [bio, setBio] = useState(user.bio || "");
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username || "");
+      setBio(user.bio || "");
+    }
+  }, [user]);
 
   const handleSave = () => {
     onSave({ username, bio });
@@ -42,8 +47,8 @@ export default function SettingsModal({ isOpen, onClose, user, onSave }) {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
               placeholder="Enter new username"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
             />
           </div>
 
@@ -53,9 +58,9 @@ export default function SettingsModal({ isOpen, onClose, user, onSave }) {
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
+              placeholder="Write a short bio..."
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
-              placeholder="Tell us about yourself..."
-              rows={3}
+              rows="4"
             />
           </div>
 
