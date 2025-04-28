@@ -4,7 +4,7 @@ import { Pencil } from "lucide-react";
 import EditAvatar from "./EditAvatar";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
-import Following from "./Following"; //Not being used at the moment.
+
 import Communities from "./Communities";
 import Uploads from "./Uploads";
 import Favorites from "./Favorites";
@@ -234,7 +234,7 @@ export default function Account() {
               </div>
 
               {followingList.length > 0 ? (
-                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                   {followingList.map((user) => (
                     <li
                       key={user.id}
@@ -272,10 +272,13 @@ export default function Account() {
                         </button>
 
                         {user.showOptions && (
-                          <div className="absolute right-0 mt-1 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                          <div className="fixed z-[9999] right-6 top-auto mt-1 w-24 bg-gray-900 border border-gray-700 rounded shadow-lg">
+                            <button
+                              onClick={() => handleUnfollow(user.id)}
+                              className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-orange-600 cursor-pointer"
+                            >
                               Unfollow
-                            </div>
+                            </button>
                           </div>
                         )}
                       </div>
@@ -316,7 +319,7 @@ export default function Account() {
                 </button>
               </div>
               {followerList.length > 0 ? (
-                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
+                <ul className="text-white space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                   {followerList.map((follower) => (
                     <li
                       key={follower.id}
@@ -354,10 +357,13 @@ export default function Account() {
                         </button>
 
                         {follower.showOptions && (
-                          <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
+                          <div className="fixed z-[9999] right-6 top-auto mt-1 w-24 bg-gray-900 border border-gray-700 rounded shadow-lg">
+                            <button
+                              onClick={() => handleRemove(follower.id)}
+                              className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-orange-600 cursor-pointer"
+                            >
                               Remove
-                            </div>
+                            </button>
                           </div>
                         )}
                       </div>

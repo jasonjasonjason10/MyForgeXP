@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import SingleUserDetails from "./SingleUserDetails";
-import SingleUserFollowers from "./SingleUserFollowers";
 import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
-import Following from "../Account/Following";
+
 import { toggleFollow } from "../../API/index";
 import ReturnButton from "../ReturnButton";
 import { X } from "lucide-react";
