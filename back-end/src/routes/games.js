@@ -45,11 +45,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // Create community
-router.post(
-  "/create",
-  tokenAuth,
-  upload.single("cover"),
-  async (req, res, next) => {
+router.post("/create", tokenAuth, upload.single("cover"), async (req, res, next) => {
     try {
       const { gameName, description } = req.body;
       const isAdmin = req.isAdmin;
