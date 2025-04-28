@@ -54,14 +54,10 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   if (postFav) {
     favClass = "p-4 bg-green-700";
   } else {
-<<<<<<< HEAD
-    favClass = "p-4 bg-red-700";
-
-    let contentPath = post.content;
-=======
     favClass = 'p-4 bg-red-700'
   }
->>>>>>> b575fff7a10a6eb5b74150fe87bb6df84b4574d5
+
+  let contentPath = post.content
 
     function videoSrc(contentPath) {
       if (
@@ -140,11 +136,6 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
         </div>
       </div>
     );
-  }
-};
-<<<<<<< HEAD
-=======
-
->>>>>>> b575fff7a10a6eb5b74150fe87bb6df84b4574d5
+  };
 
 export default CommunityCard;
