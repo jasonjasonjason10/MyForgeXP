@@ -25,11 +25,6 @@ function Community() {
             Community Page
           </h1>
           <SearchUser />
-          <button
-            onClick={() => navigate("/createpost")}
-            className="bg-orange-500 hover:bg-orange-400 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300">
-            + New Post
-          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
