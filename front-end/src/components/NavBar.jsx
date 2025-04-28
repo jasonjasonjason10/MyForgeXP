@@ -50,7 +50,7 @@ export default function NavBar() {
               to="/community"
               className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             >
-              Community
+              Game Posts
             </Link>
           </li>
 
