@@ -1,7 +1,7 @@
 export default function SingleUserUploads() {
     return (
         <div>
-            <h1>SingleUser Uploads</h1>
+            <h1>SingleUser </h1>
         </div>
     )
 }

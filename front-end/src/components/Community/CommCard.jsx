@@ -66,30 +66,29 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
 
   function postContent(contentPath) {
     if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
-
-    const videoId = extractId(contentPath);
-
-    return (
-      <div>
+      const videoId = extractId(contentPath);
+      return (
+        <div>
           <iframe
             className="h-[180px] w-[320px]"
             src={`https://www.youtube.com/embed/${videoId}`}
             allowFullScreen
           ></iframe>
-          <a href={contentPath} target="_blank" rel="noopener noreferrer" className='text-sm' >{contentPath}</a>
+          <a href={contentPath} target="_blank" rel="noopener noreferrer" className="text-sm">
+            {contentPath}
+          </a>
         </div>
       );
-    } else {
-      return (
-        <video
-          className="h-[180px] w-[320px]"
-          controls
-          src={`http://localhost:3000${contentPath}`}
-        ></video>
-      );
     }
-  }
   
+    return (
+      <video
+        className="h-[180px] w-[320px]"
+        controls
+        src={`http://localhost:3000${contentPath}`}
+      ></video>
+    );
+  }
 
     return (
       <div className="bg-gray-900 border border-blue-700 rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
