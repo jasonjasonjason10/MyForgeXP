@@ -411,6 +411,7 @@ router.get("/:id", async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
+    include: { communities: true, favorites: true, posts: true }
   });
 
   if (!user) {
@@ -424,6 +425,8 @@ router.get("/:id", async (req, res) => {
     fName: user.fName,
     lName: user.lName,
     createdAt: user.createdAt,
+    favorites: user.favorites,
+    posts: user.posts
   };
 
   res.status(200).json({

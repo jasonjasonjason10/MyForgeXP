@@ -23,6 +23,8 @@ export default function SingleUser() {
   const [user, setUser] = useState(null);
   const { id } = useParams();
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [userPosts, setUserPosts] = useState(null)
+  console.log('fer is a bad person', userPosts)
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
     following: 0,
@@ -66,6 +68,12 @@ export default function SingleUser() {
     fetchFollowCounts();
     checkIfFollowing();
   }, [id]);
+
+  useEffect(() => {
+    if(user){
+      setUserPosts(user.posts)
+    }
+  }, [user])
 
   //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
   const fetchFollowCounts = async () => {
@@ -134,14 +142,6 @@ export default function SingleUser() {
     }
   };
 
-  // const handleUserClick = (userId) => {
-  //   console.log("Navigating to user:", userId);
-  //   setShowFollowers(false); // Close the modal first
-  //   setShowFollowing(false); // Optional: close both just in case
-  //   setTimeout(() => {
-  //     navigate(`/user/${userId}`);
-  //   }, 100); // Give the modal time to disappear
-  // };
 
   const handleUserClick = (userId) => {
     setShowFollowers(false);
@@ -156,9 +156,6 @@ export default function SingleUser() {
     }, 100);
   };
 
-  // const handleReturnClick = () => {
-  //   navigate("/community");
-  // };
   if (!user) return <div className="text-white p-4">Loading user...</div>;
 
   return (
