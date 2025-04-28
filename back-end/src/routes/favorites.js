@@ -49,7 +49,15 @@ router.post('/favorites', tokenAuth, async (req, res) => {
     const favorites = await prisma.favorites.findMany({
         where: {userId},
         include: {
-            post: true
+            post: {
+                include: {
+                    user: {
+                        select: {
+                            username: true
+                        }
+                    }
+                }
+            }
         }
     })
     const posts = favorites.map((post) => (

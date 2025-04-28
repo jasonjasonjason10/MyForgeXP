@@ -3,6 +3,7 @@ import UserFavCard from "./UserFavCard";
 
 export default function Favorites({ user }) {
   const [favPosts, setFavPosts] = useState(null);
+  console.log('post array =>', favPosts)
   const address = "http://localhost:3000/";
 
   useEffect(() => {
