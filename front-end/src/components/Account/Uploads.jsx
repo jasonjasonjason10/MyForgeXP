@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import UserPostCard from "./UserPostCard";
-import { Trash } from "lucide-react";
 import SinglePost from "../Account/MySinglePost";
 
 function Uploads({ user }) {
@@ -12,34 +11,6 @@ function Uploads({ user }) {
       setUserPosts(user.posts);
     }
   }, [user]);
-
-  // delete post function
-  function handleDelete(postId) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
-    );
-    if (!confirmDelete) return;
-
-    fetch(`http://localhost:3000/user/post/${postId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((response) => {
-        console.log("Delete response status:", response.status);
-        if (response.ok) {
-          setUserPosts(userPosts.filter((post) => post.id !== postId));
-          alert("Post deleted successfully.");
-        } else {
-          alert("Failed to delete post. Status: " + response.status);
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting post:", error);
-        alert("Something went wrong.");
-      });
-  }
 
   return (
     <div className="text-white px-6 py-10 max-w-5xl mx-auto">
@@ -67,13 +38,6 @@ function Uploads({ user }) {
           ))}
         </div>
       )}
-      <button
-        onClick={() => handleDelete(post.id)}
-        className="absolute top-4 right-4 text-red-500 hover:text-red-700 transition"
-        title="Delete Post"
-      >
-        <Trash size={20} />
-      </button>
     </div>
   );
 }

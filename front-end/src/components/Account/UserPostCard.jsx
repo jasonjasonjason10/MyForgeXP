@@ -1,4 +1,3 @@
-// src/components/UserPostCard.jsx
 export default function UserPostCard({ post }) {
   let contentPath = post.content;
 
@@ -15,7 +14,7 @@ export default function UserPostCard({ post }) {
     ) {
       const videoId = extractId(contentPath);
       return (
-        <div >
+        <div>
           <iframe
             className="h-[180px] w-[320px]"
             src={`https://www.youtube.com/embed/${videoId}`}
@@ -43,7 +42,7 @@ export default function UserPostCard({ post }) {
   }
 
   return (
-    <div >
+    <div>
       <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
         {post.title}
       </h3>
@@ -64,4 +63,3 @@ export default function UserPostCard({ post }) {
     </div>
   );
 }
-
