@@ -59,16 +59,38 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
 
   let contentPath = post.content
 
-    function videoSrc(contentPath) {
-      if (
-        contentPath.startsWith("http://") ||
-        contentPath.startsWith("https://")
-      ) {
-        return contentPath;
-      } else {
-        return `http://localhost:3000${contentPath}`;
-      }
+  function extractId(contentPath) {
+    const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
+    const match = contentPath.match(findId);
+    return match ? match[1] : null;
+  }
+
+  function postContent(contentPath) {
+    if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
+
+    const videoId = extractId(contentPath);
+
+    return (
+      <div>
+          <iframe
+            className="h-[180px] w-[320px] cursor-pointer"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            allowFullScreen
+          ></iframe>
+          <a href={contentPath} target="_blank" rel="noopener noreferrer" className='text-sm' >{contentPath}</a>
+        </div>
+      );
+    } else {
+      return (
+        <video
+          className="h-[180px] w-[320px]"
+          controls
+          src={`http://localhost:3000${contentPath}`}
+        ></video>
+      );
     }
+  }
+  
 
     return (
       <div className="bg-gray-900 border border-blue-700 rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
@@ -94,11 +116,7 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
 
         {post.PostType === "video" && (
           <div>
-            <video
-              className="h-[180px] w-[320px]"
-              controls
-              src={videoSrc(contentPath)}
-            ></video>
+            {postContent(contentPath)}
           </div>
         )}
 
@@ -135,6 +153,7 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
           {postFav ? "Favorited" : "Add to Favorites"}
         </div>
       </div>
+      
     );
   };
 
