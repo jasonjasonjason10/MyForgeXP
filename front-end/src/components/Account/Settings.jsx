@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import RemoveAccount from './RemoveAccount';
 
-export default function SettingsModal({ isOpen, onClose, user, onSave }) {
+
+export default function SettingsModal({ isOpen, onClose, user, onSave, navigate }) {
   const [username, setUsername] = useState(user.username || "");
   const [bio, setBio] = useState(user.bio || "");
 
@@ -27,11 +29,12 @@ export default function SettingsModal({ isOpen, onClose, user, onSave }) {
           className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
           style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
         >
+
           {/* Close button */}
           <button
             className="absolute top-2 right-3 text-gray-400 hover:text-white"
             onClick={onClose}
-          >
+            >
             <X size={20} />
           </button>
 
@@ -49,7 +52,7 @@ export default function SettingsModal({ isOpen, onClose, user, onSave }) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter new username"
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
-            />
+              />
           </div>
 
           {/* Bio input */}
@@ -61,8 +64,12 @@ export default function SettingsModal({ isOpen, onClose, user, onSave }) {
               placeholder="Write a short bio..."
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
               rows="4"
-            />
+              />
           </div>
+            {/* {remove account} */}
+            <div>
+              <RemoveAccount user={user} navigate={navigate} />
+            </div>
 
           {/* Action buttons */}
           <div className="flex justify-end gap-4">
