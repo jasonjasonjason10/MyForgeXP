@@ -55,7 +55,7 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
     favClass = 'p-4 bg-green-700'
   } else {
     favClass = 'p-4 bg-red-700'
-
+  }
 
   let contentPath = post.content
 
@@ -126,6 +126,6 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
     </div>
   );
 };
-}
+
 
 export default CommunityCard;
