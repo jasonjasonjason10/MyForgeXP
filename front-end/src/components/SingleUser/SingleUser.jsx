@@ -4,11 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import SingleUserDetails from "./SingleUserDetails";
 import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
-import { toggleFollow } from "../../API/index";
 import ReturnButton from "../ReturnButton";
 import { toggleFollow } from "../../API/index";
-import { X } from "lucide-react";
-import { MoreHorizontal } from "lucide-react";
+
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
@@ -22,14 +20,9 @@ export default function SingleUser() {
   const [newAvatar, setNewAvatar] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
-
-  const [currentUserId, setCurrentUserId] = useState(null);
   const [userPosts, setUserPosts] = useState(null)
   console.log('fer is a bad person', userPosts)
-  const [followCounts, setFollowCounts] = useState({
-    followers: 0,
-    following: 0,
-  });
+
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
 
