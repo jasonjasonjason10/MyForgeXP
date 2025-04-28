@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import SingleUserDetails from "./SingleUserDetails";
 import SingleUserUploads from "./SingleUserUploads";
-import SingleUserFavorites from "./SingleUserFavorites";
 import ReturnButton from "../ReturnButton";
 import { toggleFollow } from "../../API/index";
 
@@ -32,7 +31,6 @@ export default function SingleUser() {
   const tabComponents = {
     details: <SingleUserDetails />,
     uploads: <SingleUserUploads />,
-    favorites: <SingleUserFavorites />,
   };
 
   useEffect(() => {
@@ -248,7 +246,7 @@ export default function SingleUser() {
       {/* Tabs */}
       <div className="bg-gray-900 rounded-lg p-4 mb-7">
         <div className="flex justify-center gap-6 border-b border-gray-700 pb-2 mb-4">
-          {["details", "uploads", "favorites"].map((tab) => (
+          {["details", "uploads"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -288,10 +286,13 @@ export default function SingleUser() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 mx-4 sm:mx-auto"
+              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
             >
               <div className="relative mb-4">
-                <h3 className="text-2xl font-bold">Followers</h3>
+                <h3 className="text-2xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                  Followers
+                </h3>
                 <button
                   className="absolute top-2 right-3 text-gray-400 hover:text-white"
                   onClick={() => setShowFollowers(false)}
@@ -333,10 +334,13 @@ export default function SingleUser() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 mx-4 sm:mx-auto"
+              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
+              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
             >
               <div className="relative mb-4">
-                <h3 className="text-2xl font-bold">Following</h3>
+                <h3 className="text-2xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                  Following
+                </h3>
                 <button
                   className="absolute top-2 right-3 text-gray-400 hover:text-white"
                   onClick={() => setShowFollowing(false)}
