@@ -12,7 +12,7 @@ const SingleCommunity = () => {
     }
 
     const memberCount = gamecommunity.users.length /* this was actually an idea by my friend so thank her */
-
+reqqwa
     return (
     <div className="max-w-4xl mx-auto p-4">
         {/* Community Header */}

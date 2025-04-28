@@ -15,11 +15,9 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   }, [favToggle]);
 
   async function likeHandle(postId) {
-    const response = await fetch(`${address}post/${postId}/like`, {
+    await fetch(`${address}post/${postId}/like`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setRefreshToggle(!refreshToggle);
   }
@@ -57,7 +55,8 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
     favClass = 'p-4 bg-red-700'
   }
 
-  let contentPath = post.content
+  let contentPath = post.content;
+
 
     function videoSrc(contentPath) {
       if (
@@ -76,6 +75,7 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
         <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
           {post.title}
         </h3>
+
 
         {/* Post Description */}
         <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">

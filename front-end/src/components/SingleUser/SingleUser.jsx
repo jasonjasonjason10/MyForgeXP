@@ -1,27 +1,27 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import SingleUserDetails from "./SingleUserDetails";
-import SingleUserFollowers from "./SingleUserFollowers";
 import SingleUserUploads from "./SingleUserUploads";
 import SingleUserFavorites from "./SingleUserFavorites";
-import Following from "../Account/Following";
-import { toggleFollow } from "../../API/index";
 import ReturnButton from "../ReturnButton";
+import { toggleFollow } from "../../API/index";
 import { X } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [showFollowOptions, setShowFollowOptions] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
-  const [user, setUser] = useState(null);
+  const [followCounts, setFollowCounts] = useState({ followers: 0, following: 0 });
+  const [showEditAvatar, setShowEditAvatar] = useState(false);
+  const [newAvatar, setNewAvatar] = useState(null);
+  const navigate = useNavigate();
   const { id } = useParams();
+
   const [currentUserId, setCurrentUserId] = useState(null);
   const [userPosts, setUserPosts] = useState(null)
   console.log('fer is a bad person', userPosts)
@@ -32,10 +32,8 @@ export default function SingleUser() {
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
 
-  //SingleUserFollowers not being used here until we implement a search bar, then also add SingleUserFollowing for search purposes
   const tabComponents = {
     details: <SingleUserDetails />,
-
     uploads: <SingleUserUploads />,
     favorites: <SingleUserFavorites />,
   };
@@ -43,9 +41,7 @@ export default function SingleUser() {
   useEffect(() => {
     async function fetchSelf() {
       const response = await fetch(`http://localhost:3000/user/info`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
       setCurrentUserId(result.user.id);
@@ -55,19 +51,13 @@ export default function SingleUser() {
 
   useEffect(() => {
     async function fetchUser() {
-      try {
-        const response = await fetch(`http://localhost:3000/user/${id}`);
-        const data = await response.json();
-        setUser(data.user);
-      } catch (error) {
-        console.error("Failed to load user:", error);
-      }
+      const response = await fetch(`http://localhost:3000/user/${id}`);
+      const data = await response.json();
+      setUser(data.user);
     }
-
     fetchUser();
-    fetchFollowCounts();
-    checkIfFollowing();
   }, [id]);
+
 
   useEffect(() => {
     if(user){
@@ -159,102 +149,83 @@ export default function SingleUser() {
   if (!user) return <div className="text-white p-4">Loading user...</div>;
 
   return (
-    <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-4xl mx-auto ">
+    <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-4xl mx-auto">
+      {/* Avatar and Username */}
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
           <img
-            src={`http://localhost:3000${user.avatar}`}
+            src={newAvatar ? URL.createObjectURL(newAvatar) : `http://localhost:3000${user.avatar}`}
             alt="User avatar"
-            className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg"
           />
+          <button
+            onClick={() => setShowEditAvatar(true)}
+            className="absolute bottom-0 right-0 bg-gray-800 hover:bg-orange-500 text-white p-1 rounded-full border border-white transition"
+            title="Edit Profile Picture"
+          >
+            ✏️
+          </button>
         </div>
-        <h2 className="text-xl mt-4 font-bold ">@{user.username}</h2>
+
+        <h2 className="text-xl mt-4 font-bold mt-4">@{user.username}</h2>
+
+        {/* Admin action buttons */}
+        <div className="flex flex-wrap gap-2 mt-6 justify-center">
+          <button className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
+          Delete User
+          </button>
+          <button className="px-4 py-2 border border-gray-500 text-blue-400 rounded-md text-sm bg-transparent">
+          Promote to Admin
+          </button>
+          <button className="px-4 py-2 border border-gray-500 text-orange-400 rounded-md text-sm bg-transparent">
+          Edit User Info
+          </button>
+        </div>
       </div>
-      <div className="flex flex-col items-center gap-3 mt-4 mb-6">
-        <div className="flex gap-6 text-center justify-center">
-          <button
-            onClick={openFollowersModal}
-            className="hover:text-orange-400 transition flex flex-col cursor-pointer"
-          >
-            <span className="text-lg font-bold">{followCounts.followers}</span>
-            <span className="text-sm">Followers</span>
-          </button>
 
-          <button
-            onClick={() => setShowFollowing(openFollowingModal)}
-            className="hover:text-orange-400 transition flex flex-col cursor-pointer"
-          >
-            <span className="text-lg font-bold">{followCounts.following}</span>
-            <span className="text-sm">Following</span>
-          </button>
-        </div>
-
-        {/* Follow / Following button */}
-        <div className="relative">
-          {!isFollowing ? (
+      {/* Edit Avatar */}
+      {showEditAvatar && (
+        <div className="bg-gray-800 border border-orange-400 rounded-lg p-6 mb-6 text-center">
+          <h3 className="text-lg mb-4 font-semibold text-orange-400">Change Profile Picture</h3>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setNewAvatar(e.target.files[0])}
+            className="text-white text-sm mb-4"
+          />
+          <div className="flex justify-center gap-4 mt-4">
             <button
-              onClick={handleFollowToggle}
-              className="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600 transition"
+              onClick={() => setShowEditAvatar(false)}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
             >
-              Follow
+            Cancel
             </button>
-          ) : (
-            <div className="relative inline-block">
-              <button
-                onClick={() => setShowFollowOptions((prev) => !prev)}
-                className="bg-gray-800 border border-orange-400 text-white px-4 py-1 rounded hover:bg-orange-500 transition"
-              >
-                Following ⌄
-              </button>
-              {showFollowOptions && (
-                <div className="absolute mt-1 w-32 bg-gray-900 border border-gray-700 rounded shadow-lg z-10">
-                  <div
-                    onClick={() => {
-                      handleFollowToggle();
-                      setShowFollowOptions(false);
-                    }}
-                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer"
-                  >
-                    Unfollow
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="bg-gray-900 rounded-lg p-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-        <div className="border-b border-gray-700 pb-2 mb-4 ">
-          {/* Desktop Tabs (??CHANGE TO ALWAYS DROP DOWN??*/}
-          <div className="hidden sm:flex justify-center gap-3 text-sm sm:text-base  ">
-            {["details", "uploads", "favorites"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`hover:text-orange-400 ${
-                  activeTab === tab && "text-orange-500 font-semibold"
-                }`}
-              >
-                {tab[0].toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
-
-          {/* Mobile Dropdown */}
-          <div className="sm:hidden mt-2 ">
-            <select
-              value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value)}
-              className="w-full bg-gray-800 text-white border border-orange-500 rounded px-3 py-2 focus:outline-none focus:ring-2"
+            <button
+              onClick={() => {
+                setShowEditAvatar(false);
+              }}
+              className="bg-orange-500 hover:bg-orange-400 text-white px-4 py-2 rounded"
             >
-              {["details", "uploads", "favorites"].map((tab) => (
-                <option key={tab} value={tab}>
-                  {tab[0].toUpperCase() + tab.slice(1)}
-                </option>
-              ))}
-            </select>
+            Save New Avatar
+            </button>
           </div>
+        </div>
+      )}
+
+      {/* Tabs */}
+      <div className="bg-gray-900 rounded-lg p-4 mb-7">
+        <div className="flex justify-center gap-6 border-b border-gray-700 pb-2 mb-4">
+          {["details", "uploads", "favorites"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`hover:text-orange-400 ${
+                activeTab === tab && "text-orange-500 font-semibold"
+              }`}
+            >
+              {tab[0].toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </div>
 
         <div className="bg-gray-800 rounded-md p-4 min-h-[200px] border border-blue-600">
@@ -271,159 +242,11 @@ export default function SingleUser() {
           </AnimatePresence>
         </div>
       </div>
-      <div className="flex justify-center mt-12 ">
+
+      {/* Return button */}
+      <div className="flex justify-center mt-10">
         <ReturnButton />
       </div>
-      {showFollowing && (
-        <>
-          {/* Backdrop blur */}
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
-
-          {/* Modal wrapper */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
-              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
-            >
-              <div className="relative mb-4">
-                <h3 className="text-2xl font-bold text-white">Following</h3>
-                <button
-                  className="absolute top-2 right-3 text-gray-400 hover:text-white"
-                  onClick={() => setShowFollowing(false)}
-                  title="Close"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              {followingList.length > 0 ? (
-                <ul className="text-white space-y-2 max-h-64 overflow-y-auto">
-                  {followingList.map((followedUser) => (
-                    <li
-                      key={followedUser.id}
-                      className="relative flex items-center justify-between cursor-pointer p-2 border-b border-blue-400 hover:border-orange-400"
-                    >
-                      <div
-                        className="flex items-center gap-3"
-                        onClick={() => handleUserClick(followedUser.id)}
-                      >
-                        <img
-                          src={`http://localhost:3000${followedUser.avatar}`}
-                          alt="avatar"
-                          className="w-8 h-8 rounded-full object-cover border border-gray-500"
-                        />
-                        <span>{followedUser.username}</span>
-                      </div>
-
-                      <div className="relative">
-                        <button
-                          onClick={() =>
-                            setFollowingList((prev) =>
-                              prev.map((f) =>
-                                f.id === followedUser.id
-                                  ? { ...f, showOptions: !f.showOptions }
-                                  : { ...f, showOptions: false }
-                              )
-                            )
-                          }
-                          className="text-gray-400 hover:text-white"
-                        >
-                          <MoreHorizontal size={20} />
-                        </button>
-
-                        {followedUser.showOptions && (
-                          <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                            <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
-                              Unfollow
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-400 text-sm">No users followed.</p>
-              )}
-            </motion.div>
-          </div>
-        </>
-      )}
-
-      {showFollowers && (
-        <>
-          {/* Backdrop blur */}
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
-
-          {/* Modal wrapper */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-cover bg-center bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mx-4 sm:mx-auto"
-              style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
-            >
-              <div className="relative mb-4">
-                <h3 className="text-2xl font-bold text-white">Followers</h3>
-                <button
-                  className="absolute top-2 right-3 text-gray-400 hover:text-white"
-                  onClick={() => setShowFollowers(false)}
-                  title="Close"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              {followerList.map((follower) => (
-                <li
-                  key={follower.id}
-                  className="relative flex items-center justify-between cursor-pointer p-2 border-b border-blue-400 hover:border-orange-400"
-                >
-                  <div
-                    className="flex items-center gap-3"
-                    onClick={() => handleUserClick(follower.id)}
-                  >
-                    <img
-                      src={`http://localhost:3000${follower.avatar}`}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover border border-gray-500"
-                    />
-                    <span>{follower.username}</span>
-                  </div>
-
-                  <div className="relative">
-                    <button
-                      onClick={() =>
-                        setFollowerList((prev) =>
-                          prev.map((f) =>
-                            f.id === follower.id
-                              ? { ...f, showOptions: !f.showOptions }
-                              : { ...f, showOptions: false }
-                          )
-                        )
-                      }
-                      className="text-gray-400 hover:text-white"
-                    >
-                      <MoreHorizontal size={20} />
-                    </button>
-
-                    {follower.showOptions && (
-                      <div className="absolute right-0 mt-2 w-24 bg-gray-800 border border-gray-600 rounded shadow-lg z-50">
-                        <div className="text-sm text-white px-4 py-2 hover:bg-red-600 rounded cursor-pointer">
-                          Remove
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </motion.div>
-          </div>
-        </>
-      )}
     </div>
   );
 }

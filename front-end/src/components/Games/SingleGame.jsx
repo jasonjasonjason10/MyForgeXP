@@ -11,7 +11,7 @@ export default function SingleGame() {
   const [clickCheck, setClickCheck] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [liked, setLiked] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const address = "http://localhost:3000/";
 
   useEffect(() => {
@@ -91,12 +91,28 @@ export default function SingleGame() {
           : " hover:bg-orange-500 border border-blue-700"
       }`}
               >
-                {isUserSubbed ? " Subscribed" : " Subscribe"}
+                {isUserSubbed ? "Subscribed" : "Subscribe"}
               </button>
 
               {/* Create Post Button */}
-              <button onClick={() => navigate(`/createpost/${game.id}`)} className="px-6 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg font-semibold transition">
+              <button
+                onClick={() => navigate(`/createpost/${game.id}`)}
+                className="px-6 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg font-semibold transition"
+              >
                 Create Post
+              </button>
+            </div>
+
+            {/* Admin Buttons */}
+            <div className="flex flex-wrap gap-2 mt-6">
+              <button className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
+                Edit Cover
+              </button>
+              <button className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
+                Edit Description
+              </button>
+              <button className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
+                Delete Game
               </button>
             </div>
           </div>
