@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import UserPostCard from "./UserPostCard";
-import SinglePost from "../SinglePost";
+import SinglePost from "./MySinglePost";
 
 function Uploads({ user }) {
   const [userPosts, setUserPosts] = useState([]);
@@ -17,9 +17,9 @@ function Uploads({ user }) {
       {/* Heading */}
       <div className="text-center mb-10">
         <h2 className="text-4xl font-bold pb-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-          Your Uploads
+          Your Posts
         </h2>
-        <div className="mx-auto w-48 h-0.5 bg-blue-700 shadow-[0_0_10px_2px_rgba(29,78,216,0.7)] rounded-full"></div>
+        {/* <div className="mx-auto w-48 h-0.5 bg-blue-700 shadow-[0_0_10px_2px_rgba(29,78,216,0.7)] rounded-full"></div> */}
       </div>
 
       {/* Either show SinglePost or Grid */}
