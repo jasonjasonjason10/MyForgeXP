@@ -53,6 +53,8 @@ export default function SingleUser() {
       setUser(data.user);
     }
     fetchUser();
+    checkIfFollowing();
+    fetchFollowCounts();
   }, [id]);
 
   useEffect(() => {
@@ -160,18 +162,55 @@ export default function SingleUser() {
         </div>
 
         <h2 className="text-xl mt-4 font-bold">@{user.username}</h2>
-
-        {/* Admin action buttons */}
-        <div className="flex flex-wrap gap-2 mt-6 justify-center">
-          <button className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
-            Delete User
+        <div className="flex gap-6 mt-2 mb-6 text-center justify-center">
+          <button
+            onClick={openFollowersModal}
+            className="hover:text-orange-400 transition flex flex-col"
+          >
+            <span className="text-lg font-bold cursor-pointer">
+              {followCounts.followers}
+            </span>
+            <span className="text-sm cursor-pointer">Followers</span>
           </button>
-          <button className="px-4 py-2 border border-gray-500 text-blue-400 rounded-md text-sm bg-transparent">
-            Promote to Admin
+          <button
+            onClick={openFollowingModal}
+            className="hover:text-orange-400 transition flex flex-col"
+          >
+            <span className="text-lg font-bold cursor-pointer">
+              {followCounts.following}
+            </span>
+            <span className="text-sm cursor-pointer">Following</span>
           </button>
-          <button className="px-4 py-2 border border-gray-500 text-orange-400 rounded-md text-sm bg-transparent">
-            Edit User Info
-          </button>
+        </div>
+        {/* Follow / Following Button */}
+        <div className="relative mt-2">
+          {!isFollowing ? (
+            <button
+              onClick={handleFollowToggle}
+              className="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600 transition"
+            >
+              Follow
+            </button>
+          ) : (
+            <div className="relative inline-block">
+              <button
+                onClick={() => setShowOptions((prev) => !prev)}
+                className="bg-gray-800 border border-orange-400 text-white px-4 py-1 rounded hover:bg-orange-500 transition"
+              >
+                Following ⌄
+              </button>
+              {showOptions && (
+                <div className="absolute mt-1 w-32 bg-gray-900 border border-gray-700 rounded shadow-lg z-10">
+                  <div
+                    onClick={handleFollowToggle}
+                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-red-500 cursor-pointer"
+                  >
+                    Unfollow
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -241,6 +280,97 @@ export default function SingleUser() {
       <div className="flex justify-center mt-10">
         <ReturnButton />
       </div>
+      {showFollowers && (
+        <>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 mx-4 sm:mx-auto"
+            >
+              <div className="relative mb-4">
+                <h3 className="text-2xl font-bold">Followers</h3>
+                <button
+                  className="absolute top-2 right-3 text-gray-400 hover:text-white"
+                  onClick={() => setShowFollowers(false)}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {followerList.length > 0 ? (
+                <ul className="space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                  {followerList.map((follower) => (
+                    <li
+                      key={follower.id}
+                      onClick={() => handleUserClick(follower.id)}
+                      className="cursor-pointer flex items-center gap-3 p-2 border-b border-blue-400 hover:border-orange-400"
+                    >
+                      <img
+                        src={`http://localhost:3000${follower.avatar}`}
+                        alt={follower.username}
+                        className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                      />
+                      <span>{follower.username}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-300 text-sm">No followers yet.</p>
+              )}
+            </motion.div>
+          </div>
+        </>
+      )}
+
+      {showFollowing && (
+        <>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-gray-800 text-white px-6 py-6 rounded-lg w-full max-w-md shadow-lg relative border border-orange-500 mx-4 sm:mx-auto"
+            >
+              <div className="relative mb-4">
+                <h3 className="text-2xl font-bold">Following</h3>
+                <button
+                  className="absolute top-2 right-3 text-gray-400 hover:text-white"
+                  onClick={() => setShowFollowing(false)}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {followingList.length > 0 ? (
+                <ul className="space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                  {followingList.map((user) => (
+                    <li
+                      key={user.id}
+                      onClick={() => handleUserClick(user.id)}
+                      className="cursor-pointer flex items-center gap-3 p-2 border-b border-blue-400 hover:border-orange-400"
+                    >
+                      <img
+                        src={`http://localhost:3000${user.avatar}`}
+                        alt={user.username}
+                        className="w-8 h-8 rounded-full object-cover border border-gray-500"
+                      />
+                      <span>{user.username}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-300 text-sm">
+                  Not following anyone yet.
+                </p>
+              )}
+            </motion.div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
