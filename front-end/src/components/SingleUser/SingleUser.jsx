@@ -5,11 +5,13 @@ import SingleUserDetails from "./SingleUserDetails";
 import SingleUserUploads from "./SingleUserUploads";
 import ReturnButton from "../ReturnButton";
 import { toggleFollow } from "../../API/index";
+import SingleUserAdmin from "../Admin/SingleUserAdmin";
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
   const [user, setUser] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isFollowing, setIsFollowing] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -23,7 +25,6 @@ export default function SingleUser() {
   const { id } = useParams();
 
   const [userPosts, setUserPosts] = useState(null);
-  console.log("fer is a bad person", userPosts);
 
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
@@ -31,6 +32,8 @@ export default function SingleUser() {
   const tabComponents = {
     details: <SingleUserDetails />,
     uploads: <SingleUserUploads userPosts={userPosts} />,
+    details: <SingleUserDetails user={user} />,
+    uploads: <SingleUserUploads />,
   };
 
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function SingleUser() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
+      setIsAdmin(result.user.isAdmin)
       setCurrentUserId(result.user.id);
     }
     fetchSelf();
@@ -145,6 +149,9 @@ export default function SingleUser() {
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-4xl mx-auto">
+      <div>
+        <SingleUserAdmin user={user} isAdmin={isAdmin} />
+      </div>
       {/* Avatar and Username */}
       <div className="flex flex-col items-center mb-8">
         <div className="relative">

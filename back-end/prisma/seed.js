@@ -31,13 +31,11 @@ const seed = async () => {
     // Full Name Test w/ Avatar
     await prisma.user.create({
       data: {
-        email: "full@name.com",
-        username: "fullNameTest",
+        email: "deleted@user.com",
+        username: "Deleted User",
         password: hashedPassword,
-        avatar: `/images/pfp/defaultavatar2.png`,
-        fName: "FirstName",
-        lName: "LastName",
-        bio: "uwu im just a quirky individual uwu",
+        avatar: `/images/pfp/deleted-user.jpg`,
+        bio: "Grave yard of the fallen",
       },
     });
 

@@ -1,5 +1,6 @@
 import HomeIntro from "./HomeIntro";
 import Carousel from "./Carousel";
+import Community from "../Community/Community";
 
 export default function Homepage() {
   return (
@@ -17,6 +18,7 @@ export default function Homepage() {
           </div>
         </main>
       </div>
+      <Community />
     </div>
   );
 }
