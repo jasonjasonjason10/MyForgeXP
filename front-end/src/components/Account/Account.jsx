@@ -22,9 +22,6 @@ export default function Account() {
   const navigate = useNavigate();
   const [currentUserId, setCurrentUserId] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-
-  // const [showOptions, setShowOptions] = useState(false);
-
   const [followCounts, setFollowCounts] = useState({
     followers: 0,
     following: 0,
@@ -38,6 +35,7 @@ export default function Account() {
   };
 
   console.log("user useState =>", user);
+
 
   useEffect(() => {
     const fetchFollowingList = async () => {
@@ -62,6 +60,7 @@ export default function Account() {
     fetchFollowerList();
     fetchFollowingList();
   }, [showFollowing, showFollowers]);
+
 
   useEffect(() => {
     setFollowCounts({
@@ -423,6 +422,7 @@ export default function Account() {
               onClose={() => setShowSettings(false)}
               user={user}
               onSave={handleSaveSettings}
+              navigate={navigate}
             />
           </div>
         </>
