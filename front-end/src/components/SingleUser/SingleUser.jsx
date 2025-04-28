@@ -244,7 +244,7 @@ export default function SingleUser() {
       )}
 
       {/* Tabs */}
-      <div className="bg-gray-900 rounded-lg p-4 mb-7">
+      <div className="bg-gray-900 rounded-lg p-4 mb-7 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
         <div className="flex justify-center gap-6 border-b border-gray-700 pb-2 mb-4">
           {["details", "uploads"].map((tab) => (
             <button
