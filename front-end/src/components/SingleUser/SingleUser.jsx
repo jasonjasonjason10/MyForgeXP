@@ -20,6 +20,7 @@ export default function SingleUser() {
   const [newAvatar, setNewAvatar] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
+
   const [userPosts, setUserPosts] = useState(null)
   console.log('fer is a bad person', userPosts)
 
