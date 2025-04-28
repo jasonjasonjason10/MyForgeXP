@@ -163,7 +163,6 @@ router.get("/info", tokenAuth, async (req, res, next) => {
 
 // get all usernames=====================================
 router.get("/usernames", async (req, res) => {
-<<<<<<< Updated upstream
   const allInfo = await prisma.user.findMany();
   const usernames = allInfo.map((user) => {
     return {
@@ -186,18 +185,6 @@ router.get("/all/info", tokenAuth, async (req, res) => {
 
   if (!isAdmin) {
     return res.status(401).json({
-=======
-    
-    const allInfo = await prisma.user.findMany();
-    const usernames = allInfo.map((user) => {
-        return {
-            id: user.id,
-            username: user.username,
-            avatar: user.avatar
-        }
-        
-        communityId 
->>>>>>> Stashed changes
       error: "No Admin Privilege",
     });
   }
