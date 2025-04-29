@@ -1,86 +1,38 @@
 export default function UserFavCard({ post }) {
-  if (!post) {
-    return (
-      <div className="text-gray-400 text-center">
-        Invalid favorite post data.
-      </div>
-    );
-  }
-
-  let contentPath = post.content;
-
-  function extractId(contentPath) {
-    const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
-    const match = contentPath?.match(findId);
-    return match ? match[1] : null;
-  }
-
-  function postContent(contentPath) {
-    if (!contentPath) return null;
-
-    if (
-      contentPath.startsWith("http://") ||
-      contentPath.startsWith("https://")
-    ) {
-      const videoId = extractId(contentPath);
-      return (
-        <div className="flex flex-col items-center">
-          <iframe
-            className="h-[180px] w-[320px] rounded-lg"
-            src={`https://www.youtube.com/embed/${videoId}`}
-            allowFullScreen
-          ></iframe>
-          <a
-            href={contentPath}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-blue-400 mt-2 underline"
-          >
-            Watch on YouTube
-          </a>
-        </div>
-      );
-    }
-
-    return (
-      <video
-        className="h-[180px] w-[320px] rounded-lg"
-        controls
-        src={`http://localhost:3000${contentPath}`}
-      ></video>
-    );
-  }
+  const contentPath = post.content;
 
   return (
-    <div>
-      {/* Title */}
-      <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
-        {post.title || "Untitled"}
-      </h3>
+    <div className="flex flex-col justify-between h-full text-white">
+      {/* Top section: title + media */}
+      <div className="flex flex-col gap-3 items-center">
+        <h3 className="text-xl font-semibold text-white drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] text-center">
+          {post.title}
+        </h3>
 
-      {/* Description */}
-      <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
-        {post.description || "No description"}
+        {post.PostType === "image" && (
+          <img
+            className="h-[180px] w-[320px] rounded-lg object-cover mx-auto"
+            src={`http://localhost:3000${contentPath}`}
+            alt="Post content"
+          />
+        )}
+
+        {post.PostType === "video" && (
+          <video
+            className="h-[180px] w-[320px] rounded-lg mx-auto"
+            controls
+            src={`http://localhost:3000${contentPath}`}
+          />
+        )}
       </div>
 
-      {/* Media (Image or Video) */}
-      {post.PostType === "image" && (
-        <img
-          className="h-[180px] w-[320px] rounded-lg object-cover"
-          src={`http://localhost:3000${contentPath}`}
-          alt="Favorite Post Image"
-        />
-      )}
-
-      {post.PostType === "video" && (
-        <div className="mt-4">{postContent(contentPath)}</div>
-      )}
-
-      {/* Timestamp */}
-      <p className="text-gray-500 text-xs mt-4">
-        Posted on:{" "}
-        {post.createdAt ? new Date(post.createdAt).toLocaleString() : "Unknown"}
-      </p>
+      {/* Bottom section: Likes */}
+      <div className="mt-4 text-center text-xs text-gray-400">
+        Likes:{" "}
+        <span className="text-white font-bold">
+          {Array.isArray(post.likes) ? post.likes.length : 0}
+        </span>
+      </div>
     </div>
   );
 }

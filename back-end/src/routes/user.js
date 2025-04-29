@@ -135,10 +135,17 @@ router.post("/register", async (req, res) => {
 
 router.get("/info", tokenAuth, async (req, res, next) => {
   const id = req.userId;
-
-  const allInfo = await prisma.user.findUnique({ 
+  const allInfo = await prisma.user.findUnique({
     where: { id },
-    include: { communities: true, favorites: true, posts: true } 
+    include: {
+      communities: true,
+      favorites: true,
+      posts: {
+        include: {
+          likes: true,
+        },
+      },
+    },
   });
   const refinedInfo = {
     id: allInfo.id,
@@ -152,7 +159,7 @@ router.get("/info", tokenAuth, async (req, res, next) => {
     bio: allInfo.bio,
     communities: allInfo.communities,
     favorites: allInfo.favorites,
-    posts: allInfo.posts
+    posts: allInfo.posts,
   };
 
   res.status(200).json({
@@ -183,8 +190,8 @@ router.get("/usernames", async (req, res) => {
 router.get("/all/info", async (req, res) => {
   const allUsers = await prisma.user.findMany({
     select: {
-      id: true
-    }
+      id: true,
+    },
   });
 
   res.status(200).json({
@@ -208,28 +215,28 @@ router.delete("/delete/:id", tokenAuth, async (req, res) => {
       });
     }
     const placementUserId = await prisma.user.findUnique({
-      where: { username: 'Deleted User' },
+      where: { username: "Deleted User" },
     });
-    if(!placementUserId){
+    if (!placementUserId) {
       return res.json({
-        error: 'no placementUserId found'
-      })
+        error: "no placementUserId found",
+      });
     }
     const deleteFav = await prisma.favorites.deleteMany({
-      where: { userId: id }
-    })
+      where: { userId: id },
+    });
     const deleteCom = await prisma.comment.deleteMany({
-      where: {userId: id }
-    }) 
-    if(isAdmin || userId === id) {
+      where: { userId: id },
+    });
+    if (isAdmin || userId === id) {
       const replacePost = await prisma.post.updateMany({
         where: { userId: id },
-        data: { userId: placementUserId.id }
-      })
-      console.log('replacement => ', replacePost)
+        data: { userId: placementUserId.id },
+      });
+      console.log("replacement => ", replacePost);
       const user = await prisma.user.delete({
-        where: {id}
-      })
+        where: { id },
+      });
       return res.status(200).json({
         successMessage: "userDeleted",
         user: user,
@@ -240,7 +247,7 @@ router.delete("/delete/:id", tokenAuth, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log("error here =>", error)
+    console.log("error here =>", error);
   }
 });
 
@@ -273,7 +280,7 @@ router.put("/update/:id", tokenAuth, async (req, res) => {
         avatar,
         fName,
         lName,
-        bio
+        bio,
       },
     });
 
@@ -291,55 +298,59 @@ router.put("/update/:id", tokenAuth, async (req, res) => {
 
 // user adding a community to their feed ==============
 router.post(`/join-game/:id`, tokenAuth, async (req, res) => {
-  const userId = req.userId
-  const communityId = +req.params.id
+  const userId = req.userId;
+  const communityId = +req.params.id;
   try {
     const existingUser = await prisma.user.findUnique({
-      where: {id: userId},
-      include: {communities: true}
-    })
-    if(!existingUser){
+      where: { id: userId },
+      include: { communities: true },
+    });
+    if (!existingUser) {
       return res.status(404).json({
-        error: 'no found user'
-      })
+        error: "no found user",
+      });
     }
     const existingComm = await prisma.gameCommunity.findUnique({
-      where: {id: communityId}
-    })
-    if(!existingComm){
+      where: { id: communityId },
+    });
+    if (!existingComm) {
       return res.status(404).json({
-        error: "no game found"
-      })
+        error: "no game found",
+      });
     }
-    const existingConnection = existingUser.communities.some(comm => comm.id === communityId)
-    if(existingConnection){
+    const existingConnection = existingUser.communities.some(
+      (comm) => comm.id === communityId
+    );
+    if (existingConnection) {
       const user = await prisma.user.update({
-        where: {id: userId},
+        where: { id: userId },
         data: {
           communities: {
-            disconnect: {id: communityId}
-          }
-        }
-      })
+            disconnect: { id: communityId },
+          },
+        },
+      });
       return res.json({
-        successMessage: 'user community relation deleted',
-        data: user
-      })
+        successMessage: "user community relation deleted",
+        data: user,
+      });
     }
     const user = await prisma.user.update({
-      where: {id: userId},
-      data: { communities: {
-        connect:  {id: communityId}
-      }}
-    })
+      where: { id: userId },
+      data: {
+        communities: {
+          connect: { id: communityId },
+        },
+      },
+    });
     res.json({
-      successMessage: 'user community relation created',
-      data: user
-    })
+      successMessage: "user community relation created",
+      data: user,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
+});
 
 // admin update ========================================
 
@@ -381,7 +392,11 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 });
 
 // change your avatar ========================================
-router.patch("/avatar", tokenAuth, upload.single("avatar"), async (req, res, next) => {
+router.patch(
+  "/avatar",
+  tokenAuth,
+  upload.single("avatar"),
+  async (req, res, next) => {
     try {
       const id = req.userId;
       if (!id) return res.status(400).json({ error: "ID not found / invalid" });
@@ -421,8 +436,6 @@ router.patch("/avatar", tokenAuth, upload.single("avatar"), async (req, res, nex
   }
 );
 
-
-
 // !!!!!JASON added this, the get user info by id function is for fetching the currently logged in users info!!!!!// also, i moved it to the very bottom because if it reads this first then My Account page breaks.
 router.get("/:id", async (req, res) => {
   const userId = Number(req.params.id);
@@ -433,7 +446,7 @@ router.get("/:id", async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    include: { communities: true, favorites: true, posts: true }
+    include: { communities: true, favorites: true, posts: true },
   });
 
   if (!user) {
@@ -448,7 +461,7 @@ router.get("/:id", async (req, res) => {
     lName: user.lName,
     createdAt: user.createdAt,
     favorites: user.favorites,
-    posts: user.posts
+    posts: user.posts,
   };
 
   res.status(200).json({
@@ -456,7 +469,6 @@ router.get("/:id", async (req, res) => {
     user: refinedUser,
   });
 });
-
 
 // !reset your avatar
 // router.put('/:id/avatar/reset', /* tokenauth, */ async (req, res, next) => {
@@ -476,23 +488,24 @@ router.get("/:id", async (req, res) => {
 // })
 
 // user to delete his/her own post
-  router.delete("/post/:id", tokenAuth, async (req, res) => {
-    const id = +req.params.id;
-    const userId = req.userId;
-    const post = await prisma.post.findUnique({
-      where: { id },
-    });
-    if (!post) {
-      return res.status(404).json({ error: "No post found" });
-    }
-    if (post.userId !== userId) {
-      return res.status(403).json({ error: "Not authorized to delete this post" });
-    }
-    await prisma.post.delete({
-      where: { id },
-    });
-    res.status(200).json({ successMessage: "Post deleted successfully" });
+router.delete("/post/:id", tokenAuth, async (req, res) => {
+  const id = +req.params.id;
+  const userId = req.userId;
+  const post = await prisma.post.findUnique({
+    where: { id },
   });
-
+  if (!post) {
+    return res.status(404).json({ error: "No post found" });
+  }
+  if (post.userId !== userId) {
+    return res
+      .status(403)
+      .json({ error: "Not authorized to delete this post" });
+  }
+  await prisma.post.delete({
+    where: { id },
+  });
+  res.status(200).json({ successMessage: "Post deleted successfully" });
+});
 
 module.exports = router;

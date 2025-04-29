@@ -62,6 +62,13 @@ const seed = async () => {
           coverImage: "/images/games/cover-elden-ring.jpg",
           heroImage: "/images/games/hero-elden-ring.png",
         },
+        { //Jason Added
+          gameName: "Ghost Recon Break Point",
+          description:
+            "Tom Clancy's Ghost Recon Breakpoint is an open-world tactical shooter where you, as elite operative Nomad, must survive and dismantle a rogue military force on the high-tech island of Auroa.",
+          coverImage: "/images/games/cover-breakpoint.png",
+          heroImage: "/images/games/hero-breakpoint.jpg",
+        },
         {
           gameName: "Baldur's Gate III",
           description:
