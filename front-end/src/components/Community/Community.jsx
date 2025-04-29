@@ -12,6 +12,8 @@ function Community() {
     async function fetchPostList() {
       const response = await fetch("http://localhost:3000/post/all");
       const result = await response.json();
+      console.log('RESULT HERE', result);
+      
       setPostList(result.post);
     }
     fetchPostList();

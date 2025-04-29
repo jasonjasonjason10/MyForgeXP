@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
+const CommunityCard = ({ post, setRefreshToggle, refreshToggle, username, userAvatar }) => {
   const [postLiked, setPostLiked] = useState(false);
   const [postFav, setPostFav] = useState(false);
   const [favToggle, setFavToggle] = useState(false);
@@ -99,6 +99,8 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
 
   return (
     <div className="bg-gray-900   rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+      <img className='h-[50px] w-[50px]' src={`http://localhost:3000${post.user.avatar}`} alt="User Avatar" />
+      <h5>{post.user.username}</h5>
       {/* Post Title */}
       <h3 className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center">
         {post.title}
