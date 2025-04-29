@@ -1,14 +1,27 @@
 export default function UserFavCard({ post }) {
+  if (!post) {
+    return (
+      <div className="text-gray-400 text-center">
+        Invalid favorite post data.
+      </div>
+    );
+  }
+
   let contentPath = post.content;
 
   function extractId(contentPath) {
     const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
-    const match = contentPath.match(findId);
+    const match = contentPath?.match(findId);
     return match ? match[1] : null;
   }
 
   function postContent(contentPath) {
-    if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
+    if (!contentPath) return null;
+
+    if (
+      contentPath.startsWith("http://") ||
+      contentPath.startsWith("https://")
+    ) {
       const videoId = extractId(contentPath);
       return (
         <div className="flex flex-col items-center">
@@ -28,7 +41,7 @@ export default function UserFavCard({ post }) {
         </div>
       );
     }
-  
+
     return (
       <video
         className="h-[180px] w-[320px] rounded-lg"
@@ -42,12 +55,12 @@ export default function UserFavCard({ post }) {
     <div>
       {/* Title */}
       <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
-        {post.title}
+        {post.title || "Untitled"}
       </h3>
 
       {/* Description */}
       <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
-        {post.description}
+        {post.description || "No description"}
       </div>
 
       {/* Media (Image or Video) */}
@@ -60,14 +73,13 @@ export default function UserFavCard({ post }) {
       )}
 
       {post.PostType === "video" && (
-        <div className="mt-4">
-          {postContent(contentPath)}
-        </div>
+        <div className="mt-4">{postContent(contentPath)}</div>
       )}
 
       {/* Timestamp */}
       <p className="text-gray-500 text-xs mt-4">
-        Posted on: {new Date(post.createdAt).toLocaleString()}
+        Posted on:{" "}
+        {post.createdAt ? new Date(post.createdAt).toLocaleString() : "Unknown"}
       </p>
     </div>
   );

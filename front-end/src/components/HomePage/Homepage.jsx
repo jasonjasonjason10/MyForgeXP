@@ -1,6 +1,7 @@
 import HomeIntro from "./HomeIntro";
 import Carousel from "./Carousel";
-import Community from "../Community/Community";
+import HomePagePosts from "./HomepagePosts";
+import HomePageUserSearch from "./HomepageUserSerach";
 
 export default function Homepage() {
   return (
@@ -17,8 +18,12 @@ export default function Homepage() {
             </div>
           </div>
         </main>
+            <div className="w-full flex justify-center">
+            <HomePageUserSearch />
+          </div>
       </div>
-      <Community />
+      
+      <HomePagePosts />
     </div>
   );
 }

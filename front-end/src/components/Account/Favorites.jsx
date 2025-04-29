@@ -1,80 +1,26 @@
-import "keen-slider/keen-slider.min.css";
-import { useKeenSlider } from "keen-slider/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import UserFavCard from "./UserFavCard";
 
-export default function YouTubeCarousel({ youtubePosts }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [sliderRef, sliderInstanceRef] = useKeenSlider({
-    loop: true,
-    mode: "free-snap",
-    slides: {
-      perView: 1,
-      spacing: 15,
-    },
-    slideChanged(slider) {
-      setCurrentSlide(slider.track.details.rel);
-    },
-  });
+export default function Favorites({ user }) {
+  const favoritePosts = user?.favorites || [];
 
-  function extractId(contentPath) {
-    const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
-    const match = contentPath.match(findId);
-    return match ? match[1] : null;
+  if (favoritePosts.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-64 text-gray-400">
+        No favorites yet.
+      </div>
+    );
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 shadow-lg mb-10">
-      {/* Carousel Container */}
-      <div ref={sliderRef} className="keen-slider">
-        {youtubePosts.map((post) => (
-          <div key={post.id} className="keen-slider__slide flex justify-center">
-            <div className="relative w-[320px] h-[180px] bg-black rounded-lg overflow-hidden shadow-lg">
-              {/* Arrows inside RELATIVE video container */}
-              {sliderInstanceRef && (
-                <>
-                  <button
-                    onClick={() => sliderInstanceRef.current?.prev()}
-                    className="absolute left-[-16px] top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black p-3 rounded-full z-10"
-                  >
-                    <ChevronLeft className="w-6 h-6 text-white" />
-                  </button>
-
-                  <button
-                    onClick={() => sliderInstanceRef.current?.next()}
-                    className="absolute right-[-16px] top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black p-3 rounded-full z-10"
-                  >
-                    <ChevronRight className="w-6 h-6 text-white" />
-                  </button>
-                </>
-              )}
-
-              {/* YouTube iframe */}
-              <iframe
-                className="w-full h-full rounded-lg"
-                src={`https://www.youtube.com/embed/${extractId(post.content)}`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Dots */}
-      {sliderInstanceRef.current?.track?.details && (
-        <div className="flex justify-center mt-4">
-          {sliderInstanceRef.current.track.details.slides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => sliderInstanceRef.current.moveToIdx(idx)}
-              className={`w-3 h-3 rounded-full mx-1 transition ${
-                currentSlide === idx ? "bg-orange-400" : "bg-gray-500"
-              }`}
-            />
-          ))}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+      {favoritePosts.map((post) => (
+        <div key={post.id} className="bg-gray-900 border border-blue-700 rounded-2xl shadow-lg p-5 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+          <UserFavCard post={post} />
         </div>
-      )}
+      ))}
     </div>
   );
 }
+
+
+

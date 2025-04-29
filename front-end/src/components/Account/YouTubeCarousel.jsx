@@ -20,8 +20,14 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
 
   useEffect(() => {
     const currentPost = youtubePosts[currentSlide];
-    if (currentPost && currentPost.game && currentPost.game.heroImage) {
-      setBackgroundUrl(`http://localhost:3000${currentPost.game.heroImage}`);
+    if (
+      currentPost &&
+      currentPost.community &&
+      currentPost.community.heroImage
+    ) {
+      setBackgroundUrl(
+        `http://localhost:3000${currentPost.community.heroImage}`
+      );
     }
   }, [currentSlide, youtubePosts]);
 
@@ -96,9 +102,9 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
         </div>
 
         {/* Dots and See Post button */}
-        <div className="flex justify-between items-center w-[400px] mt-6">
-          {/* Dots */}
-          <div className="flex">
+        <div className="w-[400px] mt-6 flex flex-col items-center">
+          {/* Dots Centered */}
+          <div className="flex justify-center mb-2">
             {sliderInstanceRef.current?.track?.details.slides.map((_, idx) => (
               <button
                 key={idx}
@@ -110,10 +116,10 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
             ))}
           </div>
 
-          {/* See Post Button */}
+          {/* See Post Button Centered Under Dots */}
           <button
             onClick={handleSeePost}
-            className="text-sm px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded transition"
+            className="text-sm px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded transition mt-2"
           >
             See Post
           </button>
