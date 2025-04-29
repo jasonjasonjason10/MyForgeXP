@@ -36,6 +36,17 @@ export default function SingleUser() {
     // uploads: <SingleUserUploads />,
   };
 
+  
+  
+  useEffect(() => {
+    if(!user){
+      return console.log("no user")
+    } if (user.id === currentUserId) {
+      navigate("/account")
+    } 
+  })
+
+
   useEffect(() => {
     async function fetchSelf() {
       const response = await fetch(`http://localhost:3000/user/info`, {
