@@ -20,7 +20,11 @@ const upload = multer({ storage });
 
 // Get all communities
 router.get("/all", async (req, res, next) => {
-  const games = await prisma.gameCommunity.findMany();
+  const games = await prisma.gameCommunity.findMany({
+    include: {
+      posts: true
+    }
+  });
   res.status(200).json({
     games: games,
   });
@@ -78,11 +82,7 @@ router.post("/create", tokenAuth, upload.single("coverImage"), async (req, res, 
 );
 
 // Update community
-router.put(
-  "/update/:id",
-  tokenAuth,
-  upload.single("newCover"),
-  async (req, res, next) => {
+router.put( "/update/:id", tokenAuth, upload.single("newCover"), async (req, res, next) => {
     try {
       const id = +req.params.id;
       const isAdmin = req.isAdmin;
@@ -91,10 +91,11 @@ router.put(
           error: "no auth",
         });
       }
-      const { gameName, description, isActive } = req.body;
       const existing = await prisma.gameCommunity.findUnique({ where: { id } });
+      
+      const coverImage = req.file ? `/images/games/${req.file.filename}` : undefined;
 
-      const coverImage = `/images/games/${req.file.filename}`;
+      const { gameName, description, isActive } = req.body;
 
       if (!existing)
         return res.status(404).json({ error: "Community not found" });
@@ -115,11 +116,25 @@ router.put(
 router.delete("/delete/:id", tokenAuth, async (req, res, next) => {
   try {
     const id = +req.params.id;
+    const isAdmin = req.isAdmin
+
+    if(!isAdmin){
+      return res.status(403).json({
+        error: "no priv"
+      })
+    }
+
     const existing = await prisma.gameCommunity.findUnique({ where: { id } });
 
+    console.log("existing => ", existing)
     if (!existing)
       return res.status(404).json({ error: "Community not found" });
 
+    await prisma.post.deleteMany({
+      where: {
+        communityId: id
+      }
+    })
     await prisma.gameCommunity.delete({ where: { id } });
 
     res.status(200).json({ message: "Community deleted" });

@@ -37,7 +37,6 @@ export default function AllGames() {
   }, []);
 
   function clickHandle(id) {
-    console.log("tp to page :)"); //REMOVE LATER
     navigate(`../games/${id}`);
   }
 

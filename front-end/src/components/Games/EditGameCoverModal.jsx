@@ -20,6 +20,7 @@ export default function EditGameCoverModal({ isOpen, onClose, onSave }) {
 
   const handleSave = () => {
     if (file) {
+      
       onSave(file); // Backend can accept FormData
     }
   };

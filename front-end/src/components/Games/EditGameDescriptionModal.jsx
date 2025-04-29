@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
-export default function EditGameDescriptionModal({ isOpen, onClose, currentDescription, onSave }) {
+export default function EditGameDescriptionModal({ isOpen, onClose, currentDescription, onSave, game }) {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (currentDescription) setDescription(currentDescription);
   }, [currentDescription]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     onSave(description);
   };
 
