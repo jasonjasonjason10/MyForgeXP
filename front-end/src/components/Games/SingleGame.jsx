@@ -17,26 +17,55 @@ export default function SingleGame() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showEditCover, setShowEditCover] = useState(false);
   const [showEditDescription, setShowEditDescription] = useState(false);
-  console.log(" is admin => ", isAdmin);
-
   const navigate = useNavigate();
   const address = "http://localhost:3000/";
+  const formData = new FormData();
 
-  async function coverHandle() {
+  function coverHandle() {
     setShowEditCover(true);
   }
 
-  async function descHandle() {
+  async function saveCover(coverImage) {
+    formData.append('newCover', coverImage)
+    await fetch(`${address}games/update/${game.id}`, {
+      method: 'PUT',
+      headers: { 
+        Authorization: `Bearer ${localStorage.getItem("token")}` },
+      body: formData
+    })
+    window.location.reload()
+  }
+
+  function descHandle() {
     setShowEditDescription(true);
   }
+
+
+  async function saveDesc(desc) {
+  const response = await fetch(`${address}games/update/${game.id}`, {
+  method: 'PUT',
+  headers: { 
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem("token")}` },
+  body: JSON.stringify({ description: desc })
+  })
+  const result = await response.json()
+  window.location.reload()
+  console.log('click =>', result )
+  }
+
 
   async function deleteHandle() {
     const confirmed = window.confirm(
       "Are you sure you want to delete this game?"
     );
     if (confirmed) {
-      // Nathan to hook up backend later
+      await fetch(`${address}games/delete/${game.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
       console.log("Game deletion confirmed.");
+      navigate("/all-games")
     }
   }
 
@@ -202,6 +231,7 @@ export default function SingleGame() {
           onClose={() => setShowEditCover(false)}
           onSave={(file) => {
             console.log("Cover file to upload:", file);
+            saveCover(file)
             setShowEditCover(false);
           }}
         />
@@ -209,11 +239,12 @@ export default function SingleGame() {
 
       {showEditDescription && (
         <EditGameDescriptionModal
+          game={game}
           isOpen={showEditDescription}
           currentDescription={game.description}
           onClose={() => setShowEditDescription(false)}
           onSave={(newDesc) => {
-            console.log("New game description:", newDesc);
+            saveDesc(newDesc)
             setShowEditDescription(false);
           }}
         />
@@ -221,3 +252,4 @@ export default function SingleGame() {
     </div>
   );
 }
+

@@ -251,35 +251,35 @@ const seed = async () => {
   }
 
   // Comments================================
-  async function createComments() {
-    const user = await prisma.user.findMany();
-    const post = await prisma.post.findMany();
+  // async function createComments() {
+  //   const user = await prisma.user.findMany();
+  //   const post = await prisma.post.findMany();
 
-    await prisma.comment.createMany({
-      data: [
-        {
-          body: "Agree! This game was awesome.",
-          postId: post[0].id,
-          userId: user[1].id,
-          likes: 3,
-        },
-        {
-          body: "I was impressed by the graphics.",
-          postId: post[1].id,
-          userId: user[2].id,
-          likes: 2,
-        },
-        {
-          body: "One of the best I have played.",
-          postId: post[2].id,
-          userId: user[1].id,
-          likes: 5,
-        },
-      ],
-    });
+  //   await prisma.comment.createMany({
+  //     data: [
+  //       {
+  //         body: "Agree! This game was awesome.",
+  //         postId: post[0].id,
+  //         userId: user[1].id,
+  //         likes: 3,
+  //       },
+  //       {
+  //         body: "I was impressed by the graphics.",
+  //         postId: post[1].id,
+  //         userId: user[2].id,
+  //         likes: 2,
+  //       },
+  //       {
+  //         body: "One of the best I have played.",
+  //         postId: post[2].id,
+  //         userId: user[1].id,
+  //         likes: 5,
+  //       },
+  //     ],
+  //   });
 
-    console.log("Comments seeded");
-  }
+  //   console.log("Comments seeded");
+  // }
 
   // Favorites============================
   async function createFavorites() {
