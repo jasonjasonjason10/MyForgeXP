@@ -288,7 +288,7 @@ export default function SingleUser() {
         </div>
       </div>
 
-      {/* Return button */}
+      {/* Delete button */}
       <div className="flex justify-center mt-10">
         <SingleUserAdmin user={user} isAdmin={isAdmin} />
       </div>
