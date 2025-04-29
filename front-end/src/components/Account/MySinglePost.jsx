@@ -1,6 +1,10 @@
-import { Trash } from "lucide-react";
+import EditPost from "./EditPost";
+import { useState } from "react";
+import { Trash, Pencil } from "lucide-react";
 
 export default function SinglePost({ post, goBack }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   let contentPath = post.content;
 
   function extractId(contentPath) {
@@ -8,6 +12,7 @@ export default function SinglePost({ post, goBack }) {
     const match = contentPath.match(findId);
     return match ? match[1] : null;
   }
+
   // delete post function
   function handleDelete(postId) {
     const confirmDelete = window.confirm(
@@ -60,6 +65,19 @@ export default function SinglePost({ post, goBack }) {
     );
   }
 
+  if (isEditing) {
+    return (
+      <EditPost
+        post={post}
+        onCancel={() => setIsEditing(false)}
+        onUpdate={() => {
+          setIsEditing(false);
+          window.location.reload();
+        }}
+      />
+    );
+  }
+
   return (
     <div className="bg-[#111827] p-6 rounded-xl shadow-lg flex flex-col items-center border">
       <button
@@ -88,7 +106,16 @@ export default function SinglePost({ post, goBack }) {
         </div>
       )}
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-6 flex gap-4">
+        <button
+          onClick={() => setIsEditing(true)}
+          className="flex items-center gap-2 px-4 py-2 text-sm text-blue-400 border border-blue-400 rounded-md hover:bg-blue-600 hover:text-white transition"
+          title="Edit Post"
+        >
+          <Pencil size={18} />
+          Edit Post
+        </button>
+
         <button
           onClick={() => handleDelete(post.id)}
           className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 border border-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
