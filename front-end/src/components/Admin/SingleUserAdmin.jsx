@@ -35,7 +35,7 @@ function SingleUserAdmin({user, isAdmin}) {
             {/* { grab id of user and see if === to user array [2(deleted user)]} */}
 
             <div>
-            {(isAdmin && (user.username !== ('Deleted User' || "Admin") )) && 
+            {(isAdmin && (user.username !== 'Deleted User' && user.username !== "admin" )) && 
                 <button onClick={deleteHandle} className=" bg-red-500">KILL THIS FUCKER!!!</button>
             }
             </div>
