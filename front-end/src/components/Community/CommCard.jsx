@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
+const CommunityCard = ({ post, setRefreshToggle, refreshToggle, username, userAvatar }) => {
   const [postLiked, setPostLiked] = useState(false);
   const [postFav, setPostFav] = useState(false);
   const [favToggle, setFavToggle] = useState(false);
   const address = "http://localhost:3000/";
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchHasLiked(post.id);
@@ -99,6 +101,10 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
 
   return (
     <div className="bg-gray-900   rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+      <div className='flex flex-row' onClick={() => navigate(`/user/${post.user.id}`)} >        
+        <img className='h-[50px] w-[50px] ' src={`http://localhost:3000${post.user.avatar}`} alt="User Avatar" />
+        <h5 className='mt-auto mb-auto' >{post.user.username}</h5>
+      </div>
       {/* Post Title */}
       <h3 className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center">
         {post.title}

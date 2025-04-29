@@ -22,7 +22,7 @@ const seed = async () => {
         email: "admin@admin.com",
         username: "admin",
         password: hashedPassword,
-        avatar: `/images/pfp/defaultavatar1.png`,
+        avatar: `/images/pfp/default-admin.png`,
         bio: "THIS IS THE MOST POWERFUL ACCOUNT KNOWN TO MAN!!!!",
         isAdmin: true,
       },

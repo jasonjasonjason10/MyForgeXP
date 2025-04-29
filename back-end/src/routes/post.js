@@ -22,6 +22,13 @@ router.get("/all", async (req, res) => {
   const post = await prisma.post.findMany({
     include: {
       likes: true,
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+          id: true
+        }
+      }
     },
   });
 
