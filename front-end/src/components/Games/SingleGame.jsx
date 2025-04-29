@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import GamePostCard from "./GamePostCard";
-
+import EditGameCoverModal from "./EditGameCoverModal";
+import EditGameDescriptionModal from "./EditGameDescriptionModal";
+import { Check } from "lucide-react";
 
 export default function SingleGame() {
   const { id } = useParams();
@@ -12,23 +14,41 @@ export default function SingleGame() {
   const [clickCheck, setClickCheck] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showEditCover, setShowEditCover] = useState(false);
+  const [showEditDescription, setShowEditDescription] = useState(false);
   console.log(" is admin => ", isAdmin);
-  
+
   const navigate = useNavigate();
   const address = "http://localhost:3000/";
 
   async function coverHandle() {
-    //I NEED AN INPUT TO HAPPEN??
+    setShowEditCover(true);
   }
 
   async function descHandle() {
-    //need input for des?
+    setShowEditDescription(true);
   }
 
   async function deleteHandle() {
-    //need pop up for delete
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this game?"
+    );
+    if (confirmed) {
+      // Nathan to hook up backend later
+      console.log("Game deletion confirmed.");
+    }
   }
+
+  const handleDeleteClick = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this game?"
+    );
+    if (confirmed) {
+      // Nathan to hook up to backend
+      console.log("Deleting game...");
+    }
+  };
 
   useEffect(() => {
     async function fetchGame() {
@@ -47,7 +67,7 @@ export default function SingleGame() {
       });
       const result = await response.json();
       setUserComms(result.user.communities);
-      setIsAdmin(result.user.isAdmin)
+      setIsAdmin(result.user.isAdmin);
     }
     fetchGame();
     fetchPost();
@@ -81,7 +101,14 @@ export default function SingleGame() {
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-5xl mx-auto">
-      <div className="bg-gray-900 rounded-lg p-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+      <div
+        className="rounded-lg p-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] relative overflow-hidden"
+        style={{
+          backgroundImage: `url(http://localhost:3000${game.heroImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         {/* Top Section */}
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Cover Image */}
@@ -102,45 +129,62 @@ export default function SingleGame() {
               <button
                 onClick={subHandle}
                 className={`px-6 py-2 rounded-lg font-semibold transition
-      ${
-        isUserSubbed
-          ? "bg-orange-500 hover:bg-orange-400 border border-blue-700 hover:border-blue-700"
-          : " hover:bg-orange-500 border border-blue-700"
-      }`}
+    ${
+      isUserSubbed
+        ? "bg-gray-800 border border-blue-700 hover:border-blue-700 shadow-[0_0_10px_rgba(59,130,246,0.6)]"
+        : "bg-gray-800 border border-blue-700"
+    }`}
               >
-                {isUserSubbed ? "Subscribed" : "Subscribe"}
+                {isUserSubbed ? (
+                  <span className="flex items-center gap-2">
+                    Subscribed <Check size={16} className="text-green-400" />
+                  </span>
+                ) : (
+                  "Subscribe"
+                )}
               </button>
 
               {/* Create Post Button */}
               <button
                 onClick={() => navigate(`/createpost/${game.id}`)}
-                className="px-6 py-2 bg-blue-500 hover:bg-blue-400 rounded-lg font-semibold transition"
+                className="px-6 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg font-semibold transition"
               >
                 Create Post
               </button>
             </div>
 
             {/* Admin Buttons */}
-              {isAdmin  &&
-                <div className="flex flex-wrap gap-2 mt-6">
-                  <button onClick={coverHandle} className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
-                    Edit Cover
-                  </button>
-                  <button onClick={descHandle} className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
-                    Edit Description
-                  </button>
-                  <button onClick={deleteHandle} className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
-                    Delete Game
-                  </button>
-                </div>
-            }
+            {isAdmin && (
+              <div className="flex flex-wrap gap-2 mt-6">
+                <button
+                  onClick={coverHandle}
+                  className="px-4 py-2 border bg-gray-800 border-blue-700 rounded-lg"
+                >
+                  Edit Cover
+                </button>
+                <button
+                  onClick={descHandle}
+                  className="px-4 py-2 border bg-gray-800 border-blue-700 rounded-lg"
+                >
+                  Edit Description
+                </button>
+                <button
+                  onClick={deleteHandle}
+                  className="px-4 py-2 border bg-gray-800 border-red-700 rounded-lg text-red-500 font-bold"
+                >
+                  Delete Game
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Game Description */}
-        <div className="mt-8">
-          <h3 className="text-2xl font-semibold mb-2">About This Game</h3>
-          <p className="text-gray-300">{game.description}</p>
+        <div className="mt-8 bg-black/30 backdrop-blur-md rounded-lg p-6 border border-white/10 shadow-inner shadow-black/40">
+          <h3 className="text-2xl font-semibold mb-2 text-white drop-shadow">
+            About This Game
+          </h3>
+          <p className="text-gray-200 leading-relaxed">{game.description}</p>
         </div>
       </div>
 
@@ -152,6 +196,28 @@ export default function SingleGame() {
           <p className="text-center text-lg mt-6">Loading posts...</p>
         )}
       </div>
+      {showEditCover && (
+        <EditGameCoverModal
+          isOpen={showEditCover}
+          onClose={() => setShowEditCover(false)}
+          onSave={(file) => {
+            console.log("Cover file to upload:", file);
+            setShowEditCover(false);
+          }}
+        />
+      )}
+
+      {showEditDescription && (
+        <EditGameDescriptionModal
+          isOpen={showEditDescription}
+          currentDescription={game.description}
+          onClose={() => setShowEditDescription(false)}
+          onSave={(newDesc) => {
+            console.log("New game description:", newDesc);
+            setShowEditDescription(false);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 function GamePostCard({ post }) {
@@ -32,7 +31,7 @@ function GamePostCard({ post }) {
   return (
     <div className="bg-gray-800 rounded-lg shadow-md p-4 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] w-full h-72 flex flex-col justify-between overflow-hidden">
       {/* Post Title */}
-      <h1 className="text-lg font-bold mb-2 text-blue-700 truncate">
+      <h1 className="text-lg font-bold mb-2  truncate drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
         {post.title}
       </h1>
 
