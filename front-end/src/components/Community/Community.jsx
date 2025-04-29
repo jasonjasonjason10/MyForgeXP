@@ -12,8 +12,6 @@ function Community() {
     async function fetchPostList() {
       const response = await fetch("http://localhost:3000/post/all");
       const result = await response.json();
-      console.log('RESULT HERE', result);
-      
       setPostList(result.post);
     }
     fetchPostList();
@@ -24,9 +22,9 @@ function Community() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-center items-center mb-10">
           <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] ">
-           All Community Posts
+            All Community Posts
           </h1>
-         
+
         </div>
         <p></p>
 

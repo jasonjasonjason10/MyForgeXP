@@ -25,7 +25,8 @@ router.get("/all", async (req, res) => {
       user: {
         select: {
           username: true,
-          avatar: true
+          avatar: true,
+          id: true
         }
       }
     },
