@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import GamePostCard from "./GamePostCard";
 
+
 export default function SingleGame() {
   const { id } = useParams();
   const [game, setGame] = useState(null);
@@ -11,8 +12,23 @@ export default function SingleGame() {
   const [clickCheck, setClickCheck] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false)
+  console.log(" is admin => ", isAdmin);
+  
   const navigate = useNavigate();
   const address = "http://localhost:3000/";
+
+  async function coverHandle() {
+    //I NEED AN INPUT TO HAPPEN??
+  }
+
+  async function descHandle() {
+    //need input for des?
+  }
+
+  async function deleteHandle() {
+    //need pop up for delete
+  }
 
   useEffect(() => {
     async function fetchGame() {
@@ -31,6 +47,7 @@ export default function SingleGame() {
       });
       const result = await response.json();
       setUserComms(result.user.communities);
+      setIsAdmin(result.user.isAdmin)
     }
     fetchGame();
     fetchPost();
@@ -104,17 +121,19 @@ export default function SingleGame() {
             </div>
 
             {/* Admin Buttons */}
-            <div className="flex flex-wrap gap-2 mt-6">
-              <button className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
-                Edit Cover
-              </button>
-              <button className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
-                Edit Description
-              </button>
-              <button className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
-                Delete Game
-              </button>
-            </div>
+              {isAdmin  &&
+                <div className="flex flex-wrap gap-2 mt-6">
+                  <button onClick={coverHandle} className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
+                    Edit Cover
+                  </button>
+                  <button onClick={descHandle} className="px-4 py-2 border border-gray-500 text-gray-300 rounded-md text-sm bg-transparent">
+                    Edit Description
+                  </button>
+                  <button onClick={deleteHandle} className="px-4 py-2 border border-gray-500 text-red-400 rounded-md text-sm bg-transparent">
+                    Delete Game
+                  </button>
+                </div>
+            }
           </div>
         </div>
 
