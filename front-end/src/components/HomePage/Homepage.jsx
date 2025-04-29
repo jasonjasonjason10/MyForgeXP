@@ -18,11 +18,11 @@ export default function Homepage() {
             </div>
           </div>
         </main>
-            <div className="w-full flex justify-center">
-            <HomePageUserSearch />
-          </div>
+        <div className="w-full flex justify-center">
+          <HomePageUserSearch />
+        </div>
       </div>
-      
+
       <HomePagePosts />
     </div>
   );
