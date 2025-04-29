@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchUser from "../SearchUser";
-import CommCard from "../Community/CommCard"
+import CommCard from "../Community/CommCard";
 
 function Community() {
   const navigate = useNavigate();
-  const [refreshToggle, setRefreshToggle] = useState(false)
-  const [postList, setPostList] = useState([])
+  const [refreshToggle, setRefreshToggle] = useState(false);
+  const [postList, setPostList] = useState([]);
 
   useEffect(() => {
     async function fetchPostList() {
@@ -20,12 +20,13 @@ function Community() {
   return (
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-            Community Page
+        <div className="flex justify-center items-center mb-10">
+          <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] ">
+           All Community Posts
           </h1>
-          <SearchUser  />
+         
         </div>
+        <p></p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {postList.map((post) => (

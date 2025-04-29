@@ -111,7 +111,7 @@ export default function NavBar() {
               className="hover:text-orange-400"
               onClick={() => setIsOpen(false)}
             >
-              Community
+              Game Posts
             </Link>
           </li>
           <li>

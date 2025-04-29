@@ -48,7 +48,7 @@ export default function Carousel() {
   }, [gameList, sliderInstance]);
 
   return (
-    <div className="relative bg-gray-900 rounded-lg p-4 shadow-lg">
+    <div className="relative bg-gray-900 rounded-lg p-4 shadow-lg ">
       {/* Top Bar */}
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">

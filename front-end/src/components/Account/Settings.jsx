@@ -40,12 +40,12 @@ export default function SettingsModal({ isOpen, onClose, user, onSave, navigate 
 
           {/* Header */}
           <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-            Edit Settings
+           Settings
           </h2>
 
           {/* Username input */}
           <div className="mb-4">
-            <label className="block mb-2 font-semibold">Username</label>
+            <label className="block mb-2 font-semibold">Change Username</label>
             <input
               type="text"
               value={username}
@@ -57,7 +57,7 @@ export default function SettingsModal({ isOpen, onClose, user, onSave, navigate 
 
           {/* Bio input */}
           <div className="mb-4">
-            <label className="block mb-2 font-semibold">Bio</label>
+            <label className="block mb-2 font-semibold">Edit Bio</label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}

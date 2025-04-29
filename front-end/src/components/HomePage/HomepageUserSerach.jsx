@@ -32,6 +32,7 @@ export default function HomePageUserSearch() {
     }
     fetchUsers();
   }, []);
+  
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -64,43 +65,51 @@ export default function HomePageUserSearch() {
       setSearchTerm("");
     }
   };
-  console.log("User avatar for random user:", user.avatar);
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 bg-gray-900 rounded-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mt-16">
+
       {/* Random Users */}
       <div className="flex justify-center gap-8 mb-6">
-        {randomUsers.map((user) => (
-         <div
-         key={user.id}
-         onClick={() => navigate(`/user/${user.id}`)}
-         className="relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg shadow cursor-pointer overflow-hidden hover:scale-105 transition-transform"
-         style={{
-           backgroundImage: `url(http://localhost:3000${user.avatar})`,
-           backgroundSize: "cover",
-           backgroundPosition: "center",
-         }}
-       >
-         {/* Blurred overlay */}
-         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-       
-         {/* Content goes on top */}
-         <div className="relative z-10 flex flex-col items-center">
-           <img
-             src={`http://localhost:3000${user.avatar}`}
-             alt={user.username}
-             className="w-12 h-12 rounded-full border-2 border-white shadow"
-           />
-           <span className="text-white font-semibold">{user.username}</span>
-         </div>
-       </div>
-       
-        ))}
+        {randomUsers.map((user) => {
+          const avatarPath = user.avatar
+            ? `http://localhost:3000${user.avatar}`
+            : "/defaultavatar1.png";
+
+          return (
+            <div
+              key={user.id}
+              onClick={() => navigate(`/user/${user.id}`)}
+              className="relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg shadow cursor-pointer overflow-hidden hover:scale-105 transition-transform"
+              style={{
+                backgroundImage: `url(${avatarPath})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {/* Blurred overlay */}
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+              {/* Foreground content */}
+              <div className="relative z-10 flex flex-col items-center">
+                <img
+                  src={avatarPath}
+                  alt={user.username}
+                  className="w-12 h-12 rounded-full border-2 border-white shadow"
+                />
+                <span className="text-white font-semibold">
+                  {user.username}
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Search Bar */}
       <div className="flex justify-center">
         <div className="relative w-full sm:w-96">
-          <div className="flex items-center bg-gray-800 text-white rounded-full px-4 py-2 shadow-sm border  focus-within:ring-2 focus-within:ring-blue-600">
+          <div className="flex items-center bg-gray-800 text-white rounded-full px-4 py-2 shadow-sm border focus-within:ring-2 focus-within:ring-blue-600">
             <Search className="mr-2 text-gray-400" size={18} />
             <input
               type="text"
