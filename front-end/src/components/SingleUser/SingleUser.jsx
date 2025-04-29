@@ -30,7 +30,7 @@ export default function SingleUser() {
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
 
   const tabComponents = {
-    details: <SingleUserDetails />,
+    // details: <SingleUserDetails />,
     uploads: <SingleUserUploads userPosts={userPosts} />,
     details: <SingleUserDetails user={user} />,
     // uploads: <SingleUserUploads />,
