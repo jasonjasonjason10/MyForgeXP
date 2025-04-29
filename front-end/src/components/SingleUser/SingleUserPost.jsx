@@ -1,4 +1,4 @@
-export default function SingleUserPost({ post, onBack }) {
+export default function SingleUserPost({ post, onBack, isAdmin }) {
     const contentPath = post.content;
   
     return (
@@ -55,6 +55,12 @@ export default function SingleUserPost({ post, onBack }) {
               : 0}
           </span>
         </p>
+
+        <div>
+          {isAdmin && 
+          <button> delete</button>
+          }
+        </div>
   
         <p className="text-xs text-gray-500 mt-2">
           Posted: {new Date(post.createdAt).toLocaleString()}

@@ -31,7 +31,7 @@ export default function SingleUser() {
 
   const tabComponents = {
     // details: <SingleUserDetails />,
-    uploads: <SingleUserUploads userPosts={userPosts} />,
+    uploads: <SingleUserUploads userPosts={userPosts} isAdmin={isAdmin} />,
     details: <SingleUserDetails user={user} />,
     // uploads: <SingleUserUploads />,
   };

@@ -3,7 +3,7 @@ import UserPostCard from "../Account/UserPostCard";
 import SingleUserPost from "./SingleUserPost";
 import SingleUserYoutubeCarousel from "./SingleUserYoutubeCarousel";
 
-export default function SingleUserUploads({ userPosts }) {
+export default function SingleUserUploads({ userPosts, isAdmin }) {
   const [selectedPost, setSelectedPost] = useState(null);
 
   if (!userPosts) {
@@ -33,6 +33,7 @@ export default function SingleUserUploads({ userPosts }) {
       {/* Single Post View */}
       {selectedPost ? (
         <SingleUserPost
+        isAdmin={isAdmin}
           post={selectedPost}
           onBack={() => setSelectedPost(null)}
         />
