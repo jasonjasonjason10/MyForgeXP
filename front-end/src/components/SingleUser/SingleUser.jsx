@@ -33,7 +33,7 @@ export default function SingleUser() {
     details: <SingleUserDetails />,
     uploads: <SingleUserUploads userPosts={userPosts} />,
     details: <SingleUserDetails user={user} />,
-    uploads: <SingleUserUploads />,
+    // uploads: <SingleUserUploads />,
   };
 
   useEffect(() => {
