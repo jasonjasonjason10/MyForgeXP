@@ -35,6 +35,14 @@ export default function UserPostCard({ post }) {
 
       {post.PostType === "video" && <div>{postContent(contentPath)}</div>}
 
+      {/* Description with extended fade effect */}
+      {post.description && (
+        <div className="relative mt-3 max-h-[199px] overflow-hidden text-sm text-gray-300 px-1">
+          <p className="whitespace-pre-wrap break-words">{post.description}</p>
+          <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none" />
+        </div>
+      )}
+
       {/* Likes Count */}
       <div className="mt-4 text-center text-gray-400 text-xs">
         Likes:{" "}

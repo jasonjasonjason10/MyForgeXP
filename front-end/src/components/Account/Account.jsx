@@ -27,8 +27,7 @@ export default function Account() {
     followers: 0,
     following: 0,
   });
-  console.log('address => ',address);
-  
+  console.log("address => ", address);
 
   const tabComponents = {
     details: <AccountDetails user={user} />,
@@ -38,7 +37,6 @@ export default function Account() {
   };
 
   console.log("user useState =>", user);
-
 
   useEffect(() => {
     const fetchFollowingList = async () => {
@@ -63,7 +61,6 @@ export default function Account() {
     fetchFollowerList();
     fetchFollowingList();
   }, [showFollowing, showFollowers]);
-
 
   useEffect(() => {
     setFollowCounts({
@@ -107,15 +104,18 @@ export default function Account() {
 
   const handleSaveSettings = async (updatedFields) => {
     try {
-      const response = await fetch(`http://localhost:3000/user/update/${user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(updatedFields), // <- SEND THE WHOLE OBJECT
-      });
-  
+      const response = await fetch(
+        `http://localhost:3000/user/update/${user.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(updatedFields), // <- SEND THE WHOLE OBJECT
+        }
+      );
+
       if (response.ok) {
         const result = await response.json();
         setUser(result.updatedData); // <- Update with new user info
@@ -127,7 +127,6 @@ export default function Account() {
       console.error("Error updating user:", error);
     }
   };
-  
 
   {
     /* Remember that a version of this is needed to display an admin dashboard for when logged in as admin */
