@@ -10,6 +10,7 @@ import Uploads from "./Uploads";
 import Favorites from "./Favorites";
 import { X } from "lucide-react";
 import { MoreHorizontal, Settings as SettingsIcon } from "lucide-react";
+import { address } from "../../../address";
 
 export default function Account() {
   const [activeTab, setActiveTab] = useState("details");
@@ -26,6 +27,8 @@ export default function Account() {
     followers: 0,
     following: 0,
   });
+  console.log('address => ',address);
+  
 
   const tabComponents = {
     details: <AccountDetails user={user} />,
