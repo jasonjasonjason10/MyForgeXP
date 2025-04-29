@@ -32,7 +32,14 @@ function SingleUserAdmin({ user, isAdmin }) {
         user.username !== "admin" && (
           <div className="flex justify-center mt-8 mb-6">
             <button
-              onClick={deleteHandle}
+              onClick={() => {
+                const confirmed = window.confirm(
+                  "Are you sure you want to delete this user?"
+                );
+                if (confirmed) {
+                  deleteHandle();
+                }
+              }}
               className="flex items-center gap-2 border border-red-500 text-red-400 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition"
             >
               <svg
