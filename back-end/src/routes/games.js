@@ -20,7 +20,11 @@ const upload = multer({ storage });
 
 // Get all communities
 router.get("/all", async (req, res, next) => {
-  const games = await prisma.gameCommunity.findMany();
+  const games = await prisma.gameCommunity.findMany({
+    include: {
+      posts: true
+    }
+  });
   res.status(200).json({
     games: games,
   });
