@@ -32,7 +32,6 @@ export default function HomePageUserSearch() {
     }
     fetchUsers();
   }, []);
-  
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -47,9 +46,15 @@ export default function HomePageUserSearch() {
     return () => clearTimeout(timeout);
   }, [searchTerm, user]);
 
-  const handleClick = (userId) => {
-    navigate(`/user/${userId}`);
-    setSearchTerm("");
+  const handleClick = (clickedUserId) => {
+    const currentUserId = user?.id; // <- This is YOUR logged in user id but its not working
+
+    if (clickedUserId === currentUserId) {
+      navigate("/account"); // Go to your own account page
+    } else {
+      navigate(`/user/${clickedUserId}`); // Go to other user's profile
+    }
+    setSearchTerm(""); // Clear search bar
   };
 
   const handleKeyDown = (e) => {
@@ -67,8 +72,15 @@ export default function HomePageUserSearch() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 bg-gray-900 rounded-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mt-16">
-
+    <div className="max-w-4xl mx-auto px-4 py-8 bg-gray-900 rounded-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mt-12">
+      <div>
+        <h1 className="flex justify-center text-2xl font-bold">
+          Featured Users
+        </h1>
+        <p className="flex justify-center mb-5 text-sm">
+          Interact to gain XP and become a featured user{" "}
+        </p>
+      </div>
       {/* Random Users */}
       <div className="flex justify-center gap-8 mb-6">
         {randomUsers.map((user) => {
@@ -113,7 +125,7 @@ export default function HomePageUserSearch() {
             <Search className="mr-2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search Users..."
+              placeholder="Search All Users..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
