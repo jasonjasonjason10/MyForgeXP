@@ -58,7 +58,7 @@ export default function SingleUserUploads({ userPosts }) {
                 >
                   
                     <UserPostCard post={post} />
-                 
+                
                 </div>
               ))}
             </div>
