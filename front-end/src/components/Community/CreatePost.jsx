@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { X } from "lucide-react";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
@@ -36,89 +37,100 @@ function CreatePost() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-[#1a1a2e] text-white px-6 py-10">
-      <div className="max-w-3xl mx-auto bg-[#1a1a2e] border border-orange-400 p-8 rounded-xl shadow-2xl">
-        <h1 className="text-4xl font-bold mb-8 text-center drop-shadow-md">
-          Create a New Post
-        </h1>
-
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Centered form container with blur behind it */}
+      <div className="relative z-10 flex justify-center items-center min-h-screen px-4 py-10">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6"
+          className="bg-cover bg-center border border-blue-500 p-8 rounded-lg shadow-xl w-full max-w-2xl backdrop-blur-md"
+          style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
           encType="multipart/form-data"
         >
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300"
-          />
-
-          <textarea
-            placeholder="Description (optional)"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300 min-h-[120px]"
-          />
-
-          <select
-            value={PostType}
-            onChange={(e) => {
-              setPostType(e.target.value);
-              setContent(null);
-            }}
-            className="p-3 bg-gray-900 border border-orange-400 rounded-md text-white"
-          >
-            <option value="image">Image</option>
-            <option value="video">Video</option>
-            <option value="text">Text</option>
-          </select>
-
-          {PostType === "image" && (
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setContent(e.target.files[0])}
-              className="file:bg-white file:text-black file:rounded file:px-4 file:py-1 text-sm text-white"
-            />
-          )}
-
-          {PostType === "video" && (
-            <div className="flex flex-col gap-4">
-              <div>
-                <label className="block mb-1 text-white font-medium">
-                  Upload Video
-                </label>
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => setContent(e.target.files[0])}
-                  className="file:bg-white file:text-black file:rounded file:px-4 file:py-1 text-sm text-white"
-                />
-              </div>
-              <div>
-                <label className="block mb-1 text-white font-medium">
-                  Or Paste YouTube Link
-                </label>
-                <input
-                  type="text"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="https://youtube.com/..."
-                  className="p-3 bg-gray-900 border border-orange-400 rounded-md placeholder-white text-white w-full"
-                />
-              </div>
-            </div>
-          )}
-
           <button
-            type="submit"
-            className="bg-white hover:bg-orange-300 text-white font-bold py-3 rounded-md transition duration-300 shadow-lg"
+            type="button"
+            onClick={() => navigate(-1)} // Go back one page
+            className="absolute top-4 right-5 text-gray-400 hover:text-white z-20"
           >
-            Submit Post
+            <X size={24} />
           </button>
+          <h1 className="text-3xl font-bold text-center mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            Create a New Post
+          </h1>
+
+          <div className="flex flex-col gap-5">
+            <input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="p-3 bg-gray-900 border border-orange-400 rounded placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300"
+            />
+
+            <textarea
+              placeholder="Description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="p-3 bg-gray-900 border border-orange-400 rounded placeholder-white text-white focus:outline-none focus:ring-2 focus:ring-orange-300 min-h-[100px]"
+            />
+
+            <select
+              value={PostType}
+              onChange={(e) => {
+                setPostType(e.target.value);
+                setContent(null);
+              }}
+              className="p-3 bg-gray-900 border border-orange-400 rounded text-white"
+            >
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+              <option value="text">Text</option>
+            </select>
+
+            {PostType === "image" && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setContent(e.target.files[0])}
+                className="file:bg-white file:text-black file:rounded file:px-4 file:py-1 text-sm text-white"
+              />
+            )}
+
+            {PostType === "video" && (
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label className="block mb-1 text-white font-medium">
+                    Upload Video
+                  </label>
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => setContent(e.target.files[0])}
+                    className="file:bg-white file:text-black file:rounded file:px-4 file:py-1 text-sm text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-white font-medium">
+                    Or Paste YouTube Link
+                  </label>
+                  <input
+                    type="text"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="https://youtube.com/..."
+                    className="p-3 bg-gray-900 border border-orange-400 rounded placeholder-white text-white w-full"
+                  />
+                </div>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-3 mt-2 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded transition"
+            >
+              Submit Post
+            </button>
+          </div>
         </form>
       </div>
     </div>

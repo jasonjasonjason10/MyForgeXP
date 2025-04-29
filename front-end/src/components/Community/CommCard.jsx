@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Check } from "lucide-react";
 
-const CommunityCard = ({ post, setRefreshToggle, refreshToggle, username, userAvatar }) => {
+const CommunityCard = ({
+  post,
+  setRefreshToggle,
+  refreshToggle,
+  username,
+  userAvatar,
+}) => {
   const [postLiked, setPostLiked] = useState(false);
   const [postFav, setPostFav] = useState(false);
   const [favToggle, setFavToggle] = useState(false);
   const address = "http://localhost:3000/";
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchHasLiked(post.id);
@@ -101,19 +108,31 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle, username, userAv
 
   return (
     <div className="bg-gray-900   rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-      <div className='flex flex-row' onClick={() => navigate(`/user/${post.user.id}`)} >        
-        <img className='h-[50px] w-[50px] ' src={`http://localhost:3000${post.user.avatar}`} alt="User Avatar" />
-        <h5 className='mt-auto mb-auto' >{post.user.username}</h5>
+      <div
+        onClick={() => navigate(`/user/${post.user.id}`)}
+        className="flex items-center gap-3 mb-4 cursor-pointer hover:opacity-80 transition"
+      >
+        <img
+          src={`http://localhost:3000${post.user.avatar}`}
+          alt="User Avatar"
+          className="w-10 h-10 rounded-full object-cover border-2 border-blue-500"
+        />
+        <h5 className="text-lg font-semibold text-white drop-shadow">
+          {post.user.username}
+        </h5>
       </div>
       {/* Post Title */}
       <h3 className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center">
         {post.title}
       </h3>
 
-      {/* Post Description */}
-      <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
-        {post.description}
-      </div>
+      {/* Post Description with fade-out */}
+      {post.description && (
+        <div className="relative mt-2 max-h-[190px] overflow-hidden text-sm text-gray-300 px-1 mb-4 text-left w-full">
+          <p className="whitespace-pre-wrap break-words">{post.description}</p>
+          <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none" />
+        </div>
+      )}
 
       {post.PostType === "image" && (
         <div>
@@ -153,11 +172,17 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle, username, userAv
         className={`mt-4 text-center text-xs font-semibold cursor-pointer rounded-md transition p-3 w-32 mx-auto
     ${
       postFav
-        ? "bg-orange-500 hover:bg-orange-400 border border-blue-700"
-        : " border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300"
+        ? "border border-blue-700"
+        : "border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300"
     }`}
       >
-        {postFav ? "Favorited" : "Add to Favorites"}
+        {postFav ? (
+          <span className="flex items-center justify-center gap-1">
+            Favorited <Check size={14} className="text-green-400" />
+          </span>
+        ) : (
+          "Add to Favorites"
+        )}
       </div>
     </div>
   );

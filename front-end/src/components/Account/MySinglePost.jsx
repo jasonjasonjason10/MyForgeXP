@@ -88,13 +88,14 @@ export default function SinglePost({ post, goBack }) {
         </div>
       )}
 
-      <div>
+      <div className="mt-6 flex justify-center">
         <button
           onClick={() => handleDelete(post.id)}
-          className="absolute top-4 right-4 text-red-500 hover:text-red-700 transition"
+          className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 border border-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
           title="Delete Post"
         >
-          <Trash size={20} />
+          <Trash size={18} />
+          Delete Post
         </button>
       </div>
     </div>

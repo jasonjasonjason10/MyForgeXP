@@ -48,15 +48,15 @@ export default function AllGames() {
           {isAdmin && (
             <div className="mb-6">
               <AddGameButton onClick={() => setShowGameForm(true)} />
-          </div>
+            </div>
           )}
 
-          <h2 className="text-4xl font-bold mb-6 border-b border-blue-600 flex justify-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] pb-2">
+          <h2 className="text-4xl font-bold mb-6  flex justify-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] pb-2">
             All Games
           </h2>
 
           {gameList ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-pointer">
               {gameList.map((game) => (
                 <div key={game.id} onClick={() => clickHandle(game.id)}>
                   <GameCard game={game} />

@@ -11,7 +11,7 @@ export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
   const [user, setUser] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -28,7 +28,7 @@ export default function SingleUser() {
 
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
-  
+
   const tabComponents = {
     // details: <SingleUserDetails />,
     uploads: <SingleUserUploads userPosts={userPosts} />,
@@ -36,16 +36,14 @@ export default function SingleUser() {
     // uploads: <SingleUserUploads />,
   };
 
-  
-  
   useEffect(() => {
-    if(!user){
-      return console.log("no user")
-    } if (user.id === currentUserId) {
-      navigate("/account")
-    } 
-  })
-
+    if (!user) {
+      return console.log("no user");
+    }
+    if (user.id === currentUserId) {
+      navigate("/account");
+    }
+  });
 
   useEffect(() => {
     async function fetchSelf() {
@@ -53,7 +51,7 @@ export default function SingleUser() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
-      setIsAdmin(result.user.isAdmin)
+      setIsAdmin(result.user.isAdmin);
       setCurrentUserId(result.user.id);
     }
     fetchSelf();
@@ -160,9 +158,7 @@ export default function SingleUser() {
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden px-4 pt-10 max-w-4xl mx-auto">
-      <div>
-        <SingleUserAdmin user={user} isAdmin={isAdmin} />
-      </div>
+      <div></div>
       {/* Avatar and Username */}
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
@@ -294,7 +290,7 @@ export default function SingleUser() {
 
       {/* Return button */}
       <div className="flex justify-center mt-10">
-        <ReturnButton />
+        <SingleUserAdmin user={user} isAdmin={isAdmin} />
       </div>
       {showFollowers && (
         <>
