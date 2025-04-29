@@ -5,7 +5,7 @@ function UserCommCard({ comm }) {
         <img
           src={`http://localhost:3000${comm.coverImage}`}
           alt={comm.gameName}
-          className="w-28 h-28 object-cover rounded-lg border"
+          className="w-28 h-28 object-cover rounded-lg "
         />
 
         <div className="flex-1">

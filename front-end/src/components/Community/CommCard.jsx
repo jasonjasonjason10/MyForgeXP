@@ -52,11 +52,10 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   if (postFav) {
     favClass = "p-4 bg-green-700";
   } else {
-    favClass = 'p-4 bg-red-700'
+    favClass = "p-4 bg-red-700";
   }
 
   let contentPath = post.content;
-
 
   function extractId(contentPath) {
     const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
@@ -65,7 +64,10 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
   }
 
   function postContent(contentPath) {
-    if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
+    if (
+      contentPath.startsWith("http://") ||
+      contentPath.startsWith("https://")
+    ) {
       const videoId = extractId(contentPath);
       return (
         <div>
@@ -74,13 +76,18 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
             src={`https://www.youtube.com/embed/${videoId}`}
             allowFullScreen
           ></iframe>
-          <a href={contentPath} target="_blank" rel="noopener noreferrer" className="text-sm">
+          <a
+            href={contentPath}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm"
+          >
             {contentPath}
           </a>
         </div>
       );
     }
-  
+
     return (
       <video
         className="h-[180px] w-[320px]"
@@ -90,70 +97,64 @@ const CommunityCard = ({ post, setRefreshToggle, refreshToggle }) => {
     );
   }
 
-    return (
-      <div className="bg-gray-900 border border-blue-700 rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-        {/* Post Title */}
-        <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
-          {post.title}
-        </h3>
+  return (
+    <div className="bg-gray-900   rounded-2xl shadow-lg p-5 flex flex-col justify-between drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+      {/* Post Title */}
+      <h3 className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center">
+        {post.title}
+      </h3>
 
+      {/* Post Description */}
+      <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
+        {post.description}
+      </div>
 
-        {/* Post Description */}
-        <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
-          {post.description}
+      {post.PostType === "image" && (
+        <div>
+          <img
+            className="h-[180px] w-[320px]"
+            src={`http://localhost:3000${contentPath}`}
+            alt=""
+          />
         </div>
+      )}
 
-        {post.PostType === "image" && (
-          <div>
-            <img
-              className="h-[180px] w-[320px]"
-              src={`http://localhost:3000${contentPath}`}
-              alt=""
-            />
-          </div>
-        )}
+      {post.PostType === "video" && <div>{postContent(contentPath)}</div>}
 
-        {post.PostType === "video" && (
-          <div>
-            {postContent(contentPath)}
-          </div>
-        )}
-
-        {/* Like Button */}
-        <div className="mt-4 flex justify-between items-center">
-          <button
-            onClick={() => likeHandle(post.id)}
-            className={`px-3 py-1 rounded-md text-xs font-semibold transition 
+      {/* Like Button */}
+      <div className="mt-4 flex justify-between items-center">
+        <button
+          onClick={() => likeHandle(post.id)}
+          className={`px-3 py-1 rounded-md text-xs font-semibold transition 
             ${
               postLiked
                 ? "bg-orange-500 hover:bg-orange-400"
                 : "bg-gray-600 hover:bg-gray-500 border border-orange-500"
             }`}
-          >
-            {postLiked ? " Liked" : "🤍 Like"}
-          </button>
+        >
+          {postLiked ? " Liked" : "🤍 Like"}
+        </button>
 
-          <span className="text-gray-400 text-xs">
-            Likes:{" "}
-            <span className="text-white font-bold">{post.likes.length}</span>
-          </span>
-        </div>
+        <span className="text-gray-400 text-xs">
+          Likes:{" "}
+          <span className="text-white font-bold">{post.likes.length}</span>
+        </span>
+      </div>
 
-        {/* Save Button */}
-        <div
-          onClick={() => favHandle(post.id)}
-          className={`mt-4 text-center text-xs font-semibold cursor-pointer rounded-md transition p-3 w-32 mx-auto
+      {/* Save Button */}
+      <div
+        onClick={() => favHandle(post.id)}
+        className={`mt-4 text-center text-xs font-semibold cursor-pointer rounded-md transition p-3 w-32 mx-auto
     ${
       postFav
         ? "bg-orange-500 hover:bg-orange-400 border border-blue-700"
         : " border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300"
     }`}
-        >
-          {postFav ? "Favorited" : "Add to Favorites"}
-        </div>
+      >
+        {postFav ? "Favorited" : "Add to Favorites"}
       </div>
-      
-    );
-  };
+    </div>
+  );
+};
 
 export default CommunityCard;

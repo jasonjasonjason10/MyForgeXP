@@ -37,20 +37,45 @@ router.get("/all", async (req, res) => {
 });
 
 // get the info of a single post by id
-router.get("/single/:id", async (req, res) => {
-  const id = +req.params.id;
-  const post = await prisma.post.findUnique({ where: { id } });
+// router.get("/single/:id", async (req, res) => {
+//   const id = +req.params.id;
+//   const post = await prisma.post.findMany({
+//     where: { userId },
+//     include: {
+//       game: true, // JASON ADDED for getting the hero image based off youtube post
+//     },
+//   });
+
+//   if (!post) {
+//     return res.status(404).json({
+//       error: "no post with that id found :(",
+//     });
+//   }
+//   res.status(200).json({
+//     successMessage: "successfully returned post",
+//     post: post,
+//   });
+// });
+
+// get all posts from a user by id
+router.get("/user/:id", async (req, res) => {
+  const userId = +req.params.id;
+  const post = await prisma.post.findMany({
+    where: { userId },
+    include: { community: true }, 
+  });
 
   if (!post) {
     return res.status(404).json({
-      error: "no post with that id found :(",
+      error: "no posts found",
     });
   }
   res.status(200).json({
-    successMessage: "successfully returned post",
+    successMessage: "successfully returned user's posts",
     post: post,
   });
 });
+
 
 // get all posts from a user by id
 router.get("/user/:id", async (req, res) => {
@@ -90,11 +115,9 @@ router.post(
     try {
       const userId = req.userId;
       if (!userId)
-        return res
-          .status(400)
-          .json({
-            error: "No user ID uploaded, maybe check if you are logged in?",
-          });
+        return res.status(400).json({
+          error: "No user ID uploaded, maybe check if you are logged in?",
+        });
 
       const { title, description, PostType } = req.body;
 
@@ -117,7 +140,7 @@ router.post(
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 // edit (update) a post by id

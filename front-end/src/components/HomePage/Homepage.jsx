@@ -1,6 +1,7 @@
 import HomeIntro from "./HomeIntro";
 import Carousel from "./Carousel";
-import Community from "../Community/Community";
+import HomePagePosts from "./HomepagePosts";
+import HomePageUserSearch from "./HomepageUserSerach";
 
 export default function Homepage() {
   return (
@@ -11,14 +12,18 @@ export default function Homepage() {
         <main className="flex-grow px-6 pt-12 w-full flex flex-col gap-8">
           <HomeIntro />
 
-          <div className="w-full flex justify-between items-start gap-4 overflow-hidden px-6 sm:px-8 md:px-12 lg:px-20 mb-20">
+          <div className="w-full flex justify-between items-start gap-4 overflow-hidden px-6 sm:px-8 md:px-12 lg:px-20 ">
             <div className="flex-1 min-w-[0]">
               <Carousel />
             </div>
           </div>
         </main>
+        <div className="w-full flex justify-center">
+          <HomePageUserSearch />
+        </div>
       </div>
-      <Community />
+
+      <HomePagePosts />
     </div>
   );
 }
