@@ -147,15 +147,7 @@ export default function NavBar() {
             </>
           ) : (
             <>
-              <li
-                onClick={() => {
-                  clickHandle();
-                  setIsOpen(false);
-                }}
-                className="hover:text-orange-400 cursor-pointer"
-              >
-                Logout
-              </li>
+              
               <li>
                 <Link
                   to="/account"
@@ -164,6 +156,15 @@ export default function NavBar() {
                 >
                   My Account
                 </Link>
+              </li>
+              <li
+                onClick={() => {
+                  clickHandle();
+                  setIsOpen(false);
+                }}
+                className="hover:text-orange-400 cursor-pointer"
+              >
+                Logout
               </li>
               <li>
                 <SearchUser />

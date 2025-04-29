@@ -266,7 +266,7 @@ export default function SingleUser() {
           ))}
         </div>
 
-        <div className="bg-gray-800 rounded-md p-4 min-h-[200px] border border-blue-600">
+        <div className="bg-gray-800 rounded-md p-4 min-h-[200px] ">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
