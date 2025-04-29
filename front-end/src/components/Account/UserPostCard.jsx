@@ -8,33 +8,9 @@ export default function UserPostCard({ post }) {
   }
 
   function postContent(contentPath) {
-    if (
-      contentPath.startsWith("http://") ||
-      contentPath.startsWith("https://")
-    ) {
-      const videoId = extractId(contentPath);
-      return (
-        <div>
-          <iframe
-            className="h-[180px] w-[320px]"
-            src={`https://www.youtube.com/embed/${videoId}`}
-            allowFullScreen
-          ></iframe>
-          <a
-            href={contentPath}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm"
-          >
-            {contentPath}
-          </a>
-        </div>
-      );
-    }
-
     return (
       <video
-        className="h-[180px] w-[320px]"
+        className="h-[180px] w-[320px] rounded-lg"
         controls
         src={`http://localhost:3000${contentPath}`}
       ></video>
@@ -43,23 +19,29 @@ export default function UserPostCard({ post }) {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold text-orange-400 mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)]">
+      {/* Post Title */}
+      <h3 className="text-xl font-semibold text-white drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center">
         {post.title}
       </h3>
 
-      <div className="text-gray-300 mb-4 break-words whitespace-pre-wrap text-sm">
-        {post.description}
-      </div>
-
+      {/* Image or Uploaded Video */}
       {post.PostType === "image" && (
         <img
-          className="h-[180px] w-[320px]"
+          className="h-[180px] w-[320px] rounded-lg object-cover"
           src={`http://localhost:3000${contentPath}`}
-          alt=""
+          alt="Post content"
         />
       )}
 
       {post.PostType === "video" && <div>{postContent(contentPath)}</div>}
+
+      {/* Likes Count */}
+      <div className="mt-4 text-center text-gray-400 text-xs">
+        Likes:{" "}
+        <span className="text-white font-bold">
+          {post.likes && Array.isArray(post.likes) ? post.likes.length : 0}
+        </span>
+      </div>
     </div>
   );
 }

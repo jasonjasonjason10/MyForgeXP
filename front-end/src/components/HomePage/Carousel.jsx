@@ -86,7 +86,7 @@ export default function Carousel() {
         {gameList.map((game) => (
           <div key={game.id} className="keen-slider__slide p-2">
             <Link to={`/games/${game.id}`}>
-              <div className="bg-gray-800 rounded-lg border hover:border-blue-400 hover:scale-105 transition shadow p-2">
+              <div className="bg-gray-800 rounded-lg   hover:scale-105 transition shadow p-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
                 <img
                   src={`${address}${game.coverImage}`}
                   alt={game.gameName}
