@@ -50,7 +50,7 @@ export default function NavBar() {
               to="/community"
               className="hover:text-orange-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             >
-              Game Posts
+              Community Posts
             </Link>
           </li>
 
@@ -111,7 +111,7 @@ export default function NavBar() {
               className="hover:text-orange-400"
               onClick={() => setIsOpen(false)}
             >
-              Game Posts
+              Community Posts
             </Link>
           </li>
           <li>
