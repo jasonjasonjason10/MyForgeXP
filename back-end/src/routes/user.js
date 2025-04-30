@@ -463,6 +463,7 @@ router.get("/:id", async (req, res) => {
     createdAt: user.createdAt,
     favorites: user.favorites,
     posts: user.posts,
+    bio: user.bio
   };
 
   res.status(200).json({
