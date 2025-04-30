@@ -1,5 +1,7 @@
+require('dotenv').config()
 const prisma = require("../prisma");
 const bcrypt = require("bcrypt");
+const PASSWORD = process.env.PASSWORD
 
 const seed = async () => {
   // Clear Seeded Data ====================================
@@ -14,13 +16,13 @@ const seed = async () => {
 
   // Users================================================
   async function createUser() {
-    const hashedPassword = await bcrypt.hash("password123", 10);
+    const hashedPassword = await bcrypt.hash(PASSWORD, 10);
 
     // Admin user
     await prisma.user.create({
       data: {
         email: "admin@admin.com",
-        username: "admin",
+        username: "superkai64",
         password: hashedPassword,
         avatar: `/images/pfp/default-admin.png`,
         bio: "THIS IS THE MOST POWERFUL ACCOUNT KNOWN TO MAN!!!!",
@@ -36,15 +38,6 @@ const seed = async () => {
         password: hashedPassword,
         avatar: `/images/pfp/deleted-user.jpg`,
         bio: "Grave yard of the fallen",
-      },
-    });
-
-    // no name and no avatar and no bio
-    await prisma.user.create({
-      data: {
-        email: "no@name.com",
-        username: "noNameTest",
-        password: hashedPassword,
       },
     });
 
@@ -209,46 +202,46 @@ const seed = async () => {
   }
 
   // post community ==========================
-  async function createPosts() {
-    const user = await prisma.user.findMany();
-    const community = await prisma.gameCommunity.findMany();
+  // async function createPosts() {
+  //   const user = await prisma.user.findMany();
+  //   const community = await prisma.gameCommunity.findMany();
 
-    await prisma.post.createMany({
-      data: [
-        {
-          title: "Loved it!",
-          description: "Amazing open-world and challenging bosses.",
-          PostType: "text",
-          userId: user[0].id,
-          communityId: community[0].id,
-        },
-        {
-          title: "Very cinematic",
-          description: "Incredible acting and writing.",
-          PostType: "text",
-          userId: user[1].id,
-          communityId: community[1].id,
-        },
-        {
-          title: "Addictive gameplay",
-          description: "Super charming and fun.",
-          PostType: "text",
-          userId: user[2].id,
-          communityId: community[2].id,
-        },
-        {
-          title: "Insane boss fight",
-          content: "https://www.youtube.com/watch?v=D_iqjI2p7F4",
-          description: "Malenia: 'I have never known defeat'.",
-          PostType: "video",
-          userId: user[1].id,
-          communityId: community[0].id,
-        },
-      ],
-    });
+  //   await prisma.post.createMany({
+  //     data: [
+  //       {
+  //         title: "Loved it!",
+  //         description: "Amazing open-world and challenging bosses.",
+  //         PostType: "text",
+  //         userId: user[0].id,
+  //         communityId: community[0].id,
+  //       },
+  //       {
+  //         title: "Very cinematic",
+  //         description: "Incredible acting and writing.",
+  //         PostType: "text",
+  //         userId: user[1].id,
+  //         communityId: community[1].id,
+  //       },
+  //       {
+  //         title: "Addictive gameplay",
+  //         description: "Super charming and fun.",
+  //         PostType: "text",
+  //         userId: user[2].id,
+  //         communityId: community[2].id,
+  //       },
+  //       {
+  //         title: "Insane boss fight",
+  //         content: "https://www.youtube.com/watch?v=D_iqjI2p7F4",
+  //         description: "Malenia: 'I have never known defeat'.",
+  //         PostType: "video",
+  //         userId: user[1].id,
+  //         communityId: community[0].id,
+  //       },
+  //     ],
+  //   });
 
-    console.log("Posts seeded");
-  }
+  //   console.log("Posts seeded");
+  // }
 
   // Comments================================
   // async function createComments() {
@@ -281,37 +274,37 @@ const seed = async () => {
   //   console.log("Comments seeded");
   // }
 
-  // Favorites============================
-  async function createFavorites() {
-    const user = await prisma.user.findMany();
-    const post = await prisma.post.findMany();
+  // // Favorites============================
+  // async function createFavorites() {
+  //   const user = await prisma.user.findMany();
+  //   const post = await prisma.post.findMany();
 
-    await prisma.favorites.createMany({
-      data: [
-        {
-          userId: user[1].id,
-          postId: post[0].id,
-        },
-        {
-          userId: user[2].id,
-          postId: post[1].id,
-        },
-        {
-          userId: user[1].id,
-          postId: post[2].id,
-        },
-      ],
-    });
+  //   await prisma.favorites.createMany({
+  //     data: [
+  //       {
+  //         userId: user[1].id,
+  //         postId: post[0].id,
+  //       },
+  //       {
+  //         userId: user[2].id,
+  //         postId: post[1].id,
+  //       },
+  //       {
+  //         userId: user[1].id,
+  //         postId: post[2].id,
+  //       },
+  //     ],
+  //   });
 
-    console.log("Favorites seeded");
-  }
+  //   console.log("Favorites seeded");
+  // }
 
   // Run all
   await createUser();
   await createGames();
-  await createPosts();
+  // await createPosts();
   // await createComments();
-  await createFavorites();
+  // await createFavorites();
 };
 
 seed()
