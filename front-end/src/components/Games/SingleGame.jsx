@@ -36,7 +36,7 @@ export default function SingleGame() {
     window.location.reload()
   }
 
-  function descHandle() {
+  async function descHandle() {
     setShowEditDescription(true);
   }
 
@@ -68,16 +68,6 @@ export default function SingleGame() {
       navigate("/all-games")
     }
   }
-
-  const handleDeleteClick = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this game?"
-    );
-    if (confirmed) {
-      // Nathan to hook up to backend
-      console.log("Deleting game...");
-    }
-  };
 
   useEffect(() => {
     async function fetchGame() {
