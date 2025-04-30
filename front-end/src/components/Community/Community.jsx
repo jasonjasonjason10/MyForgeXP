@@ -53,14 +53,6 @@ function Community() {
 
         <div className="flex justify-end mb-6">
           <div className="relative">
-            <select
-              value={sortBy}
-              onChange={handleSortChange}
-              className="text-black rounded px-2 py-1"
-            >
-
-        <div className="flex justify-end mb-6">
-          <div className="relative">
             <select value={sortBy} onChange={handleSortChange} className="...">
               <option value="recent">Recent</option>
               <option value="alphabetical">A - Z</option>
