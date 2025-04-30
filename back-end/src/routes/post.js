@@ -104,9 +104,10 @@ router.get("/user/:id", async (req, res) => {
 router.get("/game/:id", async (req, res) => {
   const id = +req.params.id;
   const postList = await prisma.post.findMany({
-    where: {
-      communityId: id,
-    },
+    where: { communityId: id },
+    include: {
+      likes: true
+    }
   });
   res.json({
     posts: postList,

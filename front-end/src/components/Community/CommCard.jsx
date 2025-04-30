@@ -39,7 +39,6 @@ const CommunityCard = ({
     }
   }, [isExpanded, post.description]);
 
-
   useEffect(() => {
     fetchHasLiked(post.id);
   }, [refreshToggle]);
@@ -162,7 +161,7 @@ const CommunityCard = ({
         {/* Hero Image – your exact version, collapsed only */}
         {!isExpanded && heroImage && post.PostType === "text" && (
           <div
-            className="relative h-[197px] w-full rounded-t-2xl overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            className="relative h-[197px] w-full rounded-t overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             style={{
               backgroundImage: `url(${address}${heroImage})`,
               backgroundSize: "cover",
@@ -171,7 +170,7 @@ const CommunityCard = ({
           >
             <button
               onClick={() => clickHandle(game.id)}
-              className="absolute bottom-2 right-2 text-xs px-3 py-1 bg-black/60 text-white rounded-full hover:bg-white hover:text-black transition"
+              className="absolute bottom-2 right-2 text-xs px-3 py-1 bg-black/60 text-white rounded-full hover:bg-white hover:text-black transition cursor-pointer"
             >
               See Game
             </button>
@@ -181,7 +180,7 @@ const CommunityCard = ({
         {/* Card Content */}
         <div
           onClick={() => setIsExpanded(!isExpanded)}
-          className={`relative z-10 bg-gray-900 rounded-b shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col ${
+          className={`relative z-10 bg-gray-900 rounded-b rounded-t shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col ${
             isExpanded
               ? "w-[1000px] h-[80vh] overflow-y-auto p-5 border justify-between"
               : "px-3 p-2 justify-between"
@@ -206,12 +205,11 @@ const CommunityCard = ({
             </div>
           )}
 
-
           {/* Title */}
           {!isExpanded && (
             <h3
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center cursor-pointer"
+              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex justify-center cursor-pointer"
             >
               {post.title}
             </h3>
@@ -273,7 +271,6 @@ const CommunityCard = ({
           {post.PostType === "image" && (
             <img
               onClick={() => setIsExpanded(!isExpanded)}
-
               className={`${
                 isExpanded ? "h-[120px] w-[240px]" : "h-[180px] w-[320px]"
               } object-cover mx-auto rounded-lg mb-4`}
