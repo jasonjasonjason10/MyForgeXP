@@ -310,7 +310,7 @@ const seed = async () => {
   await createUser();
   await createGames();
   await createPosts();
-  await createComments();
+  // await createComments();
   await createFavorites();
 };
 
