@@ -121,7 +121,7 @@ export default function SingleGame() {
       <div
         className="rounded-lg p-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] relative overflow-hidden"
         style={{
-          backgroundImage: `url(http://localhost:3000${game.heroImage})`,
+          backgroundImage: `url(https://forgexp-server.onrender.com${game.heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -131,7 +131,7 @@ export default function SingleGame() {
           {/* Cover Image */}
           <div className="flex-shrink-0">
             <img
-              src={`http://localhost:3000${game.coverImage}`}
+              src={`https://forgexp-server.onrender.com${game.coverImage}`}
               alt="Game Cover"
               className="w-48 h-64 object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-110"
             />
