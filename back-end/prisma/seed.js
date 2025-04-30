@@ -20,9 +20,9 @@ const seed = async () => {
     await prisma.user.create({
       data: {
         email: "admin@admin.com",
-        username: "admin",
+        username: "superkai64",
         password: hashedPassword,
-        avatar: `/images/pfp/default-admin.png`,
+        avatar: `/images/pfp/superKai.jpg`,
         bio: "THIS IS THE MOST POWERFUL ACCOUNT KNOWN TO MAN!!!!",
         isAdmin: true,
       },
