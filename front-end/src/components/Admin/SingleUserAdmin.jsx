@@ -4,7 +4,7 @@ import { address } from "../../../address";
 
 function SingleUserAdmin({ user, isAdmin }) {
   const navigate = useNavigate();
-  
+
   async function deleteHandle() {
     try {
       const response = await fetch(`${address}/user/delete/${user.id}`, {
@@ -12,7 +12,6 @@ function SingleUserAdmin({ user, isAdmin }) {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
-      console.log("result => ", result);
       if (response.ok) {
         navigate("/account");
       } else {

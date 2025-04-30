@@ -1,7 +1,5 @@
 import { address } from "../../../address";
 export default function UserPostCard({ post }) {
-  console.log("likes => ", post);
-  
 
   let contentPath = post.content;
 

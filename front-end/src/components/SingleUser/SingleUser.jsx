@@ -26,7 +26,6 @@ export default function SingleUser() {
   const { id } = useParams();
 
   const [userPosts, setUserPosts] = useState(null);
-  console.log("user =>", user);
   
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)

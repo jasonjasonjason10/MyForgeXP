@@ -51,7 +51,6 @@ export default function SingleGame() {
   })
   const result = await response.json()
   window.location.reload()
-  console.log('click =>', result )
   }
 
 
@@ -106,7 +105,6 @@ export default function SingleGame() {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     const result = await response.json();
-    console.log(result);
     setClickCheck(!clickCheck);
   }
 
@@ -220,7 +218,6 @@ export default function SingleGame() {
           isOpen={showEditCover}
           onClose={() => setShowEditCover(false)}
           onSave={(file) => {
-            console.log("Cover file to upload:", file);
             saveCover(file)
             setShowEditCover(false);
           }}

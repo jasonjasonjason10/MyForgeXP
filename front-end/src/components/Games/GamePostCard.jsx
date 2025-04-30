@@ -29,9 +29,7 @@ function GamePostCard({ post }) {
     setPostLiked(result.boolean);
   }
 
-  let contentPath = post.content;
-  console.log(contentPath);
-  
+  let contentPath = post.content;  
 
   function extractId(contentPath) {
     const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;

@@ -13,9 +13,6 @@ export default function AllGames() {
   const navigate = useNavigate();
   const [showGameForm, setShowGameForm] = useState(false);
 
-  console.log("gameList useState =>", gameList);
-  console.log("isAdmin useState =>", isAdmin);
-
   useEffect(() => {
     async function fetchIsAdmin() {
       const response = await fetch(`${address}/user/info`, {

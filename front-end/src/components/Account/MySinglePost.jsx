@@ -28,7 +28,6 @@ export default function SinglePost({ post, goBack }) {
       },
     })
       .then((response) => {
-        console.log("Delete response status:", response.status);
         if (response.ok) {
           setUserPosts(userPosts.filter((post) => post.id !== postId));
           alert("Post deleted successfully.");

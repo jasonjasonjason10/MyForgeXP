@@ -37,7 +37,6 @@ export default function Register({ setToken, token }) {
       });
 
       const result = await response.json();
-      console.log("fetch result", result); //REMOVE LATER
 
       if (response.ok) {
         localStorage.setItem("token", result.token);
