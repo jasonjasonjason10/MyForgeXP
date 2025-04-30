@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [backgroundUrl, setBackgroundUrl] = useState("");
+  const [heroImage, setHeroImage] = useState(null);
+  console.log('hero image', heroImage);
+  
+  const currentPost = youtubePosts[currentSlide];
   const [sliderRef, sliderInstanceRef] = useKeenSlider({
     loop: true,
     mode: "free-snap",
@@ -19,17 +23,25 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
   });
 
   useEffect(() => {
-    const currentPost = youtubePosts[currentSlide];
-    if (
-      currentPost &&
-      currentPost.community &&
-      currentPost.community.heroImage
-    ) {
+    const comId = currentPost.communityId
+    async function fetchGame() {
+      const response = await fetch(`http://localhost:3000/games/${comId}`)
+      const result = await response.json()
+      setHeroImage(result.game.heroImage);
+      
+    }
+    fetchGame()
+  },[])
+
+
+  useEffect(() => {
+    if (heroImage) {
+      console.log("hero exists!!")
       setBackgroundUrl(
-        `http://localhost:3000${currentPost.community.heroImage}`
+        `http://localhost:3000${heroImage}`
       );
     }
-  }, [currentSlide, youtubePosts]);
+  }, [heroImage]);
 
   function extractId(contentPath) {
     const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
