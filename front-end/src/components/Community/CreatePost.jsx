@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { X } from "lucide-react";
+import { address } from "../../../address";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
@@ -20,14 +21,13 @@ function CreatePost() {
 
   async function fetchCreatePost() {
     const formData = new FormData();
-    console.log(["COMMUNITYID HERE", params]);
     formData.append("communityId", params.id);
     formData.append("title", title);
     formData.append("description", description);
     formData.append("PostType", PostType);
     formData.append("content", content);
 
-    const response = await fetch("http://localhost:3000/post/create", {
+    const response = await fetch(`${address}/post/create`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       body: formData,

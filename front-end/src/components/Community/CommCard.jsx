@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Check, Plus, X } from "lucide-react";
+import { address } from "../../../address";
 
 const CommunityCard = ({
   post,
@@ -13,14 +14,10 @@ const CommunityCard = ({
   const [postFav, setPostFav] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [favToggle, setFavToggle] = useState(false);
-  const address = "http://localhost:3000/";
   const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [heroImage, setHeroImage] = useState(undefined);
-  console.log(game);
-  if (game) {
-    console.log("HEYO", heroImage);
-  }
+
   useEffect(() => {
     fetchHasLiked(post.id);
   }, [refreshToggle]);
@@ -37,7 +34,7 @@ const CommunityCard = ({
     if (post.communityId) {
       const gameId = post.communityId;
       async function fetchGameDetails() {
-        const response = await fetch(`http://localhost:3000/games/${gameId}`);
+        const response = await fetch(`${address}/games/${gameId}`);
         const result = await response.json();
         setGame(result.game);
       }
@@ -52,7 +49,7 @@ const CommunityCard = ({
   }, [game]);
 
   async function likeHandle(postId) {
-    await fetch(`${address}post/${postId}/like`, {
+    await fetch(`${address}/post/${postId}/like`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -60,7 +57,7 @@ const CommunityCard = ({
   }
 
   async function fetchHasLiked(postId) {
-    const response = await fetch(`${address}post/hasliked/${postId}`, {
+    const response = await fetch(`${address}/post/hasliked/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -69,7 +66,7 @@ const CommunityCard = ({
   }
 
   async function fetchHasFav(postId) {
-    const response = await fetch(`${address}user/hasfav/${postId}`, {
+    const response = await fetch(`${address}/user/hasfav/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -78,7 +75,7 @@ const CommunityCard = ({
   }
 
   async function favHandle(postId) {
-    const response = await fetch(`${address}user/favorite/${postId}`, {
+    const response = await fetch(`${address}/user/favorite/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -112,7 +109,7 @@ const CommunityCard = ({
       <video
         className="h-[180px] w-[320px]"
         controls
-        src={`http://localhost:3000${contentPath}`}
+        src={`${address}${contentPath}`}
       ></video>
     );
   }
@@ -140,7 +137,7 @@ const CommunityCard = ({
           <div
             className="h-[197px] w-full rounded-t -2xl overflow-hidden"
             style={{
-              backgroundImage: `url(http://localhost:3000${heroImage})`,
+              backgroundImage: `url(${address}${heroImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -169,7 +166,7 @@ const CommunityCard = ({
           <div className="flex items-center gap-3 mb-4 hover:opacity-80 transition">
             <img
               onClick={() => navigate(`/user/${post.user.id}`)}
-              src={`http://localhost:3000${post.user.avatar}`}
+              src={`${address}${post.user.avatar}`}
               alt="User Avatar"
               className="w-10 h-10 rounded-full object-cover border-2 border-blue-500 cursor-pointer"
             />
@@ -196,7 +193,7 @@ const CommunityCard = ({
               style={
                 heroImage
                   ? {
-                      backgroundImage: `url(http://localhost:3000${heroImage})`,
+                      backgroundImage: `url(${address}${heroImage})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }
@@ -210,7 +207,7 @@ const CommunityCard = ({
             <img
               onClick={() => setIsExpanded(!isExpanded)}
               className="h-[180px] w-[320px] object-cover mx-auto rounded-lg mb-4"
-              src={`http://localhost:3000${contentPath}`}
+              src={`${address}${contentPath}`}
               alt=""
             />
           )}

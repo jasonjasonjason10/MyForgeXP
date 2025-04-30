@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
+import { address } from "../../../address";
 
 function GamePostCard({ post }) {
   const [postLiked, setPostLiked] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
-  const address = "http://localhost:3000/";
+
 
   useEffect(() => {
     fetchHasLiked(post.id);
   }, [refreshToggle]);
 
   async function likeHandle(postId) {
-    const response = await fetch(`${address}post/${postId}/like`, {
+    const response = await fetch(`${address}/post/${postId}/like`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -20,12 +21,41 @@ function GamePostCard({ post }) {
   }
 
   async function fetchHasLiked(postId) {
-    const response = await fetch(`${address}post/hasliked/${postId}`, {
+    const response = await fetch(`${address}/post/hasliked/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     const result = await response.json();
     setPostLiked(result.boolean);
+  }
+
+  let contentPath = post.content;  
+
+  function extractId(contentPath) {
+    const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
+    const match = contentPath.match(findId);
+    return match ? match[1] : null;
+  }
+
+  function postContent(contentPath) {
+    if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
+      const videoId = extractId(contentPath);
+      return (
+        <iframe
+          className="h-[180px] w-[320px]"
+          src={`https://www.youtube.com/embed/${videoId}`}
+          allowFullScreen
+        ></iframe>
+      );
+    }
+
+    return (
+      <video
+        className="h-[180px] w-[320px]"
+        controls
+        src={`http://localhost:3000${contentPath}`}
+      ></video>
+    );
   }
 
   return (
@@ -37,7 +67,7 @@ function GamePostCard({ post }) {
 
       {/* Post Content */}
       <div className="mb-2 text-gray-300 text-sm line-clamp-3">
-        {post.content}
+        {contentPath ? postContent(contentPath) : '' }
       </div>
 
       {/* Post Description */}

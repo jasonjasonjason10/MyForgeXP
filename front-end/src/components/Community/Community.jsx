@@ -9,7 +9,7 @@ function Community() {
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [postList, setPostList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("recent");
+  const [sortBy, setSortBy] = useState('recent')
 
   useEffect(() => {
     async function fetchPostList() {
@@ -58,6 +58,10 @@ function Community() {
               onChange={handleSortChange}
               className="text-black rounded px-2 py-1"
             >
+
+        <div className="flex justify-end mb-6">
+          <div className="relative">
+            <select value={sortBy} onChange={handleSortChange} className="...">
               <option value="recent">Recent</option>
               <option value="alphabetical">A - Z</option>
               <option value="likes">Most Likes</option>

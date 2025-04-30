@@ -6,6 +6,7 @@ import SingleUserUploads from "./SingleUserUploads";
 import ReturnButton from "../ReturnButton";
 import { toggleFollow } from "../../API/index";
 import SingleUserAdmin from "../Admin/SingleUserAdmin";
+import { address } from "../../../address";
 
 export default function SingleUser() {
   const [activeTab, setActiveTab] = useState("details");
@@ -25,7 +26,6 @@ export default function SingleUser() {
   const { id } = useParams();
 
   const [userPosts, setUserPosts] = useState(null);
-  console.log("user =>", user);
   
   const [showOptions, setShowOptions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); //This isnt being used any more since moving the 3 dot button to Followers pop up. (Leaving here to use for something else)
@@ -48,7 +48,7 @@ export default function SingleUser() {
 
   useEffect(() => {
     async function fetchSelf() {
-      const response = await fetch(`http://localhost:3000/user/info`, {
+      const response = await fetch(`${address}/user/info`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
@@ -60,7 +60,7 @@ export default function SingleUser() {
 
   useEffect(() => {
     async function fetchUser() {
-      const response = await fetch(`http://localhost:3000/user/${id}`);
+      const response = await fetch(`${address}/user/${id}`);
       const data = await response.json();
       setUser(data.user);
     }
@@ -78,7 +78,7 @@ export default function SingleUser() {
   //For displaying a count number **WHAT I HAD TO ADD TO THE BACKEND FOR
   const fetchFollowCounts = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/user/follow/counts/${id}`);
+      const res = await fetch(`${address}/user/follow/counts/${id}`);
       const data = await res.json();
       setFollowCounts({
         followers: data.followers,
@@ -94,7 +94,7 @@ export default function SingleUser() {
   const openFollowersModal = async () => {
     setShowFollowers(true);
     try {
-      const res = await fetch(`http://localhost:3000/user/followed/${id}`);
+      const res = await fetch(`${address}/user/followed/${id}`);
       const data = await res.json();
       setFollowerList(data.followers);
     } catch (err) {
@@ -107,7 +107,7 @@ export default function SingleUser() {
   const openFollowingModal = async () => {
     setShowFollowing(true);
     try {
-      const res = await fetch(`http://localhost:3000/user/following/${id}`);
+      const res = await fetch(`${address}/user/following/${id}`);
       const data = await res.json();
       setFollowingList(data.following);
     } catch (err) {
@@ -119,7 +119,7 @@ export default function SingleUser() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/user/isfollowing/${id}`,
+        `${address}/user/isfollowing/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -167,7 +167,7 @@ export default function SingleUser() {
             src={
               newAvatar
                 ? URL.createObjectURL(newAvatar)
-                : `http://localhost:3000${user.avatar}`
+                : `${address}${user.avatar}`
             }
             alt="User avatar"
             className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg"
@@ -325,7 +325,7 @@ export default function SingleUser() {
                       className="cursor-pointer flex items-center gap-3 p-2 border-b border-blue-400 hover:border-orange-400"
                     >
                       <img
-                        src={`http://localhost:3000${follower.avatar}`}
+                        src={`${address}${follower.avatar}`}
                         alt={follower.username}
                         className="w-8 h-8 rounded-full object-cover border border-gray-500"
                       />
@@ -373,7 +373,7 @@ export default function SingleUser() {
                       className="cursor-pointer flex items-center gap-3 p-2 border-b border-blue-400 hover:border-orange-400"
                     >
                       <img
-                        src={`http://localhost:3000${user.avatar}`}
+                        src={`${address}${user.avatar}`}
                         alt={user.username}
                         className="w-8 h-8 rounded-full object-cover border border-gray-500"
                       />

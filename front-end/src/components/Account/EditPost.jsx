@@ -1,3 +1,4 @@
+import { address } from "../../../address";
 import { useState } from "react";
 
 export default function EditPost({ post, onCancel, onUpdate }) {
@@ -28,7 +29,7 @@ export default function EditPost({ post, onCancel, onUpdate }) {
         formData.append("content", newFile);
       }
 
-      const res = await fetch("http://localhost:3000/post/edit", {
+      const res = await fetch(`${address}/post/edit`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -80,7 +81,7 @@ export default function EditPost({ post, onCancel, onUpdate }) {
         <div className="mb-6">
           <label className="block mb-2 text-sky-300">Current Image</label>
           <img
-            src={`http://localhost:3000${post.content}`}
+            src={`${address}${post.content}`}
             alt="Post"
             className="max-h-64 rounded border border-blue-500 shadow-[0_0_15px_#3b82f6]"
           />
@@ -91,7 +92,7 @@ export default function EditPost({ post, onCancel, onUpdate }) {
         <div className="mb-6">
           <label className="block mb-2 text-sky-300">Current Video</label>
           <video
-            src={`http://localhost:3000${post.content}`}
+            src={`${address}${post.content}`}
             controls
             className="w-full max-h-64 rounded border border-blue-500 shadow-[0_0_15px_#3b82f6]"
           />
