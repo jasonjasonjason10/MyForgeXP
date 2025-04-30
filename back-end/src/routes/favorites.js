@@ -55,7 +55,8 @@ router.post('/favorites', tokenAuth, async (req, res) => {
                         select: {
                             username: true
                         }
-                    }
+                    },
+                    likes: true
                 }
             }
         }

@@ -16,7 +16,7 @@ export default function Favorites({ user }) {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
-      setFavPosts(result.posts);
+      setFavPosts(result.posts); 
     }
     fetchFavPosts();
   }, []);
