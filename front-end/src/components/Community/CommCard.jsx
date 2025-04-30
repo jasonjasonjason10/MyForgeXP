@@ -51,6 +51,10 @@ const CommunityCard = ({
     }
   }, [game]);
 
+  function clickHandle(id) {
+    navigate(`../games/${id}`);
+  }
+
   async function likeHandle(postId) {
     await fetch(`${address}post/${postId}/like`, {
       method: "POST",
@@ -138,6 +142,7 @@ const CommunityCard = ({
         {/* Hero Image – your exact version, collapsed only */}
         {!isExpanded && heroImage && post.PostType === "text" && (
           <div
+            onClick={() => clickHandle(game.id)}
             className="h-[197px] w-full rounded-t -2xl overflow-hidden"
             style={{
               backgroundImage: `url(http://localhost:3000${heroImage})`,
@@ -151,7 +156,7 @@ const CommunityCard = ({
         <div
           className={`relative z-10 bg-gray-900 rounded-b shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col  ${
             isExpanded
-              ? "w-[1000px] h-[60vh]  overflow-y-auto p-10 border"
+              ? "w-[1000px] h-[80vh]  overflow-y-auto p-10 border"
               : "px-3 p-2 justify-between"
           }`}
         >
@@ -190,9 +195,7 @@ const CommunityCard = ({
           </h3>
           {isExpanded && (
             <div
-              className={`h-[200px] w-full rounded-xl overflow-hidden mb-4 ${
-                !heroImage ? "bg-gray-800 animate-pulse" : ""
-              }`}
+              className="relative h-[250px] w-full rounded-t-2xl overflow-hidden mb-6 rounded-b-2xl"
               style={
                 heroImage
                   ? {
@@ -200,9 +203,40 @@ const CommunityCard = ({
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }
-                  : {}
+                  : { backgroundColor: "#1f2937" } // Fallback gray if no image
               }
-            />
+            >
+              {/* X Button */}
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="absolute top-4 right-4 text-white text-2xl z-50 bg-black/50 rounded-full p-1 hover:bg-black/70"
+              >
+                ✕
+              </button>
+
+              {/* Overlay Content */}
+              <div className="absolute inset-0 bg-black/30 flex flex-col justify-center items-center text-white px-4">
+                {/* Avatar and Username */}
+                <div
+                  className="flex items-center gap-3 mb-2 cursor-pointer"
+                  onClick={() => navigate(`/user/${post.user.id}`)}
+                >
+                  <img
+                    src={`http://localhost:3000${post.user.avatar}`}
+                    alt="User Avatar"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-blue-500"
+                  />
+                  <h5 className="text-lg font-semibold drop-shadow">
+                    {post.user.username}
+                  </h5>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-center drop-shadow-lg">
+                  {post.title}
+                </h3>
+              </div>
+            </div>
           )}
 
           {/* Image/Video */}
