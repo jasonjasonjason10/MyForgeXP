@@ -150,10 +150,43 @@ router.post(
   }
 );
 
-// edit (update) a post by id
-router.patch("/edit", tokenAuth, async (req, res, next) => {
+// edit a post by id & optional file reupload & update PostType
+router.patch("/edit", tokenAuth, upload.single("content"), async (req, res, next) => {
   try {
-  } catch (error) {}
+    const { postId, title, description } = req.body;
+
+    if (!postId) {
+      return res.status(400).json({ error: "Missing postId" });
+    }
+
+    const dataToUpdate = {
+      title,
+      description,
+    };
+
+    if (req.file) {
+      dataToUpdate.content = `/images/posts/${req.file.filename}`;
+
+      if (req.file.mimetype.startsWith("image/")) {
+        dataToUpdate.PostType = "image";
+      } else if (req.file.mimetype.startsWith("video/")) {
+        dataToUpdate.PostType = "video";
+      }
+    }
+
+    const updatedPost = await prisma.post.update({
+      where: { id: Number(postId) },
+      data: dataToUpdate,
+    });
+
+    res.status(200).json({
+      successMessage: "Post updated successfully",
+      post: updatedPost,
+    });
+  } catch (error) {
+    console.error("Edit post error:", error);
+    next(error);
+  }
 });
 
 // delete a post by id
