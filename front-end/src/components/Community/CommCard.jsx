@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { Check, Plus, X } from "lucide-react";
+import { address } from "../../../address";
 
 const CommunityCard = ({
   post,
@@ -14,10 +15,10 @@ const CommunityCard = ({
   const [postFav, setPostFav] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [favToggle, setFavToggle] = useState(false);
-  const address = "http://localhost:3000/";
   const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [heroImage, setHeroImage] = useState(undefined);
+
   const [isOverflowing, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
 
@@ -38,6 +39,7 @@ const CommunityCard = ({
     }
   }, [isExpanded, post.description]);
 
+
   useEffect(() => {
     fetchHasLiked(post.id);
   }, [refreshToggle]);
@@ -54,7 +56,7 @@ const CommunityCard = ({
     if (post.communityId) {
       const gameId = post.communityId;
       async function fetchGameDetails() {
-        const response = await fetch(`http://localhost:3000/games/${gameId}`);
+        const response = await fetch(`${address}/games/${gameId}`);
         const result = await response.json();
         setGame(result.game);
       }
@@ -73,7 +75,7 @@ const CommunityCard = ({
   }
 
   async function likeHandle(postId) {
-    await fetch(`${address}post/${postId}/like`, {
+    await fetch(`${address}/post/${postId}/like`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -81,7 +83,7 @@ const CommunityCard = ({
   }
 
   async function fetchHasLiked(postId) {
-    const response = await fetch(`${address}post/hasliked/${postId}`, {
+    const response = await fetch(`${address}/post/hasliked/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -90,7 +92,7 @@ const CommunityCard = ({
   }
 
   async function fetchHasFav(postId) {
-    const response = await fetch(`${address}user/hasfav/${postId}`, {
+    const response = await fetch(`${address}/user/hasfav/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -99,7 +101,7 @@ const CommunityCard = ({
   }
 
   async function favHandle(postId) {
-    const response = await fetch(`${address}user/favorite/${postId}`, {
+    const response = await fetch(`${address}/user/favorite/${postId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -133,7 +135,7 @@ const CommunityCard = ({
       <video
         className="h-[180px] w-[320px]"
         controls
-        src={`http://localhost:3000${contentPath}`}
+        src={`${address}${contentPath}`}
       ></video>
     );
   }
@@ -162,7 +164,7 @@ const CommunityCard = ({
           <div
             className="relative h-[197px] w-full rounded-t-2xl overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             style={{
-              backgroundImage: `url(http://localhost:3000${heroImage})`,
+              backgroundImage: `url(${address}${heroImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -186,6 +188,7 @@ const CommunityCard = ({
           }`}
         >
           {/* User Info */}
+
           {!isExpanded && (
             <div className="flex items-center gap-3 mb-4 hover:opacity-80 transition">
               <img
@@ -203,6 +206,7 @@ const CommunityCard = ({
             </div>
           )}
 
+
           {/* Title */}
           {!isExpanded && (
             <h3
@@ -218,7 +222,7 @@ const CommunityCard = ({
               style={
                 heroImage
                   ? {
-                      backgroundImage: `url(http://localhost:3000${heroImage})`,
+                      backgroundImage: `url(${address}${heroImage})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }
@@ -269,6 +273,7 @@ const CommunityCard = ({
           {post.PostType === "image" && (
             <img
               onClick={() => setIsExpanded(!isExpanded)}
+
               className={`${
                 isExpanded ? "h-[120px] w-[240px]" : "h-[180px] w-[320px]"
               } object-cover mx-auto rounded-lg mb-4`}

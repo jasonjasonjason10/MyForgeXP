@@ -35,11 +35,9 @@ export default function Account() {
     favorites: <Favorites user={user} />,
   };
 
-  console.log("user useState =>", user);
-
   useEffect(() => {
     const fetchFollowingList = async () => {
-      const response = await fetch("http://localhost:3000/user/following", {
+      const response = await fetch(`${address}/user/following`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -48,7 +46,7 @@ export default function Account() {
     };
 
     const fetchFollowerList = async () => {
-      const response = await fetch("http://localhost:3000/user/followed", {
+      const response = await fetch(`${address}/user/followed`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -69,12 +67,11 @@ export default function Account() {
   }, [followerList, followingList]);
 
   async function handleUnfollow(id) {
-    const response = await fetch(`http://localhost:3000/user/follow/${id}`, {
+    const response = await fetch(`${address}/user/follow/${id}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     const result = await response.json()
-    console.log(result)
     window.location.reload()
   }
 
@@ -83,7 +80,7 @@ export default function Account() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch("http://localhost:3000/user/info", {
+        const res = await fetch(`${address}/user/info`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -115,7 +112,7 @@ export default function Account() {
   const handleSaveSettings = async (updatedFields) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/update/${user.id}`,
+        `${address}/user/update/${user.id}`,
         {
           method: "PUT",
           headers: {
@@ -147,7 +144,7 @@ export default function Account() {
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
           <img
-            src={`http://localhost:3000${user.avatar}`}
+            src={`${address}${user.avatar}`}
             alt="User avatar"
             className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
           />
@@ -294,7 +291,7 @@ export default function Account() {
                         onClick={() => handleUserClick(user.id)}
                       >
                         <img
-                          src={`http://localhost:3000${user.avatar}`}
+                          src={`${address}${user.avatar}`}
                           alt="avatar"
                           className="w-8 h-8 rounded-full object-cover border border-gray-500"
                         />
@@ -379,7 +376,7 @@ export default function Account() {
                         onClick={() => handleUserClick(follower.id)}
                       >
                         <img
-                          src={`http://localhost:3000${follower.avatar}`}
+                          src={`${address}${follower.avatar}`}
                           alt="avatar"
                           className="w-8 h-8 rounded-full object-cover border border-gray-500"
                         />

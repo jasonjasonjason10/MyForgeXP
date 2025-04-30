@@ -1,3 +1,4 @@
+import { address } from "../../../address";
 export default function SingleFavPost({ post, onBack }) {
   const contentPath = post.content;
 
@@ -14,7 +15,7 @@ export default function SingleFavPost({ post, onBack }) {
 
       {post.PostType === "image" && (
         <img
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           alt="Post content"
           className="w-full rounded-lg mb-4"
         />
@@ -22,7 +23,7 @@ export default function SingleFavPost({ post, onBack }) {
 
       {post.PostType === "video" && (
         <video
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           controls
           className="w-full rounded-lg mb-4"
         />

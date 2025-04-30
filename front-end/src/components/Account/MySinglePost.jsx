@@ -1,6 +1,11 @@
-import { Trash } from "lucide-react";
+import EditPost from "./EditPost";
+import { useState } from "react";
+import { Trash, Pencil } from "lucide-react";
+import { address } from "../../../address";
 
 export default function SinglePost({ post, goBack }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   let contentPath = post.content;
 
   function extractId(contentPath) {
@@ -8,6 +13,7 @@ export default function SinglePost({ post, goBack }) {
     const match = contentPath.match(findId);
     return match ? match[1] : null;
   }
+
   // delete post function
   function handleDelete(postId) {
     const confirmDelete = window.confirm(
@@ -15,14 +21,13 @@ export default function SinglePost({ post, goBack }) {
     );
     if (!confirmDelete) return;
 
-    fetch(`http://localhost:3000/user/post/${postId}`, {
+    fetch(`${address}/user/post/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((response) => {
-        console.log("Delete response status:", response.status);
         if (response.ok) {
           setUserPosts(userPosts.filter((post) => post.id !== postId));
           alert("Post deleted successfully.");
@@ -55,8 +60,21 @@ export default function SinglePost({ post, goBack }) {
       <video
         className="w-full h-[400px] rounded-lg"
         controls
-        src={`http://localhost:3000${contentPath}`}
+        src={`${address}${contentPath}`}
       ></video>
+    );
+  }
+
+  if (isEditing) {
+    return (
+      <EditPost
+        post={post}
+        onCancel={() => setIsEditing(false)}
+        onUpdate={() => {
+          setIsEditing(false);
+          window.location.reload();
+        }}
+      />
     );
   }
 
@@ -77,7 +95,7 @@ export default function SinglePost({ post, goBack }) {
       {post.PostType === "image" && (
         <img
           className="rounded-lg object-cover max-h-[400px] w-full"
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           alt="Post content"
         />
       )}
@@ -88,7 +106,16 @@ export default function SinglePost({ post, goBack }) {
         </div>
       )}
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-6 flex gap-4">
+        <button
+          onClick={() => setIsEditing(true)}
+          className="flex items-center gap-2 px-4 py-2 text-sm text-blue-400 border border-blue-400 rounded-md hover:bg-blue-600 hover:text-white transition"
+          title="Edit Post"
+        >
+          <Pencil size={18} />
+          Edit Post
+        </button>
+
         <button
           onClick={() => handleDelete(post.id)}
           className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 border border-red-500 rounded-md hover:bg-red-500 hover:text-white transition"

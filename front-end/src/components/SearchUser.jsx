@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { address } from "../../address";
 
 export default function SearchUser() {
   const [user, setUser] = useState([]);
@@ -13,7 +14,7 @@ export default function SearchUser() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch("http://localhost:3000/user/usernames");
+        const response = await fetch(`${address}/user/usernames`);
         const result = await response.json();
         if (!result.error) {
           setUser(result.allUsers);
@@ -90,7 +91,7 @@ export default function SearchUser() {
               onClick={() => handleClick(user.id)}
             >
               <img
-                src={`http://localhost:3000${user.avatar}`}
+                src={`${address}${user.avatar}`}
                 alt="avatar"
                 className="w-6 h-6 rounded-full object-cover border border-gray-600"
               />

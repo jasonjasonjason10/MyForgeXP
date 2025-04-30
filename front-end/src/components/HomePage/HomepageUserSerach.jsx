@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { address } from "../../../address";
 
 export default function HomePageUserSearch() {
   const [user, setUser] = useState([]);
@@ -14,7 +15,7 @@ export default function HomePageUserSearch() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch("http://localhost:3000/user/usernames");
+        const response = await fetch(`${address}/user/usernames`);
         const result = await response.json();
         if (!result.error) {
           setUser(result.allUsers);
@@ -85,7 +86,7 @@ export default function HomePageUserSearch() {
       <div className="flex justify-center gap-8 mb-6">
         {randomUsers.map((user) => {
           const avatarPath = user.avatar
-            ? `http://localhost:3000${user.avatar}`
+            ? `${address}${user.avatar}`
             : "/defaultavatar1.png";
 
           return (
@@ -150,7 +151,7 @@ export default function HomePageUserSearch() {
                   onClick={() => handleClick(user.id)}
                 >
                   <img
-                    src={`http://localhost:3000${user.avatar}`}
+                    src={`${address}${user.avatar}`}
                     alt="avatar"
                     className="w-6 h-6 rounded-full object-cover border border-gray-600"
                   />

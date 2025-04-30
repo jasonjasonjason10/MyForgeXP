@@ -1,9 +1,10 @@
+import { address } from "../../../address";
 function UserCommCard({ comm }) {
   return (
     <>
       <div className="flex gap-6 items-start">
         <img
-          src={`http://localhost:3000${comm.coverImage}`}
+          src={`${address}${comm.coverImage}`}
           alt={comm.gameName}
           className="w-28 h-28 object-cover rounded-lg "
         />

@@ -4,6 +4,7 @@ import GamePostCard from "./GamePostCard";
 import EditGameCoverModal from "./EditGameCoverModal";
 import EditGameDescriptionModal from "./EditGameDescriptionModal";
 import { Check } from "lucide-react";
+import { address } from "../../../address";
 
 export default function SingleGame() {
   const { id } = useParams();
@@ -18,7 +19,6 @@ export default function SingleGame() {
   const [showEditCover, setShowEditCover] = useState(false);
   const [showEditDescription, setShowEditDescription] = useState(false);
   const navigate = useNavigate();
-  const address = "http://localhost:3000/";
   const formData = new FormData();
 
   function coverHandle() {
@@ -27,7 +27,7 @@ export default function SingleGame() {
 
   async function saveCover(coverImage) {
     formData.append('newCover', coverImage)
-    await fetch(`${address}games/update/${game.id}`, {
+    await fetch(`${address}/games/update/${game.id}`, {
       method: 'PUT',
       headers: { 
         Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -36,13 +36,13 @@ export default function SingleGame() {
     window.location.reload()
   }
 
-  function descHandle() {
+  async function descHandle() {
     setShowEditDescription(true);
   }
 
 
   async function saveDesc(desc) {
-  const response = await fetch(`${address}games/update/${game.id}`, {
+  const response = await fetch(`${address}/games/update/${game.id}`, {
   method: 'PUT',
   headers: { 
     'Content-Type': 'application/json',
@@ -51,7 +51,6 @@ export default function SingleGame() {
   })
   const result = await response.json()
   window.location.reload()
-  console.log('click =>', result )
   }
 
 
@@ -60,7 +59,7 @@ export default function SingleGame() {
       "Are you sure you want to delete this game?"
     );
     if (confirmed) {
-      await fetch(`${address}games/delete/${game.id}`, {
+      await fetch(`${address}/games/delete/${game.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       })
@@ -69,29 +68,19 @@ export default function SingleGame() {
     }
   }
 
-  const handleDeleteClick = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this game?"
-    );
-    if (confirmed) {
-      // Nathan to hook up to backend
-      console.log("Deleting game...");
-    }
-  };
-
   useEffect(() => {
     async function fetchGame() {
-      const response = await fetch(`${address}games/${id}`);
+      const response = await fetch(`${address}/games/${id}`);
       const result = await response.json();
       setGame(result.game);
     }
     async function fetchPost() {
-      const response = await fetch(`${address}post/game/${id}`);
+      const response = await fetch(`${address}/post/game/${id}`);
       const result = await response.json();
       setPosts(result.posts);
     }
     async function fetchUser() {
-      const response = await fetch(`${address}user/info`, {
+      const response = await fetch(`${address}/user/info`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
@@ -116,7 +105,6 @@ export default function SingleGame() {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     const result = await response.json();
-    console.log(result);
     setClickCheck(!clickCheck);
   }
 
@@ -230,7 +218,6 @@ export default function SingleGame() {
           isOpen={showEditCover}
           onClose={() => setShowEditCover(false)}
           onSave={(file) => {
-            console.log("Cover file to upload:", file);
             saveCover(file)
             setShowEditCover(false);
           }}

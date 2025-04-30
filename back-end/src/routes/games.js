@@ -130,11 +130,14 @@ router.delete("/delete/:id", tokenAuth, async (req, res, next) => {
     if (!existing)
       return res.status(404).json({ error: "Community not found" });
 
-    await prisma.post.deleteMany({
-      where: {
-        communityId: id
-      }
-    })
+    const itsPosts = await prisma.post.findMany({ where: {communityId: id}, select: { id: true } })
+
+    const postIds = itsPosts.map(post => post.id)
+
+    if (postIds.length > 0) await prisma.favorites.deleteMany({ where: {postId: {in: postIds}}})
+
+    await prisma.post.deleteMany({ where: {communityId: id} })
+
     await prisma.gameCommunity.delete({ where: { id } });
 
     res.status(200).json({ message: "Community deleted" });

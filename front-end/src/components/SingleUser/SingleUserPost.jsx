@@ -1,3 +1,4 @@
+import { address } from "../../../address";
 export default function SingleUserPost({ post, onBack, isAdmin }) {
   const contentPath = post.content;
 
@@ -15,7 +16,7 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
       {/* Media */}
       {post.PostType === "image" && (
         <img
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           alt="Post content"
           className="w-full rounded-lg mb-4"
         />
@@ -23,7 +24,7 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
 
       {post.PostType === "video" && (
         <video
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           controls
           className="w-full rounded-lg mb-4"
         />
@@ -67,10 +68,6 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
               const confirmed = window.confirm(
                 "Are you sure you want to delete this post?"
               );
-              if (confirmed) {
-                // Your delete logic here
-                console.log("Deleting post...");
-              }
             }}
             className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-400 rounded hover:text-red-300 hover:border-red-400 transition"
           >

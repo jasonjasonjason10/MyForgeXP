@@ -2,21 +2,20 @@ import { useEffect, useState } from "react";
 import UserFavCard from "./UserFavCard";
 import YouTubeCarousel from "./YouTubeCarousel"; // make sure it's imported
 import SingleFavPost from "./SingleFavPost";
+import { address } from "../../../address";
 
 export default function Favorites({ user }) {
   const [favPosts, setFavPosts] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const address = "http://localhost:3000/";
-
   useEffect(() => {
     async function fetchFavPosts() {
-      const response = await fetch(`${address}user/favorites`, {
+      const response = await fetch(`${address}/user/favorites`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
-      setFavPosts(result.posts);
+      setFavPosts(result.posts); 
     }
     fetchFavPosts();
   }, []);

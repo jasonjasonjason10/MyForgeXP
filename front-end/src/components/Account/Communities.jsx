@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 export default function Communities({ user }) {
   const [userCommunities, setUserCommunities] = useState(null);
   const navigate = useNavigate();
-  console.log("comm useState => ", userCommunities);
 
   useEffect(() => {
     setUserCommunities(user.communities);
