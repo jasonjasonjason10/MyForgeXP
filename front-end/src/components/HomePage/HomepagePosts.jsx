@@ -1,3 +1,4 @@
+import { address } from "../../../address";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CommCard from "../Community/CommCard";
@@ -9,7 +10,7 @@ function HomePagePosts() {
 
   useEffect(() => {
     async function fetchPostList() {
-      const response = await fetch("http://localhost:3000/post/all");
+      const response = await fetch(`${address}/post/all`);
       const result = await response.json();
       setPostList(result.post);
     }

@@ -3,8 +3,7 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const address = "http://localhost:3000";
+import { address } from "../../../address";
 
 export default function Carousel() {
   const [gameList, setGameList] = useState([]);
