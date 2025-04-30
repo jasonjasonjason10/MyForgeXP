@@ -9,7 +9,7 @@ function Community() {
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [postList, setPostList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState('recent')
+  const [sortBy, setSortBy] = useState("recent");
 
   useEffect(() => {
     async function fetchPostList() {
@@ -20,10 +20,11 @@ function Community() {
     fetchPostList();
   }, [refreshToggle]);
 
-  const filteredPosts = postList.filter((post) =>
-    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.user?.username?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPosts = postList.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.user?.username?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
@@ -50,14 +51,6 @@ function Community() {
         </div>
 
         <SearchPost onSearch={(query) => setSearchQuery(query)} />
-
-        <div className="flex justify-end mb-6">
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={handleSortChange}
-              className="text-black rounded px-2 py-1"
-            >
 
         <div className="flex justify-end mb-6">
           <div className="relative">
