@@ -27,7 +27,6 @@ export default function Account() {
     followers: 0,
     following: 0,
   });
-  console.log("address => ", address);
 
   const tabComponents = {
     details: <AccountDetails user={user} />,
@@ -68,6 +67,17 @@ export default function Account() {
       following: followingList.length,
     });
   }, [followerList, followingList]);
+
+  async function handleUnfollow(id) {
+    const response = await fetch(`http://localhost:3000/user/follow/${id}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
+    const result = await response.json()
+    console.log(result)
+    window.location.reload()
+  }
+
 
   //===========User info useEffect==================
   useEffect(() => {
@@ -346,7 +356,7 @@ export default function Account() {
             >
               <div className="relative mb-4">
                 <h3 className="text-2xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                  Following
+                  Followers
                 </h3>
                 <button
                   className="absolute top-2 right-3 text-gray-400 hover:text-white "
@@ -378,21 +388,6 @@ export default function Account() {
 
                       {/* Three-dot dropdown */}
                       <div className="relative">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setFollowerList((prev) =>
-                              prev.map((f) =>
-                                f.id === follower.id
-                                  ? { ...f, showOptions: !f.showOptions }
-                                  : { ...f, showOptions: false }
-                              )
-                            );
-                          }}
-                          className="text-gray-400 hover:text-white"
-                        >
-                          <MoreHorizontal size={20} />
-                        </button>
 
                         {follower.showOptions && (
                           <div className="fixed z-[9999] right-6 top-auto mt-1 w-24 bg-gray-900 border border-gray-700 rounded shadow-lg">
