@@ -144,7 +144,7 @@ const CommunityCard = ({
       {isExpanded && (
         <div
           ///ADD ONCLICK FOR USER TO CLICK OUTSIDE OF POP UP
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 "
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 "
           onClick={() => setIsExpanded(false)}
         />
       )}
@@ -160,21 +160,28 @@ const CommunityCard = ({
         {/* Hero Image – your exact version, collapsed only */}
         {!isExpanded && heroImage && post.PostType === "text" && (
           <div
-            onClick={() => clickHandle(game.id)}
-            className="h-[197px] w-full rounded-t -2xl overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+            className="relative h-[197px] w-full rounded-t-2xl overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             style={{
               backgroundImage: `url(http://localhost:3000${heroImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-          />
+          >
+            <button
+              onClick={() => clickHandle(game.id)}
+              className="absolute bottom-2 right-2 text-xs px-3 py-1 bg-black/60 text-white rounded-full hover:bg-white hover:text-black transition"
+            >
+              See Game
+            </button>
+          </div>
         )}
 
         {/* Card Content */}
         <div
-          className={`relative z-10 bg-gray-900 rounded-b shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col  ${
+          onClick={() => setIsExpanded(!isExpanded)}
+          className={`relative z-10 bg-gray-900 rounded-b shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col ${
             isExpanded
-              ? "w-[1000px] h-[80vh]  overflow-y-auto p-5 border"
+              ? "w-[1000px] h-[80vh] overflow-y-auto p-5 border justify-between"
               : "px-3 p-2 justify-between"
           }`}
         >
@@ -189,7 +196,7 @@ const CommunityCard = ({
               />
               <h5
                 onClick={() => navigate(`/user/${post.user.id}`)}
-                className="text-lg font-semibold text-white drop-shadow"
+                className="text-lg font-semibold text-white drop-shadow cursor-pointer"
               >
                 {post.user.username}
               </h5>
@@ -200,7 +207,7 @@ const CommunityCard = ({
           {!isExpanded && (
             <h3
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center"
+              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center cursor-pointer"
             >
               {post.title}
             </h3>
@@ -215,9 +222,10 @@ const CommunityCard = ({
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }
-                  : { backgroundColor: "#1f2937" } // Fallback gray if no image
+                  : { backgroundColor: "#1f2937" }
               }
             >
+              {/* X Button */}
               <button
                 onClick={() => setIsExpanded(false)}
                 className="absolute top-4 right-4 text-white text-xl z-50"
@@ -225,10 +233,9 @@ const CommunityCard = ({
                 ✕
               </button>
 
-              {/* Overlay Content */}
+              {/* Overlay Content (title, avatar) */}
               <div className="absolute inset-0 flex justify-center items-center px-4 ">
                 <div className="bg-black/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center text-white max-w-[80%] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] border ">
-                  {/* Avatar and Username */}
                   <div
                     className="flex items-center gap-3 mb-2 cursor-pointer"
                     onClick={() => navigate(`/user/${post.user.id}`)}
@@ -236,19 +243,25 @@ const CommunityCard = ({
                     <img
                       src={`http://localhost:3000${post.user.avatar}`}
                       alt="User Avatar"
-                      className="w-10 h-10 rounded-full object-cover border-2 "
+                      className="w-10 h-10 rounded-full object-cover border-2"
                     />
                     <h5 className="text-sm font-semibold drop-shadow">
                       {post.user.username}
                     </h5>
                   </div>
-
-                  {/* Title */}
                   <h3 className="text-3xl font-bold text-center drop-shadow-lg">
                     {post.title}
                   </h3>
                 </div>
               </div>
+
+              {/* ✅ See Game Button in bottom-right */}
+              <button
+                onClick={() => clickHandle(game.id)}
+                className="absolute bottom-2 right-2 text-xs px-3 py-1 bg-black/60 text-white rounded-full hover:bg-white hover:text-black transition"
+              >
+                See Game
+              </button>
             </div>
           )}
 
@@ -281,7 +294,7 @@ const CommunityCard = ({
                 descOverflow ? "overflowing" : ""
               }`}
             >
-              <p className="whitespace-pre-wrap break-words">
+              <p className="whitespace-pre-wrap break-words flex justify-center">
                 {post.description}
               </p>
 
