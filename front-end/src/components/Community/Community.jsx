@@ -44,17 +44,23 @@ function Community() {
   return (
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-10">
+        {/* Page Title */}
+        <div className="flex justify-center mb-10">
           <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
             All Community Posts
           </h1>
         </div>
 
-        <SearchPost onSearch={(query) => setSearchQuery(query)} />
+        {/* Search + Sort Row */}
+        <div className="flex justify-center gap-4 mb-6">
+          <SearchPost onSearch={(query) => setSearchQuery(query)} />
 
-        <div className="flex justify-end mb-6">
           <div className="relative">
-            <select value={sortBy} onChange={handleSortChange} className="...">
+            <select
+              value={sortBy}
+              onChange={handleSortChange}
+              className="bg-gray-800 text-white text-sm px-4 py-1 rounded-md border border-blue-700 shadow-[0_0_10px_#1e90ff50] hover:shadow-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            >
               <option value="recent">Recent</option>
               <option value="alphabetical">A - Z</option>
               <option value="likes">Most Likes</option>
@@ -62,6 +68,7 @@ function Community() {
           </div>
         </div>
 
+        {/* Posts Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
           {sortedPosts.map((post) => (
             <CommCard

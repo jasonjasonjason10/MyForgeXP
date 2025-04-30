@@ -122,7 +122,7 @@ export default function HomePageUserSearch() {
       {/* Search Bar */}
       <div className="flex justify-center">
         <div className="relative w-full sm:w-96">
-          <div className="flex items-center bg-gray-800 text-white rounded-full px-4 py-2 shadow-sm border focus-within:ring-2 focus-within:ring-blue-600">
+          <div className="flex items-center bg-gray-800 text-white rounded px-4 py-2 shadow-sm border focus-within:ring-2 focus-within:ring-blue-600">
             <Search className="mr-2 text-gray-400" size={18} />
             <input
               type="text"
