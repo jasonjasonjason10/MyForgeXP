@@ -192,8 +192,7 @@ const CommunityCard = ({
             <div className="flex items-center gap-3 mb-4 hover:opacity-80 transition">
               <img
                 onClick={() => navigate(`/user/${post.user.id}`)}
-                src={`${address}
-                ${post.user.avatar}`}
+                src={`https://forgexp-server.onrender.com${post.user.avatar}`}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full object-cover border-2  cursor-pointer"
               />
@@ -244,7 +243,7 @@ const CommunityCard = ({
                     onClick={() => navigate(`/user/${post.user.id}`)}
                   >
                     <img
-                      src={`${address}{post.user.avatar}`}
+                      src={`https://forgexp-server.onrender.com${post.user.avatar}`}
                       alt="User Avatar"
                       className="w-10 h-10 rounded-full object-cover border-2"
                     />
@@ -275,7 +274,7 @@ const CommunityCard = ({
               className={`${
                 isExpanded ? "h-[120px] w-[240px]" : "h-[180px] w-[320px]"
               } object-cover mx-auto rounded-lg mb-4`}
-              src={`${address}${contentPath}`}
+              src={`https://forgexp-server.onrender.com${contentPath}`}
               alt=""
             />
           )}

@@ -1,6 +1,6 @@
 export async function toggleFollow(targetUserId, token) {
     try {
-      const response = await fetch(`http://localhost:3000/user/follow/${targetUserId}`, {
+      const response = await fetch(`https://forgexp-server.onrender.com/user/follow/${targetUserId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
