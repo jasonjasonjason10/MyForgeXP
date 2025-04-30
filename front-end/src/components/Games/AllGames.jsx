@@ -5,6 +5,7 @@ import NewGameForm from "./NewGameForm";
 import ReturnButton from "../ReturnButton";
 import AddGameButton from "./AddGameButton";
 import SearchGame from "./SearchGame";
+import { address } from "../../../address";
 
 export default function AllGames() {
   const [gameList, setGameList] = useState([]);
@@ -12,11 +13,10 @@ export default function AllGames() {
   const [showGameForm, setShowGameForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const address = "http://localhost:3000/";
 
   useEffect(() => {
     async function fetchIsAdmin() {
-      const response = await fetch(`${address}user/info`, {
+      const response = await fetch(`${address}/user/info`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
@@ -27,7 +27,7 @@ export default function AllGames() {
 
   useEffect(() => {
     async function fetchGameList() {
-      const response = await fetch(`${address}games/all`);
+      const response = await fetch(`${address}/games/all`);
       const result = await response.json();
       setGameList(result.games);
     }
@@ -43,7 +43,7 @@ export default function AllGames() {
   );
 
   return (
-    <div className="relative min-h-screen text-white overflow-hidden ">
+    <div className="relative min-h-screen text-white overflow-hidden">
       <div className="relative z-10 flex flex-col min-h-screen">
         <main className="flex-grow p-6">
           {isAdmin && (
