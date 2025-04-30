@@ -20,7 +20,6 @@ function CreatePost() {
 
   async function fetchCreatePost() {
     const formData = new FormData();
-    console.log(["COMMUNITYID HERE", params]);
     formData.append("communityId", params.id);
     formData.append("title", title);
     formData.append("description", description);

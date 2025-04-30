@@ -1,6 +1,4 @@
-export default function UserPostCard({ post }) {
-  console.log("likes => ", post);
-  
+export default function UserPostCard({ post }) {  
 
   let contentPath = post.content;
 

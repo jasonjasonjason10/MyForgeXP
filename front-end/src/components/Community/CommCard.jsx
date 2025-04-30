@@ -17,10 +17,7 @@ const CommunityCard = ({
   const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [heroImage, setHeroImage] = useState(undefined);
-  console.log(game);
-  if (game) {
-    console.log("HEYO", heroImage);
-  }
+
   useEffect(() => {
     fetchHasLiked(post.id);
   }, [refreshToggle]);

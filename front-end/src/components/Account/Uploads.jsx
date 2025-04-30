@@ -28,7 +28,6 @@ export default function Uploads({ user }) {
       setYoutubePosts(ytPosts);
     }
   }, [user]);
-  console.log("USER POST", user.posts);
 
   return (
     <div className="text-white px-6 py-10 max-w-5xl mx-auto">

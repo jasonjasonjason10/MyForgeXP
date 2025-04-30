@@ -7,7 +7,6 @@ export default function SingleUserYoutubeCarousel({ youtubePosts, setSelectedPos
   const [currentSlide, setCurrentSlide] = useState(0);
   const [backgroundUrl, setBackgroundUrl] = useState("");
   const [heroImage, setHeroImage] = useState(null);
-  console.log('hero image', heroImage);
   
   const currentPost = youtubePosts[currentSlide];
   const [sliderRef, sliderInstanceRef] = useKeenSlider({
@@ -35,7 +34,6 @@ export default function SingleUserYoutubeCarousel({ youtubePosts, setSelectedPos
 
   useEffect(() => {
     if (heroImage) {
-      console.log("hero exists!!")
       setBackgroundUrl(
         `http://localhost:3000${heroImage}`
       );

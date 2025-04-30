@@ -34,7 +34,6 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
 
   useEffect(() => {
     if (heroImage) {
-      console.log("hero exists!!")
       setBackgroundUrl(
         `http://localhost:3000${heroImage}`
       );

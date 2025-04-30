@@ -13,9 +13,6 @@ export default function AllGames() {
   const [showGameForm, setShowGameForm] = useState(false);
   const address = "http://localhost:3000/";
 
-  console.log("gameList useState =>", gameList);
-  console.log("isAdmin useState =>", isAdmin);
-
   useEffect(() => {
     async function fetchIsAdmin() {
       const response = await fetch(`${address}user/info`, {

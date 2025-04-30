@@ -22,7 +22,6 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
   const changedAvatar = async () => {
     const formData = new FormData();
     formData.append("avatar", file);
-    console.log("Result =>", formData);
 
     const response = await fetch(`http://localhost:3000/user/avatar`, {
       method: "PATCH",

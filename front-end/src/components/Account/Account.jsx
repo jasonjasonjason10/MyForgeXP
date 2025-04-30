@@ -35,8 +35,6 @@ export default function Account() {
     favorites: <Favorites user={user} />,
   };
 
-  console.log("user useState =>", user);
-
   useEffect(() => {
     const fetchFollowingList = async () => {
       const response = await fetch("http://localhost:3000/user/following", {
@@ -74,7 +72,6 @@ export default function Account() {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     const result = await response.json()
-    console.log(result)
     window.location.reload()
   }
 
