@@ -143,6 +143,7 @@ export default function SingleGame() {
 
             <div className="flex flex-wrap gap-4">
               {/* Subscribe Button */}
+              {localStorage.getItem('token') && 
               <button
                 onClick={subHandle}
                 className={`px-6 py-2 rounded-lg font-semibold transition
@@ -160,14 +161,17 @@ export default function SingleGame() {
                   "Subscribe"
                 )}
               </button>
+              }
 
               {/* Create Post Button */}
+              {localStorage.getItem('token') &&
               <button
                 onClick={() => navigate(`/createpost/${game.id}`)}
                 className="px-6 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg font-semibold transition"
               >
                 Create Post
               </button>
+              }
             </div>
 
             {/* Admin Buttons */}
