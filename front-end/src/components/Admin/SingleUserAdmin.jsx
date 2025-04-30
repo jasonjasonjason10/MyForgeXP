@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { address } from "../../../address";
 
 function SingleUserAdmin({ user, isAdmin }) {
   const navigate = useNavigate();
 
-  const address = "http://localhost:3000/";
   async function deleteHandle() {
     try {
-      const response = await fetch(`${address}user/delete/${user.id}`, {
+      const response = await fetch(`${address}/user/delete/${user.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

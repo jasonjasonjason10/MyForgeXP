@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { address } from "../../address";
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ const Login = ({ setToken }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/user/login", {
+      const response = await fetch(`${address}/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

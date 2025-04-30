@@ -1,6 +1,7 @@
 import EditPost from "./EditPost";
 import { useState } from "react";
 import { Trash, Pencil } from "lucide-react";
+import { address } from "../../../address";
 
 export default function SinglePost({ post, goBack }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +21,7 @@ export default function SinglePost({ post, goBack }) {
     );
     if (!confirmDelete) return;
 
-    fetch(`http://localhost:3000/user/post/${postId}`, {
+    fetch(`${address}/user/post/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -59,7 +60,7 @@ export default function SinglePost({ post, goBack }) {
       <video
         className="w-full h-[400px] rounded-lg"
         controls
-        src={`http://localhost:3000${contentPath}`}
+        src={`${address}${contentPath}`}
       ></video>
     );
   }
@@ -94,7 +95,7 @@ export default function SinglePost({ post, goBack }) {
       {post.PostType === "image" && (
         <img
           className="rounded-lg object-cover max-h-[400px] w-full"
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           alt="Post content"
         />
       )}

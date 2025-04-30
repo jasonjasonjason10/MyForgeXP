@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import { address } from "../../../address";
 
 export default function EditAvatar({ isOpen, onClose, onSave }) {
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -23,7 +24,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
     const formData = new FormData();
     formData.append("avatar", file);
 
-    const response = await fetch(`http://localhost:3000/user/avatar`, {
+    const response = await fetch(`${address}/user/avatar`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 

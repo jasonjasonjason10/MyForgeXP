@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaHammer } from "react-icons/fa";
+import { address } from "../../address";
 
 export default function Register({ setToken, token }) {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function Register({ setToken, token }) {
 
 
     try {
-      const response = await fetch("http://localhost:3000/user/register", {
+      const response = await fetch(`${address}/user/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username, fName, lName, password }),

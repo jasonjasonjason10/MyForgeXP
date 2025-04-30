@@ -2,6 +2,7 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { address } from "../../../address";
 
 export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -23,7 +24,7 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
   useEffect(() => {
     const comId = currentPost.communityId
     async function fetchGame() {
-      const response = await fetch(`http://localhost:3000/games/${comId}`)
+      const response = await fetch(`${address}/games/${comId}`)
       const result = await response.json()
       setHeroImage(result.game.heroImage);
       
@@ -35,7 +36,7 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
   useEffect(() => {
     if (heroImage) {
       setBackgroundUrl(
-        `http://localhost:3000${heroImage}`
+        `${address}${heroImage}`
       );
     }
   }, [heroImage]);

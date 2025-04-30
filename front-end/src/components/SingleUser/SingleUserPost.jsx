@@ -1,3 +1,4 @@
+import { address } from "../../../address";
 export default function SingleUserPost({ post, onBack, isAdmin }) {
   const contentPath = post.content;
 
@@ -15,7 +16,7 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
       {/* Media */}
       {post.PostType === "image" && (
         <img
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           alt="Post content"
           className="w-full rounded-lg mb-4"
         />
@@ -23,7 +24,7 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
 
       {post.PostType === "video" && (
         <video
-          src={`http://localhost:3000${contentPath}`}
+          src={`${address}${contentPath}`}
           controls
           className="w-full rounded-lg mb-4"
         />
