@@ -10,7 +10,7 @@ export default function SearchPost({ onSearch }) {
   };
 
   return (
-    <div className="flex justify-end mb-6">
+    <div className="flex justify-center mb-6">
       <input
         type="text"
         placeholder="Search posts..."
