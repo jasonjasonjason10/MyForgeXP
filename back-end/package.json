@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "nodemon server.js",
     "start": "node server.js",
-    "build": "npx prisma db push && npx prisma db seed"
+    "build": "cd ../front-end && npm i && npm run build && cd ../back-end && npx prisma db push"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
