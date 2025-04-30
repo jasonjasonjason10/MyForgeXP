@@ -57,18 +57,15 @@ export default function AllGames() {
   return (
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
-
         {/* Centered Title & Button */}
         <div className="flex flex-col items-center text-center mb-6">
           <h1 className="text-4xl font-bold mb-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
             All Games
           </h1>
-          {isAdmin && (
-            <AddGameButton onClick={() => setShowGameForm(true)} />
-          )}
+          {isAdmin && <AddGameButton onClick={() => setShowGameForm(true)} />}
         </div>
 
-        <div className="flex flex-col items-center gap-2 mb-8">
+        <div className="flex flex-row flex-wrap justify-center items-center gap-4 mb-8">
           <input
             type="text"
             placeholder="Search games..."
@@ -78,7 +75,7 @@ export default function AllGames() {
           <select
             value={sortBy}
             onChange={handleSortChange}
-            className="bg-transparent border border-gray-400 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-white w-full sm:w-64"
+            className="bg-gray-800 text-white text-sm px-4 py-2 rounded-md border border-blue-700 shadow-[0_0_10px_#1e90ff50] hover:shadow-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
           >
             <option value="alphabetical">A - Z</option>
             <option value="popular">Most Posts</option>

@@ -59,7 +59,7 @@ function Community() {
             <select
               value={sortBy}
               onChange={handleSortChange}
-              className="bg-gray-800 text-white text-sm px-4 py-1 rounded-md border border-blue-700 shadow-[0_0_10px_#1e90ff50] hover:shadow-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="bg-gray-800 text-white text-sm px-4 py-2 rounded-md border border-blue-700 shadow-[0_0_10px_#1e90ff50] hover:shadow-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             >
               <option value="recent">Recent</option>
               <option value="alphabetical">A - Z</option>
