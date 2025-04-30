@@ -7,8 +7,6 @@ export default function YouTubeCarousel({ youtubePosts, setSelectedPost }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [backgroundUrl, setBackgroundUrl] = useState("");
   const [heroImage, setHeroImage] = useState(null);
-  console.log('hero image', heroImage);
-  
   const currentPost = youtubePosts[currentSlide];
   const [sliderRef, sliderInstanceRef] = useKeenSlider({
     loop: true,
