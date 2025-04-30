@@ -22,7 +22,7 @@ function HomePagePosts() {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col items-center mb-10">
           <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] border-b pb-2">
-            Community Posts
+            Explore Our Community Posts
           </h1>
           <p className="text-center text-gray-300 mt-4 max-w-2xl text-sm font-bold">
             Browse the latest posts shared by our gaming community. To get

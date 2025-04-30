@@ -72,10 +72,6 @@ export default function AllGames() {
         </main>
       </div>
 
-      <div className="flex justify-center">
-        <ReturnButton />
-      </div>
-
       <NewGameForm
         isOpen={showGameForm}
         onClose={() => setShowGameForm(false)}

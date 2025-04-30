@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import { Check, Plus, X } from "lucide-react";
 import { address } from "../../../address";
 
@@ -17,6 +18,27 @@ const CommunityCard = ({
   const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [heroImage, setHeroImage] = useState(undefined);
+
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const descriptionRef = useRef(null);
+
+  const descRef = useRef(null);
+  const [descOverflow, setDescOverflow] = useState(false);
+  useEffect(() => {
+    if (descRef.current) {
+      setDescOverflow(
+        descRef.current.scrollHeight > descRef.current.clientHeight
+      );
+    }
+  }, [post.description, isExpanded]);
+
+  useEffect(() => {
+    if (isExpanded && descriptionRef.current) {
+      const el = descriptionRef.current;
+      setIsOverflowing(el.scrollHeight > el.clientHeight);
+    }
+  }, [isExpanded, post.description]);
+
 
   useEffect(() => {
     fetchHasLiked(post.id);
@@ -47,6 +69,10 @@ const CommunityCard = ({
       setHeroImage(game.heroImage);
     }
   }, [game]);
+
+  function clickHandle(id) {
+    navigate(`../games/${id}`);
+  }
 
   async function likeHandle(postId) {
     await fetch(`${address}/post/${postId}/like`, {
@@ -119,7 +145,8 @@ const CommunityCard = ({
       {/* Background blur overlay when expanded */}
       {isExpanded && (
         <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 "
+          ///ADD ONCLICK FOR USER TO CLICK OUTSIDE OF POP UP
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 "
           onClick={() => setIsExpanded(false)}
         />
       )}
@@ -135,61 +162,63 @@ const CommunityCard = ({
         {/* Hero Image – your exact version, collapsed only */}
         {!isExpanded && heroImage && post.PostType === "text" && (
           <div
-            className="h-[197px] w-full rounded-t -2xl overflow-hidden"
+            className="relative h-[197px] w-full rounded-t-2xl overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             style={{
               backgroundImage: `url(${address}${heroImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-          />
+          >
+            <button
+              onClick={() => clickHandle(game.id)}
+              className="absolute bottom-2 right-2 text-xs px-3 py-1 bg-black/60 text-white rounded-full hover:bg-white hover:text-black transition"
+            >
+              See Game
+            </button>
+          </div>
         )}
 
         {/* Card Content */}
         <div
-          className={`relative z-10 bg-gray-900 rounded-b shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col  ${
+          onClick={() => setIsExpanded(!isExpanded)}
+          className={`relative z-10 bg-gray-900 rounded-b shadow-lg transition-all duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex flex-col ${
             isExpanded
-              ? "w-[1000px] h-[60vh]  overflow-y-auto p-10 border"
+              ? "w-[1000px] h-[80vh] overflow-y-auto p-5 border justify-between"
               : "px-3 p-2 justify-between"
           }`}
         >
-          {/* Close Button */}
-          {isExpanded && (
-            <button
-              onClick={() => setIsExpanded(false)}
-              className="absolute top-4 right-4 text-white text-xl z-50"
-            >
-              ✕
-            </button>
+          {/* User Info */}
+
+          {!isExpanded && (
+            <div className="flex items-center gap-3 mb-4 hover:opacity-80 transition">
+              <img
+                onClick={() => navigate(`/user/${post.user.id}`)}
+                src={`http://localhost:3000${post.user.avatar}`}
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full object-cover border-2  cursor-pointer"
+              />
+              <h5
+                onClick={() => navigate(`/user/${post.user.id}`)}
+                className="text-lg font-semibold text-white drop-shadow cursor-pointer"
+              >
+                {post.user.username}
+              </h5>
+            </div>
           )}
 
-          {/* User Info */}
-          <div className="flex items-center gap-3 mb-4 hover:opacity-80 transition">
-            <img
-              onClick={() => navigate(`/user/${post.user.id}`)}
-              src={`${address}${post.user.avatar}`}
-              alt="User Avatar"
-              className="w-10 h-10 rounded-full object-cover border-2 border-blue-500 cursor-pointer"
-            />
-            <h5
-              onClick={() => navigate(`/user/${post.user.id}`)}
-              className="text-lg font-semibold text-white drop-shadow"
-            >
-              {post.user.username}
-            </h5>
-          </div>
 
           {/* Title */}
-          <h3
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center"
-          >
-            {post.title}
-          </h3>
+          {!isExpanded && (
+            <h3
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center cursor-pointer"
+            >
+              {post.title}
+            </h3>
+          )}
           {isExpanded && (
             <div
-              className={`h-[200px] w-full rounded-xl overflow-hidden mb-4 ${
-                !heroImage ? "bg-gray-800 animate-pulse" : ""
-              }`}
+              className="relative h-[250px] w-full rounded-t-2xl overflow-hidden mb-6 rounded-b-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
               style={
                 heroImage
                   ? {
@@ -197,42 +226,98 @@ const CommunityCard = ({
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }
-                  : {}
+                  : { backgroundColor: "#1f2937" }
               }
-            />
+            >
+              {/* X Button */}
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="absolute top-4 right-4 text-white text-xl z-50"
+              >
+                ✕
+              </button>
+
+              {/* Overlay Content (title, avatar) */}
+              <div className="absolute inset-0 flex justify-center items-center px-4 ">
+                <div className="bg-black/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center text-white max-w-[80%] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] border ">
+                  <div
+                    className="flex items-center gap-3 mb-2 cursor-pointer"
+                    onClick={() => navigate(`/user/${post.user.id}`)}
+                  >
+                    <img
+                      src={`http://localhost:3000${post.user.avatar}`}
+                      alt="User Avatar"
+                      className="w-10 h-10 rounded-full object-cover border-2"
+                    />
+                    <h5 className="text-sm font-semibold drop-shadow">
+                      {post.user.username}
+                    </h5>
+                  </div>
+                  <h3 className="text-3xl font-bold text-center drop-shadow-lg">
+                    {post.title}
+                  </h3>
+                </div>
+              </div>
+
+              {/* ✅ See Game Button in bottom-right */}
+              <button
+                onClick={() => clickHandle(game.id)}
+                className="absolute bottom-2 right-2 text-xs px-3 py-1 bg-black/60 text-white rounded-full hover:bg-white hover:text-black transition"
+              >
+                See Game
+              </button>
+            </div>
           )}
 
           {/* Image/Video */}
           {post.PostType === "image" && (
             <img
               onClick={() => setIsExpanded(!isExpanded)}
-              className="h-[180px] w-[320px] object-cover mx-auto rounded-lg mb-4"
-              src={`${address}${contentPath}`}
+
+              className={`${
+                isExpanded ? "h-[120px] w-[240px]" : "h-[180px] w-[320px]"
+              } object-cover mx-auto rounded-lg mb-4`}
+              src={`http://localhost:3000${contentPath}`}
               alt=""
             />
           )}
           {post.PostType === "video" && (
-            <div className="flex justify-center mb-4">
+            <div
+              className={`${
+                isExpanded ? "w-[600px] h-[360px]" : "w-[320px] h-[180px]"
+              } mx-auto mb-4 overflow-hidden rounded-lg flex justify-center items-center`}
+            >
               {postContent(contentPath)}
             </div>
           )}
 
           {/* Full Description */}
           {isExpanded && post.description && (
-            <div className="mt-2 text-sm text-gray-300 px-1 mb-4 text-left w-full">
-              <p className="whitespace-pre-wrap break-words">
+            <div
+              ref={descRef}
+              className={`relative max-h-[150px] overflow-y-auto px-4 text-sm text-gray-300 mb-4 text-left w-full description-scroll ${
+                descOverflow ? "overflowing" : ""
+              }`}
+            >
+              <p className="whitespace-pre-wrap break-words flex justify-center">
                 {post.description}
               </p>
+
+              {/* Optional fading gradient at bottom */}
+              {descOverflow && (
+                <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none" />
+              )}
             </div>
           )}
 
           {/* Like and Favorites (only in expanded) */}
           {isExpanded && (
-            <>
-              <div className="mt-4 flex justify-between items-center">
+            <div className="mt-6 px-4 flex justify-between items-end w-full">
+              {/* Left: Like button and like count */}
+              <div className="flex items-center gap-4">
                 <button
                   onClick={() => likeHandle(post.id)}
-                  className={`px-3 py-1 rounded-md text-xs font-semibold transition ${
+                  className={`px-3 py-1 rounded-md text-xs font-semibold transition cursor-pointer ${
                     postLiked
                       ? "bg-orange-500 hover:bg-orange-400"
                       : "bg-gray-600 hover:bg-gray-500 border border-orange-500"
@@ -249,9 +334,10 @@ const CommunityCard = ({
                 </span>
               </div>
 
+              {/* Right: Favorite button */}
               <div
                 onClick={() => favHandle(post.id)}
-                className={`mt-4 text-center text-xs font-semibold cursor-pointer rounded-md transition p-3 w-32 mx-auto  ${
+                className={`text-center text-xs font-semibold cursor-pointer rounded-md transition p-3 w-32 ${
                   postFav
                     ? "border border-blue-700"
                     : "border border-blue-700 shadow-[0_0_20px_#22d3ee60] hover:shadow-blue-700 duration-300"
@@ -265,7 +351,7 @@ const CommunityCard = ({
                   "Add to Favorites"
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>
