@@ -210,7 +210,7 @@ const CommunityCard = ({
           {!isExpanded && (
             <h3
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_5px_rgba(255,165,0,0.3)] flex justify-center cursor-pointer"
+              className="text-xl font-semibold text-white mb-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] flex justify-center cursor-pointer"
             >
               {post.title}
             </h3>
