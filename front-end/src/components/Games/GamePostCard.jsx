@@ -28,6 +28,37 @@ function GamePostCard({ post }) {
     setPostLiked(result.boolean);
   }
 
+  let contentPath = post.content;
+  console.log(contentPath);
+  
+
+  function extractId(contentPath) {
+    const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
+    const match = contentPath.match(findId);
+    return match ? match[1] : null;
+  }
+
+  function postContent(contentPath) {
+    if (contentPath.startsWith("http://") || contentPath.startsWith("https://")) {
+      const videoId = extractId(contentPath);
+      return (
+        <iframe
+          className="h-[180px] w-[320px]"
+          src={`https://www.youtube.com/embed/${videoId}`}
+          allowFullScreen
+        ></iframe>
+      );
+    }
+
+    return (
+      <video
+        className="h-[180px] w-[320px]"
+        controls
+        src={`http://localhost:3000${contentPath}`}
+      ></video>
+    );
+  }
+
   return (
     <div className="bg-gray-800 rounded-lg shadow-md p-4 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] w-full h-72 flex flex-col justify-between overflow-hidden">
       {/* Post Title */}
@@ -37,7 +68,7 @@ function GamePostCard({ post }) {
 
       {/* Post Content */}
       <div className="mb-2 text-gray-300 text-sm line-clamp-3">
-        {post.content}
+        {contentPath ? postContent(contentPath) : '' }
       </div>
 
       {/* Post Description */}

@@ -7,6 +7,7 @@ function Community() {
   const navigate = useNavigate();
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [postList, setPostList] = useState([]);
+  const [sortBy, setSortBy] = useState('recent')
 
   useEffect(() => {
     async function fetchPostList() {
@@ -17,6 +18,20 @@ function Community() {
     fetchPostList();
   }, [refreshToggle]);
 
+  const sortPost = [...postList].sort((a, b) => {
+    if (sortBy === "alphabetical") {
+      return a.title.localeCompare(b.title);
+    } else if (sortBy === "likes") {
+      return (b.likes?.length || 0) - (a.likes?.length || 0);
+    } else {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+  });
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
   return (
     <div className="min-h-screen text-white px-4 py-10">
       <div className="max-w-6xl mx-auto">
@@ -24,12 +39,20 @@ function Community() {
           <h1 className="text-4xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] ">
             All Community Posts
           </h1>
-
         </div>
-        <p></p>
+
+        <div className="flex justify-end mb-6">
+          <div className="relative">
+            <select value={sortBy} onChange={handleSortChange} className="...">
+              <option value="recent">Recent</option>
+              <option value="alphabetical">A - Z</option>
+              <option value="likes">Most Likes</option>
+            </select>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
-          {postList.map((post) => (
+          {sortPost.map((post) => (
             <CommCard
               key={post.id}
               post={post}
