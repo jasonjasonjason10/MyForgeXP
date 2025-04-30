@@ -101,42 +101,46 @@ export default function GamePostModal({ post, game, onClose }) {
       <div className="fixed inset-0 flex items-center justify-center p-10 z-50">
         <div className="bg-gray-900 text-white rounded-xl shadow-lg w-[1000px] max-h-[90vh] overflow-y-auto border p-5 relative flex flex-col justify-between">
           {/* Hero Image */}
-          <div
-            className="relative h-[250px] w-full rounded-t-2xl overflow-hidden mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-            style={{
-              backgroundImage: `url(${address}${game.heroImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 text-white text-xl z-50"
+          {game?.heroImage && (
+            <div
+              className="relative h-[250px] w-full rounded-t-2xl overflow-hidden mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              style={{
+                backgroundImage: `url(http://localhost:3000${game.heroImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
             >
-              ✕
-            </button>
+              {/* Close Button */}
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 text-white text-xl z-50 bg-black/50 rounded-full px-3 py-1 hover:bg-black/70"
+              >
+                ✕
+              </button>
 
-            <div className="absolute inset-0 flex justify-center items-center px-4">
-              <div className="bg-black/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center text-white max-w-[80%] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] border">
-                <div
-                  className="flex items-center gap-3 mb-2 cursor-pointer"
-                  onClick={() => navigate(`/user/${post.user.id}`)}
-                >
-                  <img
-                    src={`${address}${post.user.avatar}`}
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full object-cover border-2"
-                  />
-                  <h5 className="text-sm font-semibold drop-shadow">
-                    {post.user.username}
-                  </h5>
+              {/* Avatar, Username, and Title Overlay */}
+              <div className="absolute inset-0 flex justify-center items-center px-4">
+                <div className="bg-black/10 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center text-white max-w-[80%] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] border">
+                  <div
+                    className="flex items-center gap-3 mb-2 cursor-pointer"
+                    onClick={() => navigate(`/user/${post.user.id}`)}
+                  >
+                    <img
+                      src={`http://localhost:3000${post.user.avatar}`}
+                      alt="User Avatar"
+                      className="w-10 h-10 rounded-full object-cover border-2"
+                    />
+                    <h5 className="text-sm font-semibold drop-shadow">
+                      {post.user.username}
+                    </h5>
+                  </div>
+                  <h3 className="text-3xl font-bold text-center drop-shadow-lg">
+                    {post.title}
+                  </h3>
                 </div>
-                <h3 className="text-3xl font-bold text-center drop-shadow-lg">
-                  {post.title}
-                </h3>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Media */}
           {post.PostType === "image" ||
@@ -180,7 +184,7 @@ export default function GamePostModal({ post, game, onClose }) {
               <span className="text-gray-400 text-xs">
                 Likes:{" "}
                 <span className="text-white font-bold">
-                  {post.likes.length}
+                {Array.isArray(post.likes) ? post.likes.length : 0}
                 </span>
               </span>
             </div>
