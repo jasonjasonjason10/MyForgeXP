@@ -26,33 +26,33 @@ export default function SingleGame() {
   }
 
   async function saveCover(coverImage) {
-    formData.append('newCover', coverImage)
+    formData.append("newCover", coverImage);
     await fetch(`${address}/games/update/${game.id}`, {
-      method: 'PUT',
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem("token")}` },
-      body: formData
-    })
-    window.location.reload()
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData,
+    });
+    window.location.reload();
   }
 
   async function descHandle() {
     setShowEditDescription(true);
   }
 
-
   async function saveDesc(desc) {
-  const response = await fetch(`${address}/games/update/${game.id}`, {
-  method: 'PUT',
-  headers: { 
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem("token")}` },
-  body: JSON.stringify({ description: desc })
-  })
-  const result = await response.json()
-  window.location.reload()
+    const response = await fetch(`${address}/games/update/${game.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ description: desc }),
+    });
+    const result = await response.json();
+    window.location.reload();
   }
-
 
   async function deleteHandle() {
     const confirmed = window.confirm(
@@ -61,10 +61,10 @@ export default function SingleGame() {
     if (confirmed) {
       await fetch(`${address}/games/delete/${game.id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      })
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       console.log("Game deletion confirmed.");
-      navigate("/all-games")
+      navigate("/all-games");
     }
   }
 
@@ -212,17 +212,20 @@ export default function SingleGame() {
       {/* Posts Section */}
       <div className="mt-10 mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts ? (
-          posts.map((post) => <GamePostCard key={post.id} post={post} />)
+          posts.map((post) => (
+            <GamePostCard key={post.id} post={post} gameId={post.communityId} />
+          ))
         ) : (
           <p className="text-center text-lg mt-6">Loading posts...</p>
         )}
       </div>
+
       {showEditCover && (
         <EditGameCoverModal
           isOpen={showEditCover}
           onClose={() => setShowEditCover(false)}
           onSave={(file) => {
-            saveCover(file)
+            saveCover(file);
             setShowEditCover(false);
           }}
         />
@@ -235,7 +238,7 @@ export default function SingleGame() {
           currentDescription={game.description}
           onClose={() => setShowEditDescription(false)}
           onSave={(newDesc) => {
-            saveDesc(newDesc)
+            saveDesc(newDesc);
             setShowEditDescription(false);
           }}
         />
@@ -243,4 +246,3 @@ export default function SingleGame() {
     </div>
   );
 }
-
