@@ -3,13 +3,15 @@ import { Check } from "lucide-react";
 import { address } from "../../../address";
 import { useNavigate } from "react-router-dom";
 
-export default function GamePostModal({ post, onClose }) {
+export default function GamePostModal({ post, onClose, user }) {
   const [postLiked, setPostLiked] = useState(false);
   const [postFav, setPostFav] = useState(false);
   const [descOverflow, setDescOverflow] = useState(false);
   const [game, setGame] = useState(null);
   const descRef = useRef(null);
   const navigate = useNavigate();
+  console.log('p[ostyi', post);
+  
 
   useEffect(() => {
     if (descRef.current) {
@@ -27,7 +29,7 @@ export default function GamePostModal({ post, onClose }) {
       if (post.communityId) {
         const response = await fetch(`${address}/games/${post.communityId}`);
         const result = await response.json();
-        setGame(result.game);
+        setGame(result.game);c
       }
     }
 
@@ -43,6 +45,7 @@ export default function GamePostModal({ post, onClose }) {
     });
     fetchHasLiked(postId);
   }
+
 
   async function fetchHasLiked(postId) {
     const response = await fetch(`${address}/post/hasliked/${postId}`, {
@@ -113,7 +116,7 @@ export default function GamePostModal({ post, onClose }) {
             <div
               className="relative h-[250px] w-full  overflow-hidden mb-6 rounded-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
               style={{
-                backgroundImage: `url(http://localhost:3000${game.heroImage})`,
+                backgroundImage: `url(${address}{game.heroImage})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
@@ -132,18 +135,18 @@ export default function GamePostModal({ post, onClose }) {
                   <div
                     className="flex items-center gap-3 mb-2 cursor-pointer"
                     onClick={() =>
-                      navigate(`/user/${post?.user?.id || "unknown"}`)
+                      navigate(`/user/${post?.userId || "unknown"}`)
                     }
                   >
                     {post?.user?.avatar && (
                       <img
-                        src={`http://localhost:3000${post.user.avatar}`}
+                        src={`${address}${user.avatar}`}
                         alt="User Avatar"
                         className="w-10 h-10 rounded-full object-cover border-2"
                       />
                     )}
                     <h5 className="text-sm font-semibold drop-shadow">
-                      {post?.user?.username || "Unknown"}
+                      {user.username || "Unknown"}
                     </h5>
                   </div>
                   <h3 className="text-3xl font-bold text-center drop-shadow-lg">

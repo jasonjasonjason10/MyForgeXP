@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GamePostModal from "./GamePostModal";
 import { address } from "../../../address";
 
 function GamePostCard({ post, game }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user , setUser] = useState(null)
+  console.log('YUSUER' ,user)
 
   function extractId(contentPath) {
     const findId = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\n?#]+)/;
@@ -25,6 +27,15 @@ function GamePostCard({ post, game }) {
         ></iframe>
       );
     }
+
+  useEffect(() => {
+    async function fetchUser() {
+      const response = await fetch(`${address}/user/${post?.userId}`)
+      const result = await response.json()
+      setUser(result.user)
+    }
+    fetchUser()
+  }, [])
 
     return (
       <video
@@ -58,13 +69,14 @@ function GamePostCard({ post, game }) {
 
         {/* Metadata */}
         <div className="flex justify-between items-center text-[10px] text-gray-500">
-          <div>By: {post.user?.username || post.userId}</div>
+          <div>By: {user?.username}</div>
           <div>{new Date(post.createdAt).toLocaleDateString()}</div>
         </div>
       </div>
 
       {isModalOpen && (
         <GamePostModal
+          user={user}
           post={post}
           game={game}
           onClose={() => setIsModalOpen(false)}

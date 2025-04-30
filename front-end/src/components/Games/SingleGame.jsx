@@ -84,8 +84,8 @@ export default function SingleGame() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const result = await response.json();
-      setUserComms(result.user.communities);
-      setIsAdmin(result.user.isAdmin);
+      setUserComms(result?.user?.communities);
+      setIsAdmin(result?.user?.isAdmin);
     }
     fetchGame();
     fetchPost();
