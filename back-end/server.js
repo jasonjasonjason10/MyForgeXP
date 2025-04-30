@@ -53,6 +53,12 @@ app.use(
   express.static(path.join(__dirname, "src", "images", "games"))
 )
 
+app.use(express.static(path.join(__dirname, '../front-end/dist')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../front-end/dist', 'index.html'))
+})
+
 app.listen(3000, () => {
   console.log("server running on port 3000");
 });
