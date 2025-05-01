@@ -24,7 +24,9 @@ export default function CreatePost() {
           filename: encodeURIComponent(content.name),
           fileType: encodeURIComponent(content.type),
         });
-        const res1 = await fetch(`${address}/post/generate-upload-url?${params}`);
+        const res1 = await fetch(`${address}/post/generate-upload-url?${params}`, {
+          headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        });
         if (!res1.ok) throw new Error("Failed to get upload URL");
         const { uploadUrl, key } = await res1.json();
 
