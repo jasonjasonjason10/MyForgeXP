@@ -9,7 +9,7 @@ export default function CreatePost() {
   const [PostType, setPostType]   = useState("text");
   const [content, setContent]     = useState(null);
   const [error, setError]         = useState("");
-  const params = useParams();
+  const {id} = useParams();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -51,7 +51,7 @@ export default function CreatePost() {
 
     // 2) Build FormData for your create-post endpoint
     const formData = new FormData();
-    formData.append("communityId", params.id);
+    formData.append("communityId", id);
     formData.append("title", title);
     formData.append("description", description);
     formData.append("PostType", PostType);

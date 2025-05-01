@@ -5,17 +5,13 @@ const prisma = require("../../prisma");
 const tokenAuth = require("../middleware/TokenAuth");
 const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/images/posts");
-  },
-  filename: (req, file, cb) => {
-    const prefix = `${Date.now()}-${req.userId}`; // FIGURE OUT HOW TO THROW POST ID ON THIS GUY
-    cb(null, `${prefix}-${file.originalname}`);
-  },
-});
+const REGION = process.env.AWS_REGION;
+const BUCKET = process.env.S3_BUCKET;
+function buildPublicUrl(key) {
+  return `https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`;
+}
 
-const upload = multer({ storage });
+router.use(express.json());
 
 // get all posts from a community by id
 router.get("/all", async (req, res) => {
@@ -118,35 +114,56 @@ router.get("/game/:id", async (req, res) => {
 router.post(
   "/create",
   tokenAuth,
-  upload.single("content"),
   async (req, res, next) => {
     try {
       const userId = req.userId;
-      if (!userId)
-        return res.status(400).json({
-          error: "No user ID uploaded, maybe check if you are logged in?",
-        });
-
-      const { title, description, PostType } = req.body;
-
-      const communityId = +req.body.communityId;
-      if (!communityId)
-        return res.status(400).json({ error: "No community ID uploaded" });
-
-      let postData = { ...req.body, userId, communityId };
-
-      if (req.file) postData.content = `/images/posts/${req.file.filename}`;
-
-      if (!description || description === "") {
-        postData.description = null;
+      if (!userId) {
+        return res.status(400).json({ error: "Not authenticated." });
       }
 
-      const createPost = await prisma.post.create({ data: postData });
-      res
-        .status(200)
-        .json({ successMessage: "Post CREATED !", post: createPost });
-    } catch (error) {
-      next(error);
+      const { title, description, PostType, content, communityId } = req.body;
+      const cid = parseInt(communityId, 10);
+      if (!cid || !title) {
+        return res.status(400).json({ error: "Missing required fields." });
+      }
+
+      // Base data
+      const postData = {
+        userId,
+        communityId: cid,
+        title,
+        description: description || null,
+        PostType,
+        content: null,
+      };
+
+      // Determine content
+      if (PostType === "image" || PostType === "video") {
+        // content should be the S3 key
+        if (!content) {
+          return res
+            .status(400)
+            .json({ error: "Missing S3 key for image/video post." });
+        }
+        postData.content = buildPublicUrl(content);
+      } else {
+        // text post
+        if (typeof content !== "string" || !content.trim()) {
+          return res
+            .status(400)
+            .json({ error: "Missing text content for text post." });
+        }
+        postData.content = content.trim();
+      }
+
+      const created = await prisma.post.create({ data: postData });
+
+      res.status(201).json({
+        successMessage: "Post created successfully!",
+        post: created,
+      });
+    } catch (err) {
+      next(err);
     }
   }
 );
