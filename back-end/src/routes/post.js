@@ -169,7 +169,7 @@ router.post(
 );
 
 // edit a post by id & optional file reupload & update PostType
-router.patch("/edit", tokenAuth, upload.single("content"), async (req, res, next) => {
+router.patch("/edit", tokenAuth, async (req, res, next) => {
   try {
     const { postId, title, description } = req.body;
 
