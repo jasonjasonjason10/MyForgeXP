@@ -16,9 +16,9 @@ const s3  = new S3Client({ region: process.env.AWS_REGION, credentials: {
 const BUCKET = process.env.S3_BUCKET;
 router.use(express.json())
 // 1️⃣ Generate a presigned PUT URL for clients to upload directly to S3
-router.post("/generate-upload-url", async (req, res, next) => {
+router.get("/generate-upload-url", async (req, res, next) => {
   try {
-    const { filename, fileType } = req.body;
+    const { filename, fileType } = req.query;
     if (!filename || !fileType) {
       return res.status(400).json({ error: "filename and fileType required" });
     }
