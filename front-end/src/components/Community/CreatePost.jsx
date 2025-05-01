@@ -12,7 +12,7 @@ export default function CreatePost() {
   const {id} = useParams();
   const navigate = useNavigate();
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e, id, title, description, PostType, contentValue) {
     e.preventDefault();
     setError("");
 
@@ -21,6 +21,8 @@ export default function CreatePost() {
     // 1) If it's a File (image or video), upload to S3 first
     if ((PostType === "image" || PostType === "video") && content instanceof File) {
       try {
+        console.log('CONTENT:', content);
+        console.log('ID:' ,id);
         // ask backend for presigned URL
         const res1 = await fetch(
           `${address}/post/generate-upload-url?` +
@@ -50,12 +52,12 @@ export default function CreatePost() {
     }
 
     // 2) Build FormData for your create-post endpoint
-    const formData = new FormData();
-    formData.append("communityId", id);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("PostType", PostType);
-    formData.append("content", contentValue);
+    // const formData = new FormData();
+    // formData.append("communityId", id);
+    // formData.append("title", title);
+    // formData.append("description", description);
+    // formData.append("PostType", PostType);
+    // formData.append("content", contentValue);
 
     // 3) Send to your API
     try {
@@ -82,7 +84,7 @@ export default function CreatePost() {
     <div className="relative min-h-screen overflow-hidden">
       <div className="relative z-10 flex justify-center items-center min-h-screen px-4 py-10">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(e) =>handleSubmit(e,id, title, description, PostType, contentValue)}
           className="bg-cover bg-center border border-blue-500 p-8 rounded-lg shadow-xl w-full max-w-2xl backdrop-blur-md"
           style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
         >
