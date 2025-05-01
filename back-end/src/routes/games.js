@@ -10,7 +10,7 @@ const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { v4: uuid } = require("uuid");
 
 const s3  = new S3Client({ region: process.env.AWS_REGION, credentials: {
-  accessKeyId: process.env.ACCESS, secretAccessKey: process.env.SECRET_ACCESS
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 } });
 const BUCKET = process.env.S3_BUCKET;
 router.use(express.json())
