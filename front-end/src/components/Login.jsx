@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { address } from "../../address";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -8,6 +9,7 @@ const Login = ({ setToken }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -67,7 +69,7 @@ const Login = ({ setToken }) => {
               className="h-20 w-auto drop-shadow-xl"
             />
           </div>
-  
+
           {error && (
             <p className="text-orange-400 text-sm mb-4 text-center">{error}</p>
           )}
@@ -76,7 +78,7 @@ const Login = ({ setToken }) => {
               {successMessage}
             </p>
           )}
-  
+
           <label
             htmlFor="email"
             className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
@@ -92,24 +94,32 @@ const Login = ({ setToken }) => {
             required
             className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-  
+
           <label
             htmlFor="password"
             className="block mb-2 font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
           >
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            minLength="8"
-            required
-            className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-  
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength="8"
+              required
+              className="w-full px-4 py-2 mb-4 bg-gray-900 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-3 right-4 text-xl cursor-pointer text-gray-300 hover:text-white"
+            >
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </span>
+          </div>
+
           <button
             type="submit"
             className="w-full py-2 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded mt-2 transition disabled:opacity-50"
@@ -120,7 +130,6 @@ const Login = ({ setToken }) => {
       </div>
     </div>
   );
-  
 };
 
 export default Login;
