@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 // const prisma = require("prisma")
 
-app.use(cors({origin: ['https://forgexp-server.onrender.com']}));
+app.use(cors({origin: ['https://forgexp-server.onrender.com', 'https://forgexp.onrender.com']}));
 app.use(express.json());
 app.use(require("morgan")("dev"));
 

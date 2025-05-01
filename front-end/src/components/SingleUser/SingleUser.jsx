@@ -44,7 +44,7 @@ export default function SingleUser() {
     if (user.id === currentUserId) {
       navigate("/account");
     }
-  });
+  }, []);
 
   useEffect(() => {
     async function fetchSelf() {
