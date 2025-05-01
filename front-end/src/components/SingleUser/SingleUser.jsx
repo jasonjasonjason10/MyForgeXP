@@ -167,7 +167,7 @@ export default function SingleUser() {
             src={
               newAvatar
                 ? URL.createObjectURL(newAvatar)
-                : `${address}${user.avatar}`
+                : `${user.avatar}`
             }
             alt="User avatar"
             className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg"

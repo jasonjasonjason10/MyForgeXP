@@ -41,7 +41,7 @@ function GamePostCard({ post, game }) {
       <video
         className="h-[180px] w-[320px]"
         controls
-        src={`https://forgexp-server.onrender.com${contentPath}`}
+        src={`${contentPath}`}
       ></video>
     );
   }

@@ -131,7 +131,7 @@ export default function SingleGame() {
           {/* Cover Image */}
           <div className="flex-shrink-0">
             <img
-              src={`https://forgexp-server.onrender.com${game.coverImage}`}
+              src={`${game.coverImage}`}
               alt="Game Cover"
               className="w-48 h-64 object-cover rounded-lg shadow-md transition-transform duration-300 hover:scale-110"
             />
