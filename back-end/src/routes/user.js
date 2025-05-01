@@ -397,27 +397,35 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 });
 
 // change your avatar ========================================
-router.patch("/avatar", tokenAuth, async (req, res, next) => {
+router.patch('/avatar', tokenAuth, async (req, res, next) => {
   try {
     const userId = req.userId;
     if (!userId) {
-      return res.status(400).json({ error: "Invalid user ID" });
+      return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    const { avatarKey } = req.body;
-    if (!avatarKey) {
-      return res.status(400).json({ error: "No avatarKey provided" });
+    // Accept either an S3 key or a full URL
+    const { avatarKey, avatarUrl } = req.body;
+    if (!avatarKey && !avatarUrl) {
+      return res
+        .status(400)
+        .json({ error: 'Provide either avatarKey or avatarUrl' });
     }
 
+    // Fetch the user
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    if (user.avatar && user.avatar !== DEFAULT_AVATAR_URL) {
-      const match = user.avatar.match(/https?:\/\/[^/]+\/(.+)$/);
-      const oldKey = match ? match[1] : null;
-
+    // If they already had a non-default S3 avatar, delete old object
+    if (
+      user.avatar &&
+      user.avatar !== DEFAULT_AVATAR_URL &&
+      user.avatar.includes(`${BUCKET}.s3.${REGION}.amazonaws.com/`)
+    ) {
+      const match   = user.avatar.match(/\/([^/]+)$/);
+      const oldKey  = match?.[1];
       if (oldKey) {
         await s3.send(
           new DeleteObjectCommand({ Bucket: BUCKET, Key: oldKey })
@@ -425,15 +433,21 @@ router.patch("/avatar", tokenAuth, async (req, res, next) => {
       }
     }
 
-    const newAvatarUrl = buildPublicUrl(avatarKey);
+    // Determine the new avatar URL
+    const newAvatar = avatarKey
+      ? buildPublicUrl(avatarKey)
+      : avatarUrl;
+
+    // Update in database
     await prisma.user.update({
       where: { id: userId },
-      data: { avatar: newAvatarUrl },
+      data: { avatar: newAvatar },
     });
 
+    // Return the new URL
     return res.status(200).json({
-      successMessage: "Avatar updated successfully",
-      avatar: newAvatarUrl,
+      successMessage: 'Avatar updated successfully',
+      avatar: newAvatar,
     });
   } catch (err) {
     next(err);

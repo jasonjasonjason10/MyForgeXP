@@ -33,6 +33,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
   };
 
   const handleSave = async (file, avatarUrl) => {
+    console.log('AVATAR URL HERE', avatarUrl)
     try {
       let payload, headers;
       if (file) {
@@ -135,6 +136,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
             <input
               type="file"
               accept="image/png,image/jpeg"
+              value={file}
               onChange={handleFileChange}
               className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-700 file:text-white hover:file:bg-blue-400"
             />
