@@ -32,7 +32,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
     setAvatarUrl("");
   };
 
-  const handleSave = async () => {
+  const handleSave = async (file, avatarUrl) => {
     try {
       let payload, headers;
       if (file) {
@@ -152,7 +152,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
               Cancel
             </button>
             <button
-              onClick={handleSave}
+              onClick={() => handleSave(file, avatarUrl)}
               className="px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded"
             >
               Save
