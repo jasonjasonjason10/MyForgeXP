@@ -116,19 +116,19 @@ const CommunityCard = ({
   }
 
   function postContent(contentPath) {
-    if (
-      contentPath.startsWith("http://") ||
-      contentPath.startsWith("https://")
-    ) {
-      const videoId = extractId(contentPath);
-      return (
-        <iframe
-          className="h-[180px] w-[320px]"
-          src={`https://www.youtube.com/embed/${videoId}`}
-          allowFullScreen
-        ></iframe>
-      );
-    }
+    // if (
+    //   contentPath.startsWith("http://") ||
+    //   contentPath.startsWith("https://")
+    // ) {
+    //   const videoId = extractId(contentPath);
+    //   return (
+    //     <iframe
+    //       className="h-[180px] w-[320px]"
+    //       src={`https://www.youtube.com/embed/${videoId}`}
+    //       allowFullScreen
+    //     ></iframe>
+    //   );
+    // }
 
     return (
       <video
