@@ -12,7 +12,7 @@ export default function CreatePost() {
   const {id} = useParams();
   const navigate = useNavigate();
 
-  async function handleSubmit(e, id, title, description, PostType, contentValue) {
+  async function handleSubmit(e, id, title, description, PostType, content) {
     e.preventDefault();
     setError("");
 
@@ -41,7 +41,7 @@ export default function CreatePost() {
         if (!res2.ok) throw new Error("Upload to S3 failed");
 
         // use the S3 key as the content pointer
-        contentValue = key;
+        let contentValue = key;
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -82,7 +82,7 @@ export default function CreatePost() {
     <div className="relative min-h-screen overflow-hidden">
       <div className="relative z-10 flex justify-center items-center min-h-screen px-4 py-10">
         <form
-          onSubmit={(e) =>handleSubmit(e,id, title, description, PostType, contentValue)}
+          onSubmit={(e) =>handleSubmit(e,id, title, description, PostType, content)}
           className="bg-cover bg-center border border-blue-500 p-8 rounded-lg shadow-xl w-full max-w-2xl backdrop-blur-md"
           style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
         >
@@ -163,8 +163,7 @@ export default function CreatePost() {
                 />
                 <span className="text-center text-white mt-2">— OR —</span>
                 <input
-                  type="text"
-                  value={typeof content === "string" ? content : ""}
+                  type="text" value={typeof content === "string" ? content : ""}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Paste YouTube link..."
                   className="p-3 bg-gray-900 border border-orange-400 rounded placeholder-white text-white w-full"
