@@ -53,7 +53,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
         setFileError("Please supply either a URL or choose a file.");
         return;
       }
-
+      console.log('AVATAR URL', avatarUrl)
       const res = await fetch(`${address}/user/avatar`, {
         method: "PATCH",
         headers,
