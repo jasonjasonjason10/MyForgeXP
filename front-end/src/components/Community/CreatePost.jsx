@@ -25,14 +25,14 @@ export default function CreatePost() {
           fileType: encodeURIComponent(content.type),
         });
         const res1 = await fetch(`${address}/post/generate-upload-url?${params}`, {
-          headers: {'Content-Type': `${content.type}`, 'Authorization': `Bearer ${localStorage.getItem('token')}`}
+          headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
         });
         if (!res1.ok) throw new Error("Failed to get upload URL");
         const { uploadUrl, key } = await res1.json();
 
         const res2 = await fetch(uploadUrl, {
           method: "PUT",
-          headers: { "Content-Type": content.type, 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+          headers: { "Content-Type": content.type },
           body: content,
         });
         if (!res2.ok) throw new Error("Upload to S3 failed");
