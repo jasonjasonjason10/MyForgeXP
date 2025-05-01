@@ -19,7 +19,7 @@ export default function NewGameForm({ isOpen, onClose }) {
     setFile(f);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (title, description, file) => {
     if (!title || !description || !file) {
       alert("All fields + an image are required.");
       return;
@@ -157,7 +157,7 @@ export default function NewGameForm({ isOpen, onClose }) {
               Cancel
             </button>
             <button
-              onClick={handleSubmit}
+              onClick={()=>handleSubmit(title, description, file)}
               className="px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded"
             >
               Submit

@@ -396,7 +396,6 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 router.patch(
   "/avatar",
   tokenAuth,
-  upload.single("avatar"),
   async (req, res, next) => {
     try {
       const id = req.userId;
