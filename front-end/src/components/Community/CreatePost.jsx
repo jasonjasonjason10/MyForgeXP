@@ -64,7 +64,7 @@ export default function CreatePost() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: formData,
+        body: JSON.stringify({title, description, PostType, content, communityId: id}),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || "Create failed");
