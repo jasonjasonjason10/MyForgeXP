@@ -116,7 +116,7 @@ export default function GamePostModal({ post, onClose, user }) {
             <div
               className="relative h-[250px] w-full  overflow-hidden mb-6 rounded-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
               style={{
-                backgroundImage: `url(${address}{game.heroImage})`,
+                backgroundImage: `url(${game.heroImage})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

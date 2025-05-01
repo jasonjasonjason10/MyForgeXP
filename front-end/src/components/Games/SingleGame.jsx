@@ -121,7 +121,7 @@ export default function SingleGame() {
       <div
         className="rounded-lg p-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] relative overflow-hidden"
         style={{
-          backgroundImage: `url(https://forgexp-server.onrender.com${game.heroImage})`,
+          backgroundImage: `url(${game.heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

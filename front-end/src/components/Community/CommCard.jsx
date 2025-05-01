@@ -163,7 +163,7 @@ const CommunityCard = ({
           <div
             className="relative h-[197px] w-full rounded-t overflow-hidden drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
             style={{
-              backgroundImage: `url(${address}${heroImage})`,
+              backgroundImage: `url(${heroImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -220,7 +220,7 @@ const CommunityCard = ({
               style={
                 heroImage
                   ? {
-                      backgroundImage: `url(${address}${heroImage})`,
+                      backgroundImage: `url(${heroImage})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }

@@ -36,7 +36,7 @@ export default function SingleUserYoutubeCarousel({ youtubePosts, setSelectedPos
   useEffect(() => {
     if (heroImage) {
       setBackgroundUrl(
-        `${address}${heroImage}`
+        `${heroImage}`
       );
     }
   }, [heroImage]);

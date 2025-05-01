@@ -86,7 +86,7 @@ export default function HomePageUserSearch() {
       <div className="flex justify-center gap-8 mb-6">
         {randomUsers.map((user) => {
           const avatarPath = user.avatar
-            ? `${address}${user.avatar}`
+            ? `${user.avatar}`
             : "/defaultavatar1.png";
 
           return (
