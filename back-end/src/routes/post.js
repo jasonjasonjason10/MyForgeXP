@@ -7,6 +7,9 @@ const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { v4: uuid } = require("uuid");
 const tokenAuth = require("../middleware/TokenAuth");
 
+console.log('ACCESS KEY', process.env.AWS_ACCESS_KEY_ID)
+console.log('SECRET ACCESS', process.env.AWS_SECRET_ACCESS_KEY)
+
 // Set up AWS S3 Client - FIX: Use standard AWS environment variable names
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -47,6 +50,7 @@ router.get("/generate-upload-url", tokenAuth, async (req, res, next) => {
     });
 
     const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 }); // 5 minutes
+    console.log('UPLOAD URL HERE', uploadUrl)
 
     res.status(200).json({
       uploadUrl,
