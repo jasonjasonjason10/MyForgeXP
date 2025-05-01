@@ -144,7 +144,7 @@ export default function Account() {
       <div className="flex flex-col items-center mb-8">
         <div className="relative">
           <img
-            src={`${address}${user.avatar}`}
+            src={user.avatar}
             alt="User avatar"
             className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover shadow-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
           />
@@ -291,7 +291,7 @@ export default function Account() {
                         onClick={() => handleUserClick(user.id)}
                       >
                         <img
-                          src={`${address}${user.avatar}`}
+                          src={`${user.avatar}`}
                           alt="avatar"
                           className="w-8 h-8 rounded-full object-cover border border-gray-500"
                         />
@@ -376,7 +376,7 @@ export default function Account() {
                         onClick={() => handleUserClick(follower.id)}
                       >
                         <img
-                          src={`${address}${follower.avatar}`}
+                          src={`${follower.avatar}`}
                           alt="avatar"
                           className="w-8 h-8 rounded-full object-cover border border-gray-500"
                         />

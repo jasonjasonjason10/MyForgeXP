@@ -60,7 +60,7 @@ export default function SinglePost({ post, goBack }) {
       <video
         className="w-full h-[400px] rounded-lg"
         controls
-        src={`${address}${contentPath}`}
+        src={`${contentPath}`}
       ></video>
     );
   }
@@ -95,7 +95,7 @@ export default function SinglePost({ post, goBack }) {
       {post.PostType === "image" && (
         <img
           className="rounded-lg object-cover max-h-[400px] w-full"
-          src={`${address}${contentPath}`}
+          src={`${contentPath}`}
           alt="Post content"
         />
       )}

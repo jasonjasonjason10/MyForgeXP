@@ -15,7 +15,7 @@ export default function SingleFavPost({ post, onBack }) {
 
       {post.PostType === "image" && (
         <img
-          src={`${address}${contentPath}`}
+          src={`${contentPath}`}
           alt="Post content"
           className="w-full rounded-lg mb-4"
         />
@@ -23,7 +23,7 @@ export default function SingleFavPost({ post, onBack }) {
 
       {post.PostType === "video" && (
         <video
-          src={`${address}${contentPath}`}
+          src={`${contentPath}`}
           controls
           className="w-full rounded-lg mb-4"
         />

@@ -81,7 +81,7 @@ export default function EditPost({ post, onCancel, onUpdate }) {
         <div className="mb-6">
           <label className="block mb-2 text-sky-300">Current Image</label>
           <img
-            src={`${address}${post.content}`}
+            src={`${post.content}`}
             alt="Post"
             className="max-h-64 rounded border border-blue-500 shadow-[0_0_15px_#3b82f6]"
           />
@@ -92,7 +92,7 @@ export default function EditPost({ post, onCancel, onUpdate }) {
         <div className="mb-6">
           <label className="block mb-2 text-sky-300">Current Video</label>
           <video
-            src={`${address}${post.content}`}
+            src={`${post.content}`}
             controls
             className="w-full max-h-64 rounded border border-blue-500 shadow-[0_0_15px_#3b82f6]"
           />

@@ -13,7 +13,7 @@ export default function UserFavCard({ post }) {
         {post.PostType === "image" && (
           <img
             className="h-[180px] w-[320px] rounded-lg object-cover mx-auto"
-            src={`${address}${contentPath}`}
+            src={`${contentPath}`}
             alt="Post content"
           />
         )}
@@ -22,7 +22,7 @@ export default function UserFavCard({ post }) {
           <video
             className="h-[180px] w-[320px] rounded-lg mx-auto"
             controls
-            src={`${address}${contentPath}`}
+            src={`${contentPath}`}
           />
         )}
 

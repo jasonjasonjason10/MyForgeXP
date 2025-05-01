@@ -98,7 +98,7 @@ export default function GamePostModal({ post, onClose, user }) {
       <video
         className="h-[180px] w-[320px]"
         controls
-        src={`${address}${contentPath}`}
+        src={`${contentPath}`}
       ></video>
     );
   }
@@ -140,7 +140,7 @@ export default function GamePostModal({ post, onClose, user }) {
                   >
                     {post?.user?.avatar && (
                       <img
-                        src={`${address}${user.avatar}`}
+                        src={`${user.avatar}`}
                         alt="User Avatar"
                         className="w-10 h-10 rounded-full object-cover border-2"
                       />
