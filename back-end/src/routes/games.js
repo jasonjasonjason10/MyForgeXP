@@ -23,7 +23,6 @@ router.get("/generate-upload-url", async (req, res, next) => {
       return res.status(400).json({ error: "filename and fileType required" });
     }
 
-  
     const key = `images/games/${uuid()}-${filename}`;
 
     // prepare S3 command

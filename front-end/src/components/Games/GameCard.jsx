@@ -4,7 +4,7 @@ function GameCard({ game }) {
     <div>
       <div className="relative w-full flex justify-center transition-transform duration-300 hover:scale-110">
         <img
-          src={`${address}${game.coverImage}`}
+          src={game.coverImage}
           alt="Game cover"
           className="h-60 w-auto object-contain rounded-xl"
         />

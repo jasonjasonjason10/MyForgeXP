@@ -8,20 +8,24 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/images/pfp");
-  },
-  filename: (req, file, cb) => {
-    const prefix = `${Date.now()} - `;
-    cb(null, `${prefix}${file.originalname}`);
-  },
-});
+const {
+  S3Client,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
 
-const upload = multer({ storage });
+const s3 = new S3Client({ region: process.env.AWS_REGION, credentials: {
+  accessKeyId: process.env.ACCESS, secretAccessKey: process.env.SECRET_ACCESS
+} });
+const BUCKET = process.env.S3_BUCKET;
+const REGION = process.env.AWS_REGION;
+const PUBLIC_BASE = `https://${BUCKET}.s3.${REGION}.amazonaws.com`;
 
-const defaultAvatar = "/images/pfp/default-avatar.png";
+const defaultAvatar = "https://forgexp-bucket.s3.us-east-2.amazonaws.com/images/pfp/default-avatar.png";
+const DEFAULT_AVATAR_URL = defaultAvatar
 
+function buildPublicUrl(key) {
+  return `${PUBLIC_BASE}/${key}`;
+}
 //============Routers to create=====================
 
 // Login Funtion ========================================
@@ -393,48 +397,48 @@ router.patch("/upgrade/:id", tokenAuth, async (req, res) => {
 });
 
 // change your avatar ========================================
-router.patch(
-  "/avatar",
-  tokenAuth,
-  async (req, res, next) => {
-    try {
-      const id = req.userId;
-      if (!id) return res.status(400).json({ error: "ID not found / invalid" });
-
-      if (!req.file)
-        return res.status(400).json({ error: "No image uploaded" });
-      const newAvatar = `/images/pfp/${req.file.filename}`;
-
-      const user = await prisma.user.findUnique({ where: { id } });
-      if (user.avatar !== defaultAvatar) {
-        const oldAvatarPath = path.join(
-          __dirname,
-          "..",
-          "images",
-          "pfp",
-          user.avatar
-        );
-        try {
-          await fs.promises.unlink(oldAvatarPath);
-        } catch (err) {
-          if (err.code !== "ENOENT") {
-            console.error("Error deleting old avatar:", err);
-          }
-        }
-      }
-
-      const response = await prisma.user.update({
-        where: { id },
-        data: { avatar: newAvatar },
-      });
-      return res
-        .status(200)
-        .json({ successMessage: "Avatar updated successfully" });
-    } catch (error) {
-      next(error);
+router.patch("/avatar", tokenAuth, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      return res.status(400).json({ error: "Invalid user ID" });
     }
+
+    const { avatarKey } = req.body;
+    if (!avatarKey) {
+      return res.status(400).json({ error: "No avatarKey provided" });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.avatar && user.avatar !== DEFAULT_AVATAR_URL) {
+      const match = user.avatar.match(/https?:\/\/[^/]+\/(.+)$/);
+      const oldKey = match ? match[1] : null;
+
+      if (oldKey) {
+        await s3.send(
+          new DeleteObjectCommand({ Bucket: BUCKET, Key: oldKey })
+        );
+      }
+    }
+
+    const newAvatarUrl = buildPublicUrl(avatarKey);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { avatar: newAvatarUrl },
+    });
+
+    return res.status(200).json({
+      successMessage: "Avatar updated successfully",
+      avatar: newAvatarUrl,
+    });
+  } catch (err) {
+    next(err);
   }
-);
+});
 
 // !!!!!JASON added this, the get user info by id function is for fetching the currently logged in users info!!!!!// also, i moved it to the very bottom because if it reads this first then My Account page breaks.
 router.get("/:id", async (req, res) => {
