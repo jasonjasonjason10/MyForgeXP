@@ -1,16 +1,58 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const prisma = require("../../prisma");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { v4: uuid } = require("uuid");
 const tokenAuth = require("../middleware/TokenAuth");
-const path = require("path");
 
-router.use(express.json());
-const REGION = process.env.AWS_REGION;
+// Set up AWS S3 Client
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.ACCESS,           // use ACCESS from your .env
+    secretAccessKey: process.env.SECRET_ACCESS        // use SECRET from your .env
+  }
+});
+
 const BUCKET = process.env.S3_BUCKET;
+router.use(express.json())
+// Middleware for JSON parsing
+router.use(express.json());
+
+// Helper function to construct public S3 URL
 function buildPublicUrl(key) {
-  return `https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`;
+  return `https://${BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
 }
 
+// ✅ Secure S3 upload URL route
+router.get("/generate-upload-url", tokenAuth, async (req, res, next) => {
+  try {
+    const { filename, fileType } = req.query;
+    if (!filename || !fileType) {
+      return res.status(400).json({ error: "Missing filename or fileType" });
+    }
+
+    const key = `images/posts/${uuid()}-${filename}`;
+
+    const command = new PutObjectCommand({
+      Bucket: BUCKET,
+      Key: key,
+      ContentType: fileType,
+    });
+
+    const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 }); // 5 minutes
+
+    res.status(200).json({
+      uploadUrl,
+      key,
+      publicUrl: buildPublicUrl(key)
+    });
+  } catch (err) {
+    console.error("S3 Upload URL Error:", err);
+    res.status(500).json({ error: "Failed to generate upload URL" });
+  }
+});
 
 // get all posts from a community by id
 router.get("/all", async (req, res) => {
