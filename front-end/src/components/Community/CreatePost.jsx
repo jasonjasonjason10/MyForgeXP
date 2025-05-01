@@ -30,7 +30,7 @@ export default function CreatePost() {
 
         const res2 = await fetch(uploadUrl, {
           method: "PUT",
-          headers: { "Content-Type": content.type },
+          headers: { "Content-Type": content.type, 'Authorization': `Bearer ${localStorage.getItem('token')}` },
           body: content,
         });
         if (!res2.ok) throw new Error("Upload to S3 failed");

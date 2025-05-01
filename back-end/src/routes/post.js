@@ -30,6 +30,7 @@ function buildPublicUrl(key) {
 router.get("/generate-upload-url", tokenAuth, async (req, res, next) => {
   try {
     const { filename, fileType } = req.query;
+    console.log(req.query)
     if (!filename || !fileType) {
       return res.status(400).json({ error: "Missing filename or fileType" });
     }
