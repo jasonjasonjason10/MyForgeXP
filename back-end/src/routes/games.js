@@ -54,9 +54,9 @@ router.get("/all", async (req, res, next) => {
 
 // Get single community by ID
 router.get("/:id", async (req, res, next) => {
+  const {id} = req.params;
   try {
-    const id = +req.params.id;
-    const game = await prisma.gameCommunity.findUnique({ where: { id } });
+    const game = await prisma.gameCommunity.findUnique({ where: { id: +id } });
     if (!game) return res.status(404).json({ error: "Community not found" });
     res.status(200).json({ game });
   } catch (err) {
