@@ -16,7 +16,8 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-gray-800 text-white px-6 py-4 shadow-md border-b">
+   <nav className="bg-gray-800 text-white px-6 py-4 shadow-md border-b sticky top-0 z-50 lg:relative">
+
       <div className="flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <img
