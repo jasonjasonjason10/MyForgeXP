@@ -59,6 +59,10 @@ app.use(express.static(path.join(__dirname, '../front-end/dist')));
 app.get(/.*/, async(req, res, next) => {
   res.sendFile(path.join(__dirname, '../front-end/dist/index.html'));
 });
+app.use((err, req, res, next)=> {
+  console.log(err);
+  res.send(err);
+});
 
 app.listen(3000, () => {
   console.log("server running on port 3000");

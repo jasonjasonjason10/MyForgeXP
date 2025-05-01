@@ -1,17 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
 const prisma = require("../../prisma");
 const tokenAuth = require("../middleware/TokenAuth");
 const path = require("path");
 
+router.use(express.json());
 const REGION = process.env.AWS_REGION;
 const BUCKET = process.env.S3_BUCKET;
 function buildPublicUrl(key) {
   return `https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`;
 }
 
-router.use(express.json());
 
 // get all posts from a community by id
 router.get("/all", async (req, res) => {
@@ -117,12 +116,15 @@ router.post(
   async (req, res, next) => {
     try {
       const userId = req.userId;
+      console.log(userId)
       if (!userId) {
         return res.status(400).json({ error: "Not authenticated." });
       }
 
       const { title, description, PostType, content, communityId } = req.body;
-      const cid = parseInt(communityId, 10);
+      console.log(communityId)
+      const cid = parseInt(communityId);
+      console.log(cid)
       if (!cid || !title) {
         return res.status(400).json({ error: "Missing required fields." });
       }

@@ -59,6 +59,7 @@ export default function CreatePost() {
 
     // 3) Send to your API
     try {
+      console.log('ID HERE', id)
       const res = await fetch(`${address}/post/create`, {
         method: "POST",
         headers: {
