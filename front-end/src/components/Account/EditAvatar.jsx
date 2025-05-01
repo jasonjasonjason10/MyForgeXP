@@ -4,7 +4,7 @@ import { address } from "../../../address";
 
 export default function EditAvatar({ isOpen, onClose, onSave }) {
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [file, setFile]           = useState(null);
+  const [file, setFile]           = useState("");
   const [fileError, setFileError] = useState("");
   const [preview, setPreview]     = useState("");
 
