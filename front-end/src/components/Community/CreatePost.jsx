@@ -127,16 +127,6 @@ export default function CreatePost() {
               <option value="video">Video</option>
             </select>
 
-            {PostType === "text" && (
-              <textarea
-                placeholder="Your text..."
-                value={content || ""}
-                onChange={(e) => setContent(e.target.value)}
-                required
-                className="p-3 bg-gray-900 border border-orange-400 rounded text-white min-h-[100px]"
-              />
-            )}
-
             {PostType === "image" && (
               <input
                 type="file"
