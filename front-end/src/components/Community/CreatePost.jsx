@@ -127,6 +127,10 @@ export default function CreatePost() {
               <option value="video">Video</option>
             </select>
 
+            {PostType === "text" && (
+              <></>
+            )}
+
             {PostType === "image" && (
               <input
                 type="file"
