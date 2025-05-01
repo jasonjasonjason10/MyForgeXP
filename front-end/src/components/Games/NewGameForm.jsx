@@ -9,51 +9,79 @@ export default function NewGameForm({ isOpen, onClose }) {
   const [fileError, setFileError] = useState("");
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    const acceptedTypes = ["image/png", "image/jpeg", "image/jpg"];
-
-    if (selectedFile && !acceptedTypes.includes(selectedFile.type)) {
-      setFileError("Unsupported file type. Please upload a JPG or PNG image.");
+    const f = e.target.files[0];
+    const allowed = ["image/png", "image/jpeg", "image/jpg"];
+    if (f && !allowed.includes(f.type)) {
+      setFileError("Please upload a JPG or PNG.");
       return;
     }
-
     setFileError("");
-    setFile(selectedFile);
+    setFile(f);
   };
 
   const handleSubmit = async () => {
     if (!title || !description || !file) {
-      return alert("Please fill out all fields and upload a valid image.");
+      alert("All fields + an image are required.");
+      return;
     }
 
-    const formData = new FormData();
-    formData.append("gameName", title);
-    formData.append("description", description);
-    formData.append("coverImage", file);
-
     try {
-      const response = await fetch(`${address}/games/create`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        body: formData,
-      });
-      const result = await response.json();
+      // ─── 1) Get presigned URL ─────────────────────────────────
+      // Your Express route is GET /generate-upload-url?filename=…&fileType=…
+      const url = new URL(`${address}/games/generate-upload-url`);
+      url.searchParams.append("filename", file.name);
+      url.searchParams.append("fileType", file.type);
 
-      if (result.error) {
-        console.error(result.error);
-        return alert("Failed to add game.");
+      const presignedRes = await fetch(url.toString(), {
+        method: "GET",
+        headers: { "Accept": "application/json" },
+      });
+      if (!presignedRes.ok) {
+        const err = await presignedRes.json();
+        throw new Error(err.error || "Failed to get upload URL");
+      }
+      const { uploadUrl, key } = await presignedRes.json();
+      // ↑ note we pull out the `key` (S3 object key), not just publicUrl
+
+      // ─── 2) Upload file to S3 ─────────────────────────────────
+      const uploadRes = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!uploadRes.ok) {
+        throw new Error(`S3 upload failed: ${uploadRes.status}`);
       }
 
-      setTitle('')
-      setDescription('')
-      setFile(null)
+      // ─── 3) Create the game in your API ────────────────────────
+      // Your Express POST /create expects JSON with gameName, description, coverImageKey
+      const createRes = await fetch(`${address}/games/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          gameName: title,
+          description,
+          coverImageKey: key,
+        }),
+      });
+      if (!createRes.ok) {
+        const err = await createRes.json();
+        throw new Error(err.error || "Failed to create game");
+      }
 
+      // ─── Success! ───────────────────────────────────────────────
       alert("Game added successfully!");
+      setTitle("");
+      setDescription("");
+      setFile(null);
+      onClose();
 
-      window.location.reload();
     } catch (err) {
-      console.error("Submit failed:", err);
-      alert("Something went wrong.");
+      console.error(err);
+      alert(err.message);
     }
   };
 

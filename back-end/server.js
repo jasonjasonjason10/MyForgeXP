@@ -9,7 +9,7 @@ app.use(cors({origin: ['https://forgexp-server.onrender.com', 'https://forgexp.o
 app.use(express.json());
 app.use(require("morgan")("dev"));
 
-app.use(express.static(path.join(__dirname, '../front-end/dist')));
+
 
 //=============user routes===================
 
@@ -54,7 +54,7 @@ app.use(
   express.static(path.join(__dirname, "src", "images", "games"))
 );
 
-
+app.use(express.static(path.join(__dirname, '../front-end/dist')));
 
 app.get(/.*/, async(req, res, next) => {
   res.sendFile(path.join(__dirname, '../front-end/dist/index.html'));
