@@ -16,8 +16,6 @@ export default function CreatePost() {
     e.preventDefault();
     setError("");
 
-    let contentValue = content;
-
     // 1) If it's a File (image or video), upload to S3 first
     if ((PostType === "image" || PostType === "video") && content instanceof File) {
       try {
