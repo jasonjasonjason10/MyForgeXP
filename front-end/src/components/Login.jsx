@@ -60,7 +60,7 @@ const Login = ({ setToken }) => {
           style={{ backgroundImage: "url('/images/forgexp-grid-bg.png')" }}
         >
           <h2 className="text-3xl font-bold text-center mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-            Sign In
+            Login
           </h2>
           <div className="flex justify-center my-4">
             <img
