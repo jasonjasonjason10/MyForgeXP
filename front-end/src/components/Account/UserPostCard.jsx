@@ -14,7 +14,7 @@ export default function UserPostCard({ post }) {
       <video
         className="h-[180px] w-[320px] rounded-lg"
         controls
-        src={`${contentPath}`}
+        src={contentPath}
       ></video>
     );
   }
@@ -30,7 +30,7 @@ export default function UserPostCard({ post }) {
       {post.PostType === "image" && (
         <img
           className="h-[180px] w-[320px] rounded-lg object-cover"
-          src={`${contentPath}`}
+          src={contentPath}
           alt="Post content"
         />
       )}

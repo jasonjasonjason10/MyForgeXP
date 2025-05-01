@@ -291,7 +291,7 @@ export default function Account() {
                         onClick={() => handleUserClick(user.id)}
                       >
                         <img
-                          src={`${user.avatar}`}
+                          src={user.avatar}
                           alt="avatar"
                           className="w-8 h-8 rounded-full object-cover border border-gray-500"
                         />
@@ -376,7 +376,7 @@ export default function Account() {
                         onClick={() => handleUserClick(follower.id)}
                       >
                         <img
-                          src={`${follower.avatar}`}
+                          src={follower.avatar}
                           alt="avatar"
                           className="w-8 h-8 rounded-full object-cover border border-gray-500"
                         />

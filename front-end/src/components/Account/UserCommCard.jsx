@@ -4,7 +4,7 @@ function UserCommCard({ comm }) {
     <>
       <div className="flex gap-6 items-start">
         <img
-          src={`${comm.coverImage}`}
+          src={comm.coverImage}
           alt={comm.gameName}
           className="w-28 h-28 object-cover rounded-lg "
         />

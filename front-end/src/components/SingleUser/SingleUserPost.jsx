@@ -16,7 +16,7 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
       {/* Media */}
       {post.PostType === "image" && (
         <img
-          src={`${contentPath}`}
+          src={contentPath}
           alt="Post content"
           className="w-full rounded-lg mb-4"
         />
@@ -24,7 +24,7 @@ export default function SingleUserPost({ post, onBack, isAdmin }) {
 
       {post.PostType === "video" && (
         <video
-          src={`${contentPath}`}
+          src={contentPath}
           controls
           className="w-full rounded-lg mb-4"
         />

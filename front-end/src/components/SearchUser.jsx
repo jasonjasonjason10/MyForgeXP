@@ -91,7 +91,7 @@ export default function SearchUser() {
               onClick={() => handleClick(user.id)}
             >
               <img
-                src={`${user.avatar}`}
+                src={user.avatar}
                 alt="avatar"
                 className="w-6 h-6 rounded-full object-cover border border-gray-600"
               />

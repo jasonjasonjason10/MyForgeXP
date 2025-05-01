@@ -134,7 +134,7 @@ const CommunityCard = ({
       <video
         className="h-[180px] w-[320px]"
         controls
-        src={`${contentPath}`}
+        src={contentPath}
       ></video>
     );
   }
@@ -243,7 +243,7 @@ const CommunityCard = ({
                     onClick={() => navigate(`/user/${post.user.id}`)}
                   >
                     <img
-                      src={`${post.user.avatar}`}
+                      src={post.user.avatar}
                       alt="User Avatar"
                       className="w-10 h-10 rounded-full object-cover border-2"
                     />
@@ -274,7 +274,7 @@ const CommunityCard = ({
               className={`${
                 isExpanded ? "h-[120px] w-[240px]" : "h-[180px] w-[320px]"
               } object-cover mx-auto rounded-lg mb-4`}
-              src={`${contentPath}`}
+              src={contentPath}
               alt=""
             />
           )}

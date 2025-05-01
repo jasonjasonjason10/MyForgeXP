@@ -325,7 +325,7 @@ export default function SingleUser() {
                       className="cursor-pointer flex items-center gap-3 p-2 border-b border-blue-400 hover:border-orange-400"
                     >
                       <img
-                        src={`${follower.avatar}`}
+                        src={follower.avatar}
                         alt={follower.username}
                         className="w-8 h-8 rounded-full object-cover border border-gray-500"
                       />
@@ -373,7 +373,7 @@ export default function SingleUser() {
                       className="cursor-pointer flex items-center gap-3 p-2 border-b border-blue-400 hover:border-orange-400"
                     >
                       <img
-                        src={`${user.avatar}`}
+                        src={user.avatar}
                         alt={user.username}
                         className="w-8 h-8 rounded-full object-cover border border-gray-500"
                       />
