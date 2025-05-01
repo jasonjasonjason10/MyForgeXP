@@ -87,7 +87,7 @@ export default function Carousel() {
             <Link to={`/games/${game.id}`}>
               <div className="bg-gray-800 rounded-lg   hover:scale-105 transition shadow p-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
                 <img
-                  src={`${game.coverImage}`}
+                  src={game.coverImage}
                   alt={game.gameName}
                   className="w-full h-40 object-cover rounded-md"
                 />

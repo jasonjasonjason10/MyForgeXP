@@ -64,7 +64,7 @@ export default function Homepage() {
                 <Link to={`/games/${game.id}`}>
                   <div className="bg-gray-800 rounded shadow-lg overflow-hidden hover:scale-105 transition duration-300">
                     <img
-                      src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover}.jpg`}
+                      src={game.cover}
                       alt={game.name}
                       className="w-full h-48 object-cover"
                     />

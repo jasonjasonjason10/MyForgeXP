@@ -14,7 +14,7 @@ export default function TopRanked() {
           className="block bg-gray-800 rounded-lg overflow-hidden shadow hover:scale-105 transition"
         >
           <img
-            src={`https://images.igdb.com/igdb/image/upload/t_cover_small/${game.cover}.jpg`}
+            src={game.cover}
             alt={game.name}
             className="w-full h-auto object-cover"
           />

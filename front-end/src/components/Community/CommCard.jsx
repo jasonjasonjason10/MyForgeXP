@@ -192,7 +192,7 @@ const CommunityCard = ({
             <div className="flex items-center gap-3 mb-4 hover:opacity-80 transition">
               <img
                 onClick={() => navigate(`/user/${post.user.id}`)}
-                src={`${post.user.avatar}`}
+                src={post.user.avatar}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full object-cover border-2  cursor-pointer"
               />
