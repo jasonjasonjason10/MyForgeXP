@@ -4,62 +4,68 @@ import { address } from "../../../address";
 
 export default function EditAvatar({ isOpen, onClose, onSave }) {
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [file, setFile]           = useState("");
+  const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState("");
-  const [preview, setPreview]     = useState("");
+  const [preview, setPreview] = useState("");
 
   // build a preview whenever the file or avatarUrl changes
   useEffect(() => {
+    let objectUrl;
+
     if (file) {
-      const objectUrl = URL.createObjectURL(file);
+      objectUrl = URL.createObjectURL(file);
       setPreview(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreview(avatarUrl);
     }
-    setPreview(avatarUrl);
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
   }, [file, avatarUrl]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    const accepted     = ["image/png", "image/jpeg", "image/jpg"];
+    const accepted = ["image/png", "image/jpeg", "image/jpg"];
+
     if (selectedFile && !accepted.includes(selectedFile.type)) {
       setFileError("Unsupported file type. Please upload JPG or PNG.");
       setFile(null);
       return;
     }
+
     setFileError("");
     setFile(selectedFile);
-    // if a file is chosen, clear any manual URL
     setAvatarUrl("");
   };
 
-  const handleSave = async (file, avatarUrl) => {
-    console.log('AVATAR URL HERE', avatarUrl)
+  const handleSave = async () => {
     try {
       let payload, headers;
+
       if (file) {
-        // multipart form for file upload
         payload = new FormData();
         payload.append("avatar", file);
         headers = {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         };
       } else if (avatarUrl) {
-        // JSON body for URL-only update
         payload = JSON.stringify({ avatarUrl });
         headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         };
       } else {
         setFileError("Please supply either a URL or choose a file.");
         return;
       }
-      console.log('AVATAR URL', avatarUrl)
+
       const res = await fetch(`${address}/user/avatar`, {
         method: "PATCH",
         headers,
-        body: payload
+        body: payload,
       });
+
       const result = await res.json();
 
       if (!res.ok) {
@@ -68,7 +74,6 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
         return;
       }
 
-      // call parent with the new avatar URL
       onSave(result.avatarUrl || result.url || avatarUrl);
       onClose();
     } catch (err) {
@@ -100,9 +105,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
           >
             <X size={20} />
           </button>
-          <h2 className="text-2xl font-bold mb-4 drop-shadow-lg">
-            Edit Avatar
-          </h2>
+          <h2 className="text-2xl font-bold mb-4 drop-shadow-lg">Edit Avatar</h2>
 
           {/* Preview */}
           {preview && (
@@ -136,7 +139,6 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
             <input
               type="file"
               accept="image/png,image/jpeg"
-              value={file}
               onChange={handleFileChange}
               className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-700 file:text-white hover:file:bg-blue-400"
             />
@@ -154,7 +156,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
               Cancel
             </button>
             <button
-              onClick={() => handleSave(file, avatarUrl)}
+              onClick={handleSave}
               className="px-4 py-2 bg-orange-500 hover:bg-orange-400 rounded"
             >
               Save
