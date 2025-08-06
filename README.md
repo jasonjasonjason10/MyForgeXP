@@ -1,14 +1,17 @@
-# ForgeXP
-================API=Docs=================
+# SET UP TAILWIND
 
-https://api-docs.igdb.com/#getting-started
+- Run in your terminal "npm i"
 
-===============Exaclidraw================
+- Edit "vite.config.js":
 
-https://excalidraw.com/#room=15fad6fd0a8ca9a006e7,GZCsoOG7_I07uEbP_ScrVw
+```shell
+  export default defineConfig({
+    plugins: [react(), tailwindcss()],
+  })
+```
 
-===============Google=doc================
+- Go into your CSS file (only 1 CSS file needed globally)
 
-https://docs.google.com/document/d/1S1fHvLiv-lj7HuDkmW7kSi8-PYDPFx5ERK6TZM4--z8/edit?usp=sharing
-
-=========================================
+```shell
+  @import "tailwindcss";
+```
