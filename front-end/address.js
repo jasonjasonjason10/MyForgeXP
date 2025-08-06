@@ -1,3 +1,2 @@
-// export const address = "https://forgexp-server.onrender.com"
-
-export const address = "https://forgexp-server.onrender.com"
+// front-end/src/address.js
+export const address = import.meta.env.VITE_BACKEND_URL;
