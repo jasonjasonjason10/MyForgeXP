@@ -41,36 +41,39 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
 
   const handleSave = async () => {
     try {
-      let payload;
-      let options = {
-        method: "PATCH",
-        headers: {},
-      };
+      let res, result;
 
+      // 🟩 File upload flow
       if (file) {
-        payload = new FormData();
-        payload.append("avatar", file);
-        options.body = payload;
+        const formData = new FormData();
+        formData.append("avatar", file);
 
-        // Don't set headers — browser handles multipart/form-data correctly
-        options.headers = {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        };
-      } else if (avatarUrl) {
-        payload = JSON.stringify({ avatarUrl });
-        options.body = payload;
+        // 🚫 Don't manually set Content-Type for FormData
+        res = await fetch(`${address}/user/avatar`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        });
+      }
 
-        options.headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        };
+      // 🟨 URL upload flow
+      else if (avatarUrl) {
+        res = await fetch(`${address}/user/avatar`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ avatarUrl }),
+        });
       } else {
         setFileError("Please supply either a URL or choose a file.");
         return;
       }
 
-      const res = await fetch(`${address}/user/avatar`, options);
-      const result = await res.json();
+      result = await res.json();
 
       if (!res.ok) {
         console.error("Avatar update failed:", result.error || result);
