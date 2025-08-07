@@ -42,29 +42,34 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
   const handleSave = async () => {
     try {
       let payload;
-      let headers = {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      let options = {
+        method: "PATCH",
+        headers: {},
       };
 
       if (file) {
         payload = new FormData();
         payload.append("avatar", file);
-        // Do NOT set headers manually for multipart/form-data
+        options.body = payload;
+
+        // Don't set headers — browser handles multipart/form-data correctly
+        options.headers = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        };
       } else if (avatarUrl) {
         payload = JSON.stringify({ avatarUrl });
-        headers["Content-Type"] = "application/json";
+        options.body = payload;
+
+        options.headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        };
       } else {
         setFileError("Please supply either a URL or choose a file.");
         return;
       }
 
-      const res = await fetch(`${address}/user/avatar`, {
-        method: "PATCH",
-        ...(file
-          ? { body: payload, headers: { Authorization: headers.Authorization } }
-          : { body: payload, headers }),
-      });
-
+      const res = await fetch(`${address}/user/avatar`, options);
       const result = await res.json();
 
       if (!res.ok) {
@@ -73,7 +78,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
         return;
       }
 
-      onSave(result.avatar || avatarUrl); // Use correct property
+      onSave(result.avatar || result.avatarUrl || avatarUrl);
       onClose();
     } catch (err) {
       console.error(err);
