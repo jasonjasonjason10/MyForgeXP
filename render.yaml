@@ -4,3 +4,6 @@ services:
     env: node
     buildCommand: npm install --include=dev && npm run build
     staticPublishPath: dist
+    envVars:
+      - key: VITE_BACKEND_URL
+        value: https://myforgexp-backend.onrender.com
