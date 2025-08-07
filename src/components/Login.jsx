@@ -11,11 +11,50 @@ const Login = ({ setToken }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
+  // async function handleSubmit(e) {
+  //   e.preventDefault();
+  //   if (!email && !password) {
+  //     setError("Both fields are required.");
+  //     console.error(error);
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${address}/user/login`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ email, password }),
+  //     });
+
+  //     const result = await response.json();
+  //     if (!response.ok) {
+  //       setError(result.message || "Login failed.");
+  //       return;
+  //     }
+  //     setToken(result.token);
+  //     localStorage.setItem("token", result.token);
+  //     localStorage.setItem("email", result.email);
+  //     localStorage.setItem("isAdmin", result.isAdmin);
+  //     setSuccessMessage(`Success!`);
+  //     setEmail("");
+  //     setPassword("");
+  //     setTimeout(() => {
+  //       if (result.isAdmin) {
+  //         navigate("/admin");
+  //       } else {
+  //         navigate("/account");
+  //       }
+  //     }, 1500);
+  //   } catch (error) {
+  //     setError("Something went wrong. Please try again.");
+  //     console.error("Login error:", error);
+  //   }
+  // }
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!email && !password) {
+
+    if (!email || !password) {
       setError("Both fields are required.");
-      console.error(error);
       return;
     }
 
@@ -27,14 +66,19 @@ const Login = ({ setToken }) => {
       });
 
       const result = await response.json();
+
       if (!response.ok) {
         setError(result.message || "Login failed.");
         return;
       }
+
+      // ✅ Store and set token
       setToken(result.token);
       localStorage.setItem("token", result.token);
       localStorage.setItem("email", result.email);
       localStorage.setItem("isAdmin", result.isAdmin);
+
+      // ✅ Redirect with message
       setSuccessMessage(`Success!`);
       setEmail("");
       setPassword("");
@@ -47,7 +91,7 @@ const Login = ({ setToken }) => {
       }, 1500);
     } catch (error) {
       setError("Something went wrong. Please try again.");
-      console.error("Login error:", error);
+      console.error("Login error:", error); // ✅ real error here
     }
   }
 

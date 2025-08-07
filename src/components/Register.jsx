@@ -20,14 +20,13 @@ export default function Register({ setToken, token }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    
+
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
-      return
+      return;
     }
 
     setLoading(true);
-
 
     try {
       const response = await fetch(`${address}/user/register`, {
@@ -40,6 +39,7 @@ export default function Register({ setToken, token }) {
 
       if (response.ok) {
         localStorage.setItem("token", result.token);
+        setToken(result.token);
         setSuccessMessage(result.successMessage);
 
         setLoading(false);
