@@ -1,0 +1,6 @@
+services:
+  - type: static
+    name: forgexp-frontend
+    env: node
+    buildCommand: npm install --include=dev && npm run build
+    staticPublishPath: dist
