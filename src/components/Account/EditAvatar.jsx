@@ -41,20 +41,18 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
 
   const handleSave = async () => {
     try {
-      let payload, headers;
+      let payload;
+      let headers = {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      };
 
       if (file) {
         payload = new FormData();
         payload.append("avatar", file);
-        headers = {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        };
+        // Do NOT set headers manually for multipart/form-data
       } else if (avatarUrl) {
         payload = JSON.stringify({ avatarUrl });
-        headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        };
+        headers["Content-Type"] = "application/json";
       } else {
         setFileError("Please supply either a URL or choose a file.");
         return;
@@ -62,8 +60,9 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
 
       const res = await fetch(`${address}/user/avatar`, {
         method: "PATCH",
-        headers,
-        body: payload,
+        ...(file
+          ? { body: payload, headers: { Authorization: headers.Authorization } }
+          : { body: payload, headers }),
       });
 
       const result = await res.json();
@@ -74,7 +73,7 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
         return;
       }
 
-      onSave(result.avatarUrl || result.url || avatarUrl);
+      onSave(result.avatar || avatarUrl); // Use correct property
       onClose();
     } catch (err) {
       console.error(err);
@@ -105,7 +104,9 @@ export default function EditAvatar({ isOpen, onClose, onSave }) {
           >
             <X size={20} />
           </button>
-          <h2 className="text-2xl font-bold mb-4 drop-shadow-lg">Edit Avatar</h2>
+          <h2 className="text-2xl font-bold mb-4 drop-shadow-lg">
+            Edit Avatar
+          </h2>
 
           {/* Preview */}
           {preview && (
